@@ -1,0 +1,25 @@
+Package: labelr
+Title: Tools for Working with Data Frame, Variable, and Value Labels
+Version: 1.0.0 
+Authors@R: person("Robert", "Hartman", "", email = "rhartman@mite.org", role = c("aut", "cre"))
+Maintainer: Robert Hartman <rhartman@mitre.org>
+Description: Lightweight tools to create, modify, use, discard, and restore different types of labels.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: R (>= 4.0.0)
+Imports:
+  stats,
+  utils
+Suggests: 
+    knitr,
+    rmarkdown,
+    car, 
+    nycflights13,
+    collapse,
+    tibble,
+    haven,
+    dplyr,
+    modelr
+VignetteBuilder: knitr
