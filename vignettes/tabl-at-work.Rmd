@@ -1,0 +1,327 @@
+---
+title: "tabl - Some Uses for labelr-friendly Data Tabulation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tabl - Some Uses for labelr-friendly Data Tabulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >"
+)
+```
+## Overview
+Frequency tabulations are an indispensable step in in making set of categorical 
+values, such as those that receive labelr value labels. In this vignette, we show
+some features of labelr's `tabl()` function, which supports label-friendly table
+generation.
+
+### Our Data
+Let's start by loading labelr.
+```{r}
+library(labelr)
+```
+
+Now, lets assign the Base R-furnished mtcars (Motor Trend Cars) data.frame to
+a new data.frame we'll call mttab.
+```{r}
+mttab <- mtcars
+```
+### Injecting Irregular Values
+We'll add some NA and "irregular" values to make things interesting.
+```{r}
+mttab[1, 1:11] <- NA
+rownames(mttab)[1] <- "Missing Car"
+
+# introduce irregular values
+mttab$am[1] <- NA
+
+mttab[2, "am"] <- NaN
+mttab[3, "am"] <- -Inf
+mttab[5, "cyl"] <- "NAN"
+
+head(mttab, 10)
+```
+## Adding VALUE Labels
+```{r}
+mttab <- add_val_labs(
+  data = mttab,
+  vars = "am",
+  vals = c(0, 1),
+  labs = c("automatic", "manual")
+)
+
+mttab <- add_val_labs(
+  data = mttab,
+  vars = "carb",
+  vals = c(1, 2, 3, 4, 6, 8),
+  labs = c(
+    "1-carb", "2-carbs",
+    "3-carbs", "4-carbs",
+    "6-carbs", "8-carbs"
+  )
+)
+
+# demoing `add_val1()` - could've used `add_val_labs()` here, too
+mttab <- add_val1(
+  data = mttab,
+  var = cyl, # note, "var," not "vars" arg
+  vals = c(4, 6, 8),
+  labs = c(
+    "four-cyl",
+    "six-cyl",
+    "eight-cyl"
+  )
+)
+
+mttab <- add_val_labs(
+  data = mttab,
+  vars = "gear",
+  vals = 3:5,
+  labs = c(
+    "3-speed",
+    "4-speed",
+    "5-speed"
+  )
+)
+```
+Show that our value labels are here. 
+
+```{r}
+get_val_labs(mttab)
+```
+## Using `tabl()`
+We will make several calls to `tabl()` to exercise / demonstrate its functionality.
+
+Here is our "first call," which we will reference as we tweak different options.
+
+A few things to notice
+
+* We are limiting ourselves to the variables "cyl" and "am" in this call.
+* Value labels will be "turned on."
+* We are sorting the results by values (in this case, labels) of "cyl" and "am."
+* Any irregular values (including NA values) are omitted from the returned
+  table.
+
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = NULL
+) # return counts, not proportions
+```
+
+This call is similar to our "first call", except now:
+
+* Value labels are "off."
+
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = FALSE, # use variable values
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = NULL
+) # return counts, not proportions
+```
+
+This call is similar to our "first call", except now:
+
+* We report proportions (out to three decimals) instead of counts
+
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = 3
+) # return proportions, rounded to 3rd decimal
+```
+
+This call is similar to our "first call", except now:
+
+* Returned results are sorted in descending order of frequency.
+
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = TRUE, # use variable value labels
+  sort.freq = TRUE, # sort in order of descending frequency
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = NULL
+) # return proportions, rounded to 3rd decimal
+```
+
+This call is similar to our "first call", except now:
+
+* We use (fictional) frequency weights for weighted counts.
+
+```{r}
+# get our fake weights
+set.seed(2944) # for reproducibility
+mttab$freqwt <- sample(10:50, nrow(mttab), replace = TRUE) # create (fake) freq wts
+
+head(mttab$freqwt)
+
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL
+) # return counts, not proportions
+
+mttab$freqwt <- NULL # we don't need this anymore
+```
+
+This call is similar to the previous one, except now:
+
+* We use very large (fictional) frequency weights for weighted counts.
+
+```{r}
+set.seed(428441) # for reproducibility
+mttab$freqwt <- sample(1000000:10000000, nrow(mttab), replace = TRUE) # large freq wts
+
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL
+) # return counts, not proportions
+```
+For convenience, we can scale this. Dividing by one million ("1M")
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL, # return counts, not proportions
+  div.by = "1M"
+) # one million
+```
+Or ten million.
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL, # return counts, not proportions
+  div.by = "10M"
+) # ten million
+```
+
+Or 10,000.
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL, # return counts, not proportions
+  div.by = 10000
+) # ten thousand
+```
+Or 10,000. A different way.
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  wt = "freqwt", # use frequency weights
+  labs.on = TRUE, # use variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = FALSE, # NAs and the like are included/shown
+  prop.digits = NULL, # return counts, not proportions
+  div.by = "10K"
+) # ten thousand
+
+mttab$freqwt <- NULL # we don't need this anymore
+```
+Here, we include all "eligible" variables and change more settings at once.
+Note that, here, "eligible" means
+
+1. "does not have decimals" and 
+2. "does not have more unique values than your max.unique.vals arg allows for"
+
+Turn labels off, to make this more compact.
+
+Do not show zero values (zero.rm).
+
+Do not show NA values (irreg.rm).
+
+```{r}
+tabl(mttab,
+  vars = NULL, # don't specify which variables to include (~ use all!)
+  labs.on = FALSE, # use values, not variable value labels
+  sort.freq = FALSE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  zero.rm = TRUE, # variable combinations that never occur are suppressed
+  prop.digits = NULL, # return counts, not proportions
+  max.unique.vals = 10
+) # drop from table any var with >10 distinct values
+```
+
+Same as above, but include zero counts, and NA/irregular values, 
+and sort by frequency
+
+```{r}
+big_tab <- tabl(mttab,
+  vars = NULL, # don't specify which variables to include (~ use all!)
+  labs.on = FALSE, # use values, not variable value labels
+  sort.freq = TRUE, # sort by frequency
+  irreg.rm = FALSE, # preserve/include NAs and irregular values
+  zero.rm = FALSE, # preserve/include non-observed (zero-count) vars
+  prop.digits = NULL, # return counts, not proportions
+  max.unique.vals = 10
+) # drop from table any var with >10 distinct values
+
+nrow(big_tab) # a lot of rows (because a lot of combinations of var values)
+
+head(subset(big_tab, n == 0), 20) # select zero-frequency value combinations
+```
+
+Now, back to only "cyl" and "am" and use wide.col for a cross-tab / pivoted view.
+
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = TRUE, # use variable value labels
+  sort.freq = TRUE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = NULL, # return counts, not proportions
+  wide.col = "am"
+) # use "am" as a column variable in a cross-tab view
+```
+
+Same thing, but now with "cyl" as the wide.col.
+```{r}
+tabl(mttab,
+  vars = c("cyl", "am"),
+  labs.on = TRUE, # use variable value labels
+  sort.freq = TRUE, # sort by vars values (not frequencies)
+  irreg.rm = TRUE, # NAs and the like are suppressed
+  prop.digits = NULL, # return counts, not proportions
+  wide.col = "cyl"
+) # use "cyl" as a column variable in a cross-tab view
+```
+
+Verify select counts against previous table. 
+```{r}
+nrow(subset(mttab, am == 0 & cyl == 4))
+nrow(subset(mttab, am == 0 & cyl == 8))
+nrow(subset(mttab, am == 1 & cyl == 8))
+nrow(subset(mttab, am == 0 & cyl == 6))
+nrow(subset(mttab, am == 1 & cyl == 6))
+```

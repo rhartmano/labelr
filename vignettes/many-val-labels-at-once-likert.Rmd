@@ -1,0 +1,195 @@
+---
+title: "Value-labeling Many Variables at Once"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Value-labeling Many Variables at Once}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >"
+)
+```
+## Overview
+The `add_val_labs` "vars" arg will do partial matching if partial = TRUE. This
+comes in handy if we have many variables with a similar data structure. In this
+example, we apply character values to integer values of a fictional set of 
+Likert-style survey responses.
+
+In this example, we catch all vars with "x" in their name. Note `add_val1()` has
+no comparable functionality.
+
+### Make fake likert data to explore labelr
+Load labelr.
+```{r setup}
+library(labelr)
+```
+`make_likert_data` is another labelr-provided function. Let's make some fake data.
+
+```{r}
+dflik <- make_likert_data(scale = 1:7, seed = 272)
+head(dflik)
+```
+### Get Set up to Add Value Labels
+Let's put the variables we wish to label and the labels to use in stand-alone 
+vectors, which we will supply to `add_val_labs` in a moment.
+
+```{r}
+vals2label <- 1:7
+labs2use <- c(
+  "VSD", # "Very Strongly Disagree"
+  "SD",
+  "D",
+  "N", # "Neither Agree Nor Disagree"
+  "A",
+  "SA",
+  "VSA"
+) # "Very Strongly Agree"
+```
+
+### Add the Value Labels
+Now, associate/apply the value labels to **all** vars with "x" in name and var "y3."
+
+Note: partial = TRUE.
+
+```{r}
+dflik <- add_val_labs(
+  data = dflik, vars = c("x", "y3"), ###  note the vars args
+  vals = vals2label, # from above
+  labs = labs2use, # from above
+  partial = TRUE
+)
+```
+### Examine the Results
+Compare dflik with value labels present but "off" to labels "on."
+
+Present but "off."
+```{r}
+head(dflik)
+```
+Let's "turn on" (use) these value labels.
+```{r}
+lik1 <- use_val_labs(dflik)
+head(lik1)
+```
+All variables with "x" in their name (and "y3") got the labels! This can't be
+reversed (without re-running our preceding code, at least!), so, we saved the
+result of `use_val_labs` to a different object (lik1). 
+
+### Drop Select Value Labels from Select Variables
+We can use `drop_val_labs()` in some nuanced ways.
+
+```{r}
+dfdrop <- drop_val_labs(dflik,
+  c("x2", "y3"),
+  partial = FALSE
+)
+```
+
+Most value labels are still here, except for those of variables "x2" and "y3." 
+Let's take a look at "x2".
+
+```{r}
+get_val_labs(dfdrop, "x2")
+```
+
+Compare to variable "x1" (we did not drop any value labels for this one).
+```{r}
+get_val_labs(dfdrop, "x1")
+```
+
+We can also drop value labels from all variables with "x" in their variable names.
+```{r}
+dfxgone <- drop_val_labs(dflik,
+  c("x"),
+  partial = TRUE
+)
+```
+
+The only remaining value labels are for "y3". All the labels for values of "x*" 
+variables are gone.
+
+```{r}
+get_val_labs(dfxgone)
+```
+
+Finally, we can drop all value labels, period.
+```{r}
+dfxgone <- drop_val_labs(dflik)
+
+get_val_labs(dfxgone)
+```
+
+## What If We Start with Character Values?
+Let's imagine the opposite scenario, where the raw data consists of the Likert 
+**character** variables, and the goal is to recode them to integers. `add_val_labs()` 
+may still be helpful here, thanks to an assist from `use_val_labs()`.
+
+`make_likert_data()` gives us integer values.
+
+```{r}
+df_int <- make_likert_data(scale = 1:7, seed = 272)
+head(df_int)
+```
+
+We need to get these to character variables to demonstrate things.
+
+```{r}
+df_int <- add_val_labs(
+  data = df_int, vars = c("x", "y"), #  note the vars args
+  vals = vals2label, # from above
+  labs = labs2use, # from above
+  partial = TRUE
+)
+
+df_char <- use_val_labs(df_int)
+```
+
+Now, they are character variables
+```{r}
+head(df_char)
+```
+
+Let's drop all labelr meta-data, treating this character variable data.frame 
+**as if** it were the original state of our data set when we first obtained it.
+```{r}
+df_char <- strip_labs(df_char)
+```
+
+### Use `add_val_labs()` to make integer values the labels 
+Okay, now we're ready to begin. Imagine that we **started** with this data.frame
+of character-style Likert variables. Our goal is to convert them to integer variables,
+so that we can average over them or add them up to create a summary score (or to
+calculate item and test analysis statistics, such as Cronbach's alpha or IRT models).
+
+We flip our labs and vals inputs (compare vals and labs args below to earlier call)
+```{r}
+df_still_char <- add_val_labs(
+  data = df_char, vars = c("x", "y"), # all "x" or "y" vars
+  vals = labs2use, # NOW USING THIS AS OUR CURRENT VALS
+  labs = vals2label, # NOW USING THIS AS OUR LABELS
+  partial = TRUE
+) # this is critical
+
+# see  what this did
+head(df_still_char)
+
+sapply(df_still_char, class)
+```
+
+Use the integer labels -- swap the current character values for the integer labels. 
+```{r}
+df_integer <- use_val_labs(df_still_char)
+```
+
+Now, see  what **THIS** did
+```{r}
+head(df_integer)
+sapply(df_integer, class)
+```
+
+We've gone from all character to all integer and (hopefully) gotten a little more
+insight into what these labelr functions are doing.

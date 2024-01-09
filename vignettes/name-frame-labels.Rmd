@@ -1,0 +1,231 @@
+---
+title: "Name and Frame Labels"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Name and Frame Labels}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >"
+)
+```
+
+## Types of Labels
+labelr supports the creation and use of a few different types of labels in the 
+context of R data.frames. Specifically, labelr supports three core types of 
+data.frame labels, the last of which comes in three flavors:
+
+1. **Frame labels** - Each data.frame may be given a single "frame label" of 500 
+  characters or fewer, which may describe key general features or characteristics
+  of the data set (e.g., source, date produced or published, high-level 
+  contents). 
+  
+2. **Name labels** - Each variable may be given exactly one name label, which is 
+  an extended variable name or brief description of the variable. For example, 
+  if a variable called "st_b" refers to a survey respondent's state of birth, 
+  then a sensible and useful name label might be "State of Birth". Or, if a 
+  variable called "trust1" consisted of responses to the consumer survey 
+  question, "How much do you trust BBC news to give you unbiased information?," 
+  a sensible name label might be "BBC Trust." As such, name labels are 
+  comparable to what Stata and SAS call "variable labels."
+
+3. **Value labels** - labelr offers three kinds of value labels. 
+    * *One-to-one labels* - The canonical value-labeling use case entails mapping 
+     distinct values of a variable to distinct labels in a one-to-one fashion, so
+     that each value label uniquely identifies a substantive value. For instance, 
+     an administrative data set might assign the integers 1-7 to seven distinct 
+     racial/ethnic groups, and value labels would be critical in mapping those 
+     numbers to socially substantive racial/ethnic category concepts (e.g., 
+     Which number corresponds to the "Asian American?"). 
+    
+    * *Many-to-one labels* - In an alternative use case, value labels may serve to
+     distill or "bucket" distinct variable values in a way that deliberately 
+     "throws away" information for purposes of simplification. For example, one 
+     may wish to give the single label "Agree" to the responses "Very Strongly 
+     Agree," "Strongly Agree," and "Agree." Or one may wish to differentiate 
+     self-identified "White" respondents from "People of Color," applying the 
+     latter value label to all categories other than "White."
+    
+    * *Numerical range labels* - Finally, one may wish to carve a numerical 
+     variable into an ordinal or qualitative range, such as dichotomizing a
+     variable or dividing it into quantiles. Numerical range labels support 
+     one-to-many assignment of a single value label to a range of numerical 
+     values for a given variable.
+
+Most labelr functionality focuses on value labels of one form or another. Here, 
+we briefly highlight labelr's variable name and frame labeling functionality, 
+using the popular Motor Trend Cars (mtcars) data.frame that ships with Base R 
+and appears in many R demonstrations.
+
+## Assign and Retrieve a Frame Label
+Let's start by loading labelr. 
+
+```{r setup}
+library(labelr)
+```
+
+Let's add a "frame label," which describes the data.frame overall.
+```{r}
+mt2 <- add_frame_lab(mtcars, frame.lab = "Data extracted from the 1974 Motor
+Trend US magazine, comprising fuel consumption and 10 aspects of automobile
+design and performance for 32 automobiles (1973–74 models). Source: Henderson
+and Velleman (1981), Building multiple regression models interactively.
+ Biometrics, 37, 391–411.")
+```
+Let's see what this did.
+```{r}
+attr(mt2, "frame.lab") # check for attribute
+
+get_frame_lab(mt2) # return frame.lab alongside data.frame name as a data.frame
+
+get_frame_lab(mt2)$frame.lab
+```
+
+## Create and Assign Name Labels
+Let's load labelr. 
+Now, let's create variable name labels, using named character vector syntax. Notice
+that this is a named character vector, where the names are the (current) variable
+names (the mtcars's column names), and where the values are the proposed variable
+name labels.
+
+Note that this is not the only way to supply name labels, as we will demonstrate 
+in a moment.
+
+```{r}
+names_labs_vec <- c(
+  "mpg" = "Miles/(US) gallon",
+  "cyl" = "Number of cylinders",
+  "disp" = "Displacement (cu.in.)",
+  "hp" = "Gross horsepower",
+  "drat" = "Rear axle ratio",
+  "wt" = "Weight (1000 lbs)",
+  "qsec" = "1/4 mile time",
+  "vs" = "Engine (0 = V-shaped, 1 = straight)",
+  "am" = "Transmission (0 = automatic, 1 = manual)",
+  "gear" = "Number of forward gears",
+  "carb" = "Number of carburetors"
+)
+```
+
+Now, we will assign these variable NAME labels
+```{r}
+mt2 <- add_name_labs(mt2,
+  name.labs = names_labs_vec
+)
+```
+
+Here is another way we could do it.
+```{r}
+# get our current variable names
+names_mt <- c(
+  "mpg",
+  "cyl",
+  "disp",
+  "hp",
+  "drat",
+  "wt",
+  "qsec",
+  "vs",
+  "am",
+  "gear",
+  "carb"
+)
+
+# create a second vector of label names
+labs_mt <- c(
+  "Miles/(US) gallon",
+  "Number of cylinders",
+  "Displacement (cu.in.)",
+  "Gross horsepower",
+  "Rear axle ratio",
+  "Weight (1000 lbs)",
+  "1/4 mile time",
+  "Engine (0 = V-shaped, 1 = straight)",
+  "Transmission (0 = automatic, 1 = manual)",
+  "Number of forward gears",
+  "Number of carburetors"
+)
+
+# use the vars and labs arguments instead of the name.labs argument
+mt2 <- add_name_labs(mt2, vars = names_mt, labs = labs_mt)
+```
+## Update (select) Pre-existing Name Labels with `add_name_labs()`
+We can replace individual variable name labels, keeping the others as they were.
+```{r}
+mt2 <- add_name_labs(mt2,
+  name.labs = c(
+    "disp" = toupper("uh oh!"),
+    "mpg" = toupper("i, said, uh oh!!")
+  )
+)
+```
+## Look-up Name Labels with `get_name_labs()`
+An obvious, "low-fi" use of `add_name_labs()` is to produce a "look-up" table-style
+data.frame, in partnership with `get_name_labs()`
+
+Let's see what our prior mischief did
+```{r}
+get_name_labs(mt2)
+
+get_name_labs(mt2, vars = c("disp", "mpg"))
+```
+
+Enough shenanigans. Let's fix the offending name labels. We'll illustrate yet another way to do this,
+using the named vector we created earlier.
+
+```{r}
+mt2 <- add_name_labs(mt2,
+  vars = names(names_labs_vec), # get and use the names
+  labs = names_labs_vec
+) # get and use the values
+
+get_name_labs(mt2)
+```
+That's better. 
+
+## Swap Names for Name Labels Using `use_name_labs()`
+Swap out variable name labels for variable names
+```{r}
+mt2 <- use_name_labs(mt2)
+```
+The result is verbose!
+```{r}
+head(mt2[c(1, 2)])
+```
+## Create More Descriptive (and Verbose!) calls and output
+We can use `get_name_labs` to get a look up table, then copy-and-paste to work 
+with these. 
+
+```{r}
+lm(`Miles/(US) gallon` ~ `Number of cylinders`, data = mt2)
+lm(mpg ~ cyl, data = use_var_names(mt2))
+```
+
+Typing this freehand is painful, but we can type mt2$ into the console of RStudio, 
+which will auto-complete, then we can copy from there.
+
+There are various more and less esoteric ways we can use these.
+```{r}
+sapply(mt2, median) # get the median for every name-labeled variable
+
+collapse::qsu(mt2) # use an external package for more informative descriptives
+
+# mix names with labels in a correlation matrix
+cordf <- round(cor(mt2), 2) # create te corr matrix and round vals to two decimals
+colnames(cordf) <- names(mtcars) # put the original names on top as colnames
+cordf <- as.data.frame(cordf) # make it a data.frame
+cordf # what do we have?
+```
+
+## Revert to Original Names using `use_var_names()`
+Turn them back off (safest to save to a new data.frame in the first place)
+```{r}
+mt2 <- use_var_names(mt2)
+
+head(mt2)
+```
+

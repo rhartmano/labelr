@@ -1,0 +1,208 @@
+---
+title: "labelr and Moderately Large Data Frames"
+subtitle: "NYC Flights 2013"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{labelr and Moderately Large Data Frames}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >"
+)
+```
+## Overview
+labelr is not intended for "large" data.frames, which is a fuzzy concept. To
+give a sense of what labelr **can** handle: It should take several seconds (not
+minutes) for labelr to assign 10 distinct value labels of modest (vs. long) 
+character length to a data.frame of a few  ~100K rows on a 32GB RAM computer c.
+2023. As we start pressing on one or more of those dimensions, labelr will begin 
+to struggle. Thus, labelr is fast for small data, fast enough for moderately 
+large data, and not intended for "big data" (~ millions of rows) -- though even 
+in the latter case you may find it useful for generating and referencing simple 
+value-to-label mapping ("look-up") tables.
+
+Let's see labelr in action with the NYC Flights 2013 data set: a moderate-not-big 
+data.frame of ~340K rows.
+
+## Our Data
+First, let's load labelr and the nycflights13 package.
+```{r}
+opening_ding <- Sys.time()
+
+library(labelr)
+library(nycflights13)
+```
+
+We'll assign the data.frame to one we call df
+```{r}
+df <- flights
+
+nrow(df)
+```
+## Adding a Frame Label
+Let's add a "frame label," which describes the data.frame overall.
+```{r}
+df <- add_frame_lab(df, frame.lab = "On-time data for all flights that
+                    departed NYC (i.e. JFK, LGA or EWR) in 2013.")
+```
+Let's see what this did.
+```{r}
+attr(df, "frame.lab") # check for attribute
+
+get_frame_lab(df) # return frame.lab alongside data.frame name as a data.frame
+
+get_frame_lab(df)$frame.lab
+```
+## Create and Assign Name Labels
+Now, let's assign variable NAME labels.
+
+```{r}
+names_labs_vec <- c(
+  "year" = "Year of departure",
+  "month" = "Month of departure",
+  "year" = "Day of departure",
+  "dep_time" = "Actual departure time (format HHMM or HMM), local tz",
+  "arr_time" = "Actual arrival time (format HHMM or HMM), local tz",
+  "sched_dep_time" = "Scheduled departure times (format HHMM or HMM)",
+  "sched_arr_time" = "Scheduled arrival time (format HHMM or HMM)",
+  "dep_delay" = "Departure delays, in minutes",
+  "arr_delay" = "Arrival delays, in minutes",
+  "carrier" = "Two letter airline carrier abbreviation",
+  "flight" = "Flight number",
+  "tailnum" = "Plane tail number",
+  "origin" = "Flight origin airport code",
+  "dest" = "Flight destination airport code",
+  "air_time" = "Minutes spent in the air",
+  "distance" = "Miles between airports",
+  "hour" = "Hour of scheduled departure time",
+  "minute" = "Minutes component of scheduled departure time",
+  "time_hour" = "Scheduled date and hour of the flight as a POSIXct date"
+)
+
+df <- add_name_labs(df, name.labs = names_labs_vec)
+
+get_name_labs(df) # show that they've been added
+```
+
+## Adding Value Labels 
+Let's add variable VALUE labels for variable "carrier"
+
+### Getting Our Value Labels
+We'll get the full airline carrier names from the nycflights13 package
+
+```{r}
+airlines <- airlines
+
+head(airlines)
+```
+
+The carrier field of airlines matches the carrier column of df (formerly, flights)
+```{r}
+ny_val <- airlines$carrier
+```
+
+The name field of airlines gives us the full airline names.
+```{r}
+ny_lab <- airlines$name
+```
+
+df (flights) also has an integer month variable. 
+We will "hand-jam" month value labels
+
+```{r}
+ny_month_vals <- c(1:12) # values
+ny_month_labs <- c(
+  "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+) # labels
+```
+
+### Demoing `add_val1` - less flexibility, don't need to quote vars arg
+```{r}
+df <- add_val1(df,
+  var = carrier, vals = ny_val,
+  labs = ny_lab,
+  max.unique.vals = 20
+)
+```
+
+### Demoing `add_val_labs` - more flexibility, must quote vars arg
+```{r}
+df <- add_val_labs(df,
+  vars = "month",
+  vals = ny_month_vals,
+  labs = ny_month_labs,
+  max.unique.vals = 20
+)
+```
+
+### Percentile numerical range value labeling using `add_quant_labs`
+```{r}
+df <- add_quant_labs(df, "dep_time", qtiles = 5)
+```
+
+### Looking up our value labels with `get_val_labs()`
+```{r}
+get_val_labs(df)
+```
+
+## Swapping values for labels with `use_val_labs()`
+We'll use `head()` to get a baseline look at select rows and variables
+```{r}
+head(df[c("origin", "dep_time", "dest", "year", "month", "carrier")])
+```
+
+Now, let's do the same for a version we modified with `use_val_labs()`. Note that
+this cannot be "undone" (except for the usual clunky way of re-running our script
+up to this point and not doing this!).
+
+```{r}
+df_swapd <- use_val_labs(df)
+
+head(df_swapd[c("origin", "dep_time", "dest", "year", "month", "carrier")])
+```
+
+## Adding value labels columns to our data.frame with `add_lab_cols()`
+Instead of replacing values (which we can't undo), it might be safer to simply
+add "value-labels-on" character variables to the data.frame (which does add nearly
+675K new cells!). We'll throw caution to the wind and do so with `add_lab_cols()`.
+
+```{r}
+df_plus <- add_lab_cols(df, vars = c("carrier", "month", "dep_time"))
+
+head(df_plus[c(
+  "origin", "dest", "year",
+  "month", "month_lab",
+  "dep_time", "dep_time_lab",
+  "carrier", "carrier_lab"
+)])
+```
+
+## Filtering using labels with `flab()`
+We can use `flab()` to filter df based on month and carrier, even when value
+labels are "invisible" (i.e., existing only as attributes() meta-data.
+
+```{r}
+# labels are not visible (they exist only as attributes() meta-data)
+head(df[c("carrier", "arr_delay")])
+
+# we still can use them to filter (note: we're filtering on "JetBlue Airways",
+# ...NOT its obscure code "B6")
+df_fl <- flab(df, carrier == "JetBlue Airways" & arr_delay > 20)
+
+# here's what's returned when we filtered on "JetBlue Airways" using flab()
+head(df_fl[c("carrier", "arr_delay")])
+
+# double-check that this is JetBlue
+head(use_val_labs(df_fl)[c("carrier", "arr_delay")])
+```
+
+## How long all of this took on a 32GB RAM laptop
+```{r}
+the_buzzer <- Sys.time()
+the_buzzer - opening_ding
+```

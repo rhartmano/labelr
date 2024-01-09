@@ -1,0 +1,395 @@
+---
+title: "Demographic Data Labeling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Demographic Data Labeling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >",
+  fig.width = 7,
+  fig.height = 4.7
+)
+```
+
+## Motivation
+Researchers and data analysts frequently encounter demographic data fields in 
+surveys, questionnaires, and government-furnished data sets. Often, this data is 
+expressed in terms of numerical integers (e.g., 0 for "Male", 2 for "African 
+American", 3 for "Some College"). Variable name and value labels foster 
+interpretation of these and other variables that employ integer-valued codes that
+lack an intrinsic or obvious interpretation. Here, we use a fictional demographic
+data set from a fictional statistical agency as one way to to illustrate the value 
+and uses of labels (and labelr!).
+
+## Our Fictional Demographic Data
+Let's start by loading labelr.
+```{r setup}
+library(labelr)
+```
+
+Now, let's create a fake "demographic" data.frame, apply labels to it, and do some
+things with those labels. 
+
+`make_demo_data()` (included with labelr) creates fake "demographic" data intended
+for use in exploring/demonstrating labelr functionality. Here, we'll create a
+1000-observation data.frame.
+
+```{r}
+df <- make_demo_data(n = 1000, seed = 555)
+
+head(df)
+```
+
+## Add VALUE Labels Using `add_val_labs()`
+Let's add value labels for variable "raceth". Note: max.unique.vals sets an
+upper limit on the number of unique values a variable may have be considered
+"value-label-able." labelr sets an overall upper limit of 5000 unique value
+labels permissible per variable. If you need more, labelr is not the package for
+you (but see below discussion of `add_quant_labs()`).
+
+```{r}
+df <- add_val_labs(df,
+  vars = "raceth", vals = c(1:7),
+  labs = c(
+    "White", "Black", "Latino",
+    "Asian", "AIAN", "Multi", "Other"
+  ),
+  max.unique.vals = 10
+)
+```
+
+## Add VALUE Labels Using `add_val1()`
+Let's add value labels for variable "gender." Function `add_val1` allows you to 
+supply the variable name unquoted, provided you are value-labeling only one
+variable. (Not evident from the above, but `add_val_labs` supports labeling 
+multiple variables at once).
+
+```{r}
+df <- add_val1(
+  data = df, gender, vals = c(0, 1, 2),
+  labs = c("Male", "Female", "Other"), max.unique.vals = 10
+)
+```
+
+## Add NUMERICAL RANGE Labels Using `add_quant_labs()`
+Value labels are intended for categorical variables, such as binary, nominal,
+or (integer) ordinal variables with limited numbers of distinct categories. 
+Further, value labels are constrained to map one-to-one to distinct values:
+Any given value label can map to only one distinct value and vice versa.
+
+If you wish to apply a label to a range of values of a numerical variable,
+such as labeling each value according to the quintile or decile to which it 
+belongs, you can use `add_quant_labs()` (or `add_quant1`) to do so.
+
+Here, we will use `add_quant_labs` to apply quintile range labels to all 
+variables of df that have an "x" in their names (i.e., vars "x1" and "x2")
+
+```{r}
+df_temp <- add_quant_labs(data = df, vars = "x", qtiles = 5, partial = TRUE)
+
+head(use_val_labs(df_temp), 5)
+```
+
+As `add_quant_labs` adds those numerical range labels, the console output shows
+the actual quintile value of the supplied variable (here, "x1" and "x2") that 
+corresponds to each quintile (range) label. Any value at or below that value 
+(and above the next-lowest quintile) is assigned that quintile label (as the
+call to `use_val_labs()` shows).
+
+We can use the same function to assign arbitrary, user-specified range labels. 
+Here, we assign labels that differentiate values of "x1" and "x2" that are at or
+below 100 from values that are at or below 150.
+
+```{r}
+df_temp <- add_quant_labs(
+  data = df_temp, vars = "x", vals = c(100, 150),
+  partial = TRUE
+)
+
+head(use_val_labs(df_temp), 5)
+```
+
+Having demonstrated the basic of let's use `add_quant1` to apply decile range 
+labeling to variable "x1" only. This function only accepts one variable, but its 
+name can be supplied unquoted.
+
+```{r}
+df <- add_quant1(df, x1, qtiles = 5)
+
+head(use_val_labs(df), 5)
+```
+
+We'll preserve the "x1" range labels going forward, keeping "x2" unlabeled.
+
+## Add MANY-TO-ONE VALUE Labels Using `add_m1_lab()`
+If you wish to apply a single label to multiple distinct values, this can be
+done through successive calls to `add_m1_lab()` (or `add1m1()`, if working with
+a single variable). Here "m1" is shorthand for "many to one." 
+
+Note that each call to `add_m1_lab()` applies a single value label, so,  
+multiple calls are needed to apply multiple labels. Here, we illustrate this, 
+applying the label "Some College+" to values 3, 4, or 5 of the variable "edu", 
+then applying other distinct labels to values 1 and 2, respectively.
+
+```{r}
+df <- add_m1_lab(df, "edu", vals = c(3:5), lab = "Some College+")
+
+df <- add_m1_lab(df, "edu", vals = 1, lab = "Not HS Grad")
+
+df <- add_m1_lab(df, "edu", vals = 2, lab = "HSG, No College")
+
+get_val_labs(df)
+```
+
+## Add Variable NAME Labels Using `add_name_labs()` 
+Now, let's add (some fairly trivial) variable NAME labels
+
+```{r}
+df <- add_name_labs(df, name.labs = c(
+  "age" = "Age in years",
+  "raceth" = "Racial/ethnic identity group category",
+  "gender" = "Gender identity",
+  "edu" = "Highest education level attained",
+  "x1" = "Space Invaders reaction time test scores",
+  "x2" = "Galaga reaction time test scores"
+))
+```
+
+## Add a variable "frame label" using `add_frame_lab()` 
+Finally, we can provide an overall "frame" label, for the data set as a whole. 
+Like the data.frame itself, this frame label is entirely fictional.
+
+```{r}
+df <- add_frame_lab(df, frame.lab = "Demographic and reaction time test score
+                    records collected by Royal Statistical Agency of
+                    Fictionaslaviaca. Data fictionally collected in the year
+                    1987. As published in A. Smithee (1988). Some Fictional Data
+                    for Your Amusement. Mad Magazine, 10(1), 1-24.")
+
+
+get_frame_lab(df)
+```
+
+## Get Label Lookup Tables with `get_name_labs()` and `get_val_labs()`
+Were we successful in adding our labels? It's not obvious that we were.
+
+```{r}
+head(df)
+```
+
+Don't be so sure. The labels are indeed there, lurking in the background:
+
+```{r}
+get_frame_lab(df)
+
+get_name_labs(df)
+
+get_val_labs(df)
+```
+
+## Subset Our Lookup Tables to Streamline Output
+The above commands return data.frames, and we can be more selective about what 
+they return, if we're interested in only certain variables. 
+
+```{r}
+get_name_labs(df, "gender")
+
+get_val_labs(df, "gender")
+```
+
+## "Back up" Label Attributes Using `get_all_lab_atts()` 
+We can save both sets of labels in an external object (a list), as a backup.
+
+Why would we want to do this? Because certain R functions may silently discard
+our labels. Having them "backed up" (i.e., assigned to some other object) helps us
+recover quickly from such setbacks.
+
+```{r}
+zlab.df <- get_all_lab_atts(df)
+```
+
+## Strip away All Label Attributes Using `strip_labs()` 
+To simulate such a setback, let's strip away the labels ourselves.
+```{r}
+df <- strip_labs(df)
+get_all_lab_atts(df) # nothing there
+```
+They're gone!
+
+## Restore All Label Attributes Using `add_lab_atts()`
+```{r}
+df <- add_lab_atts(df, zlab.df)
+get_all_lab_atts(df)
+```
+Phew! They're back.
+
+## Overlay Value Labels with `use_val_labs()` and `with_val_labs()`
+We can overlay labels in place of values if we wish to view the former.
+```{r}
+head(use_val_labs(df), 5)
+```
+
+We can use with()-like non-standard evaluation, which is helpful in a few
+limited cases. Note how `with_val_labs` behaves below.
+```{r}
+with(df, table(gender, raceth))
+
+with_val_labs(df, table(gender, raceth))
+
+with(use_val_labs(df), table(gender, raceth))
+```
+
+A more compact alias for `use_val_labs()` is available: `uvl()`. When used in
+conjunction with descriptive functions from Base R or external packages, `uvl()`
+offers more interpretable output.
+
+```{r}
+# xtabs typical output
+xtabs(~raceth, data = df)
+
+# with df wrapped in `uvl()` or `use_val_labs()`
+xtabs(~raceth, data = uvl(df))
+```
+See also `tabl()`.
+
+```{r}
+# `collapse::qsu()`
+# with labels "off" (i.e., using regular values of "raceth" as by var)
+by_demog_val <- collapse::qsu(df, cols = c("x2"), by = ~raceth)
+by_demog_val
+
+# with labels "on" (i.e., using labels, thanks to `uvl()` aka `use_val_labs()`)
+by_demog_lab <- collapse::qsu(uvl(df), cols = c("x2"), by = ~raceth)
+by_demog_lab
+```
+
+Likewise, `wvl()` serves as a compact alias for `with_val_labs()`.
+```{r}
+wvl(df, table(gender, raceth)) # compact alias for with_val_labs
+```
+
+## Overlay Name Labels with `with_name_labs()`
+We can use `with_name_labs()` (or alias `wnl()`) to overlay name labels in place 
+column names in various expressions. Note here that our arguments are in terms 
+of column names, but the output is in terms of the corresponding name labels.
+
+```{r}
+# verify that we still have name labels
+get_name_labs(df)
+
+# demo wnl() (note that with_name_labs() will achieve same result)
+wnl(df, xtabs(x1 ~ gender)) # data arg always goes first, followed by experession
+
+wnl(df, aov(x1 ~ gender)) # data arg always goes first, followed by experession
+
+wnl(df, lm(x2 ~ gender * raceth + age))
+```
+
+Base plots without and with name labels "on."
+
+```{r}
+invisible(with(df, hist(x1))) # using with()
+
+invisible(wnl(df, hist(x1))) # using wnl(); compare to previous histogram
+```
+
+```{r}
+invisible(with(df, plot(x1, x2))) # using with()
+
+invisible(wnl(df, plot(x1, x2))) # using wnl(); compare to previous scatterplot
+```
+
+## Transform Values to Labels Using  `use_val_labs()`
+Since `use_val_labs()` returns a data.frame, we can use this function to recode 
+all of our value-labeled variables so that the labels become the values in the
+returned data.frame. Be thoughtful about whether and where you assign the result: 
+this can't be reversed with a simple command (another good reason to use
+`get_all_lab_atts`() and `add_lab_atts()`).
+
+```{r}
+df_swap <- use_val_labs(df)
+
+head(df_swap)
+```
+
+## Add Labels Columns Using  `add_lab_cols()`
+Less destructively, we can add label columns to our data.frame while retaining the
+values columns.
+
+```{r}
+df_plus <- add_lab_cols(df)
+
+head(df_plus[c("raceth", "raceth_lab", "gender", "gender_lab")])
+```
+
+## Show Select Rows Using `headl()`, `taill()`, `somel()`
+Base R includes the `head()` and `tail()` functions, which allow you to show the
+first n or last n rows of a data.frame. The car package offers a similar function
+called `some()`, which allows you to show a random n rows of a data.frame.
+
+labelr provides versions of these functions that will display value labels 
+in place of values (akin to `use_val_labs()`). Below, each of the three standard
+functions is demonstrated, followed by its labelr counterpart.
+
+```{r}
+head(df, 5) # Base R function utils::head()
+
+headl(df, 5) # labelr function headl() (note the "l")
+
+tail(df, 5) # Base R function utils::tail()
+
+taill(df, 5) # labelr function taill() (note the "l")
+
+car::some(df, 5) # car package function car::some()
+
+somel(df, 5, seed = 1837) # labelr function somel() (note the "l")
+```
+
+Note that `some()` and `somel()` will not return the same random rows.
+
+
+## "Filter Using Labels" with `flab()` 
+Similarly, we can filter on value labels, even when they're "off".
+
+```{r}
+head(df) # value labels can work for use even when we don't see them
+df1 <- flab(df, raceth == "Asian" & gender == "Female")
+head(df1)
+```
+
+## "Subset using labels" with `slab()`
+If we also want to streamline which columns are returned, we can switch from
+`flab()` to `slab()`. Note that `slab()` requires that a filtering condition be
+passed.
+
+```{r}
+head(slab(df, raceth == "Black" & gender == "Male", gender, raceth), 10)
+```
+
+## Tabulate frequencies with `tabl()`
+...in terms of values
+```{r}
+head(tabl(df, vars = "raceth"), 20)
+```
+...in terms of labels
+```{r}
+head(tabl(df, vars = "raceth", labs.on = TRUE), 20)
+```
+...without specifying variables
+```{r}
+head(tabl(df, labs.on = TRUE), 20)
+```
+
+...in proportions
+```{r}
+head(tabl(df, labs.on = TRUE, prop.digits = 3), 20)
+```
+...cross-tab style
+```{r}
+head(tabl(df, labs.on = TRUE, wide.col = "gender"), 20)
+```

@@ -1,0 +1,276 @@
+---
+title: "Labelr and Factors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Labelr and Factors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "### >"
+)
+```
+
+## Overview
+R's concept of a factor variable shares some affinities with the concept of a
+value-labeled variable and can be viewed as one approach to value labeling. 
+However, factors can manifest idiosyncratic and surprising behaviors depending 
+on the function to which you're trying to apply them. They are character-like, 
+but they are not character values. They are built on top of integers, but they 
+won't submit to all of the operations that integers do. They do some very handy 
+things in certain model-fitting applications, but their behavior "under the hood" 
+can be counter-intuitive or opaque. Simply put, they are their own thing.
+
+So, while factors have their purposes, it would be nice to associate value 
+labels with the distinct values of data.frame variables in a manner that 
+preserves the integrity and transparency of the underlying values (factors tend 
+to be opaque about this) and that allows you to view or use the labels in flexible
+ways.
+
+And if you wanted to work with a factor, it would be nice if you could add value 
+labels to it without it ceasing to be and behave like a factor. Let's see if we 
+can have our label-factor cake and eat it, too.
+
+## Our Data
+Let's load labelr.
+
+```{r}
+library(labelr)
+```
+
+We'll work with the iris data.frame that comes pre-packaged with R. 
+
+Here, we go. We'll note that the variable "Species" is a factor.
+
+```{r}
+unique(iris$Species)
+
+sapply(iris, class) # nothing up our sleeve -- "Species" is a factor
+```
+
+Let's add value labels to "Species" and assign the result to a new data.frame 
+that we'll call irlab. For our value labels, we'll use "se","ve", and "vi", 
+which are not adding much new information, but they will help to illustrate what 
+we can do with labelr and a factor variable.
+
+```{r}
+irlab <- add_val_labs(iris,
+  vars = "Species",
+  vals = c("setosa", "versicolor", "virginica"),
+  labs = c("se", "ve", "vi")
+)
+```
+
+Note that we could have just as (or even more) easily used `add_val1()`. 
+`add_val_labs()` is useful if we want to value-label many variables at once 
+(according to a common labeling scheme -- think likert responses to a survey),
+but `add_val1()` works for a single variable at a time and allows us to avoid
+quoting our column name, if that matters to us. Let's prove that they're the 
+same.
+
+```{r}
+irlab_dos <- add_val1(iris, Species,
+  vals = c("setosa", "versicolor", "virginica"),
+  labs = c("se", "ve", "vi")
+)
+```
+
+Are they the same? 
+
+```{r}
+identical(irlab, irlab_dos) # yes, they are
+
+rm(irlab_dos) # we've proven our point. let's remove this
+```
+
+## Why not both?
+Let's take a look at irlab -- "Species" in particular.
+
+First, note that irlab looks and acts just like iris in the usual ways that 
+matter
+
+```{r}
+summary(iris)
+
+summary(irlab)
+
+head(iris, 4)
+
+head(irlab, 4)
+```
+
+Note also that irlab's "Species" is still a factor, just like its iris 
+counterpart/parent.
+
+```{r}
+sapply(irlab, class)
+
+levels(irlab$Species)
+```
+
+But irlab's "Species" has value labels!
+
+```{r}
+get_val_labs(irlab, "Species")
+```
+
+And they work.
+
+```{r}
+head(use_val_labs(irlab))
+ir_v <- flab(irlab, Species == "vi")
+head(ir_v, 5)
+unique(ir_v$Species)
+levels(ir_v$Species) # factor levels are intact
+```
+
+Our take-aways so far? Factors can be value-labeled while staying factors, and 
+we can use the labels to do labelr-y things with those factors. We can have both.
+
+## Why not REALLY both?
+If we're dealing with a moderate-sized (~1M rows or less) data set and plenty of 
+memory, we may want to go further and add the labeled variable alongside the 
+factor version.
+
+```{r}
+irlab_aug <- add_lab_cols(irlab, vars = "Species")
+```
+
+This gives us a new variable called "Species_lab".
+Let's get select rows of the resulting data.frame, since we want to see all the
+different species.
+
+```{r}
+set.seed(231)
+sample_rows <- sample(seq_len(nrow(irlab)), 10, replace = FALSE)
+
+irlab_aug[sample_rows, ]
+
+sapply(irlab_aug, class)
+
+with(irlab_aug, table(Species, Species_lab))
+```
+
+Caution: Replacing the entire data.frame using `use_val_labs()` WILL coerce 
+factors to character, since the value labels are character values, not 
+recognized factor levels
+
+```{r}
+ir_char <- use_val_labs(irlab) # we assign this to a new data.frame
+sapply(ir_char, class)
+
+head(ir_char, 3)
+
+class(ir_char$Species) # it's character
+```
+
+Of course, even then, we could explicitly coerce the labels to be factors if we 
+wanted
+
+```{r}
+ir_fact <- use_val_labs(irlab)
+
+ir_fact$Species <- factor(ir_char$Species,
+  levels = c("se", "ve", "vi"),
+  labels = c("se", "ve", "vi")
+)
+head(ir_fact, 3)
+
+class(ir_fact$Species) # it's a factor
+
+levels(ir_fact$Species) # it's a factor
+```
+
+We've recovered.
+
+```{r}
+with(ir_fact, tapply(Sepal.Width, Species, mean))
+with(irlab, tapply(Sepal.Width, Species, mean))
+with(iris, tapply(Sepal.Width, Species, mean))
+```
+
+## How does this impact other R functions?
+It surely depends on the function, but let's compare 
+
+* `lm()` on iris to 
+* `lm()` on irlab 
+
+...over a common set of variables.
+
+```{r}
+# iris
+lm(Sepal.Length ~ Sepal.Width + Species, data = iris)
+
+# irlab
+lm(Sepal.Length ~ Sepal.Width + Species, data = irlab)
+```
+
+## What about Ordered factors?
+```{r}
+ir_ord <- iris
+```
+
+Let's make a fictional ordered factor that we add to ir_ord. We can pretend that
+this is some sort of judge's overall quality rating, if that helps.
+
+```{r}
+set.seed(293)
+qrating <- c("AAA", "AA", "A", "BBB", "AA", "BBB", "A")
+
+ir_ord$qrat <- sample(qrating, 150, replace = TRUE)
+
+ir_ord$qrat <- factor(ir_ord$qrat,
+  ordered = TRUE,
+  levels = c("AAA", "AA", "A", "BBB")
+)
+```
+
+Where do we stand with this factor?
+
+```{r}
+levels(ir_ord$qrat)
+
+class(ir_ord$qrat)
+```
+
+Let's add value labels to it.
+
+```{r}
+ir_ord <- add_val_labs(ir_ord,
+  vars = "qrat",
+  vals = c("AAA", "AA", "A", "BBB"),
+  labs = c(
+    "unimpeachable",
+    "excellent",
+    "very good",
+    "meh"
+  )
+)
+```
+
+Let's add a separate column with those labels as a distinct (character) variable 
+unto itself.
+
+```{r}
+ir_ord <- add_lab_cols(ir_ord, vars = "qrat")
+
+head(ir_ord, 10)
+
+with(ir_ord, table(qrat_lab, qrat))
+
+class(ir_ord$qrat)
+
+levels(ir_ord$qrat)
+
+class(ir_ord$qrat_lab)
+
+get_val_labs(ir_ord, "qrat") # labs are still there for qrat
+
+get_val_labs(ir_ord, "qrat_lab") # no labs here; this is just a character var
+```
+
+It appears that you really can have it all, where "it all" is defined as 
+"factors and labels."
