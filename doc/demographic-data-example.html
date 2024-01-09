@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Demographic Data Labeling</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Demographic Data Labeling</h1>
+
+
+
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>Researchers and data analysts frequently encounter demographic data
+fields in surveys, questionnaires, and government-furnished data sets.
+Often, this data is expressed in terms of numerical integers (e.g., 0
+for “Male”, 2 for “African American”, 3 for “Some College”). Variable
+name and value labels foster interpretation of these and other variables
+that employ integer-valued codes that lack an intrinsic or obvious
+interpretation. Here, we use a fictional demographic data set from a
+fictional statistical agency as one way to to illustrate the value and
+uses of labels (and labelr!).</p>
+</div>
+<div id="our-fictional-demographic-data" class="section level2">
+<h2>Our Fictional Demographic Data</h2>
+<p>Let’s start by loading labelr.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(labelr)</span></code></pre></div>
+<p>Now, let’s create a fake “demographic” data.frame, apply labels to
+it, and do some things with those labels.</p>
+<p><code>make_demo_data()</code> (included with labelr) creates fake
+“demographic” data intended for use in exploring/demonstrating labelr
+functionality. Here, we’ll create a 1000-observation data.frame.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">make_demo_data</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">seed =</span> <span class="dv">555</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu     x1     x2</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">### &gt; T-1  1  59      1      4   5 120.25 0.5928</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="do">### &gt; N-2  2  56      1      1   2  67.12 0.9116</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="do">### &gt; D-3  3  54      1      6   3  79.28 0.6993</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46      1      5   4  99.59 0.2243</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="do">### &gt; E-5  5  18      1      6   4  90.49 0.0099</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="do">### &gt; K-6  6  45      0      2   4  78.55 0.9250</span></span></code></pre></div>
+</div>
+<div id="add-value-labels-using-add_val_labs" class="section level2">
+<h2>Add VALUE Labels Using <code>add_val_labs()</code></h2>
+<p>Let’s add value labels for variable “raceth”. Note: max.unique.vals
+sets an upper limit on the number of unique values a variable may have
+be considered “value-label-able.” labelr sets an overall upper limit of
+5000 unique value labels permissible per variable. If you need more,
+labelr is not the package for you (but see below discussion of
+<code>add_quant_labs()</code>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_val_labs</span>(df,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;raceth&quot;</span>, <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">labs =</span> <span class="fu">c</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="st">&quot;White&quot;</span>, <span class="st">&quot;Black&quot;</span>, <span class="st">&quot;Latino&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="st">&quot;Asian&quot;</span>, <span class="st">&quot;AIAN&quot;</span>, <span class="st">&quot;Multi&quot;</span>, <span class="st">&quot;Other&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  ),</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">max.unique.vals =</span> <span class="dv">10</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="do">### &gt; Labeling variable --raceth--:</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="do">### &gt;      var vals   labs</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="do">### &gt; 1 raceth    1  White</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="do">### &gt; 2 raceth    2  Black</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="do">### &gt; 3 raceth    3 Latino</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="do">### &gt; 4 raceth    4  Asian</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="do">### &gt; 5 raceth    5   AIAN</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="do">### &gt; 6 raceth    6  Multi</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="do">### &gt; 7 raceth    7  Other</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="do">### &gt; 8 raceth   NA     NA</span></span></code></pre></div>
+</div>
+<div id="add-value-labels-using-add_val1" class="section level2">
+<h2>Add VALUE Labels Using <code>add_val1()</code></h2>
+<p>Let’s add value labels for variable “gender.” Function
+<code>add_val1</code> allows you to supply the variable name unquoted,
+provided you are value-labeling only one variable. (Not evident from the
+above, but <code>add_val_labs</code> supports labeling multiple
+variables at once).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_val1</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">data =</span> df, gender, <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Other&quot;</span>), <span class="at">max.unique.vals =</span> <span class="dv">10</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gender--:</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">### &gt;       var vals   labs</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">### &gt; 9  gender    0   Male</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">### &gt; 10 gender    1 Female</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">### &gt; 11 gender    2  Other</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">### &gt; 12 gender   NA     NA</span></span></code></pre></div>
+</div>
+<div id="add-numerical-range-labels-using-add_quant_labs" class="section level2">
+<h2>Add NUMERICAL RANGE Labels Using <code>add_quant_labs()</code></h2>
+<p>Value labels are intended for categorical variables, such as binary,
+nominal, or (integer) ordinal variables with limited numbers of distinct
+categories. Further, value labels are constrained to map one-to-one to
+distinct values: Any given value label can map to only one distinct
+value and vice versa.</p>
+<p>If you wish to apply a label to a range of values of a numerical
+variable, such as labeling each value according to the quintile or
+decile to which it belongs, you can use <code>add_quant_labs()</code>
+(or <code>add_quant1</code>) to do so.</p>
+<p>Here, we will use <code>add_quant_labs</code> to apply quintile range
+labels to all variables of df that have an “x” in their names (i.e.,
+vars “x1” and “x2”)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(<span class="at">data =</span> df, <span class="at">vars =</span> <span class="st">&quot;x&quot;</span>, <span class="at">qtiles =</span> <span class="dv">5</span>, <span class="at">partial =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="do">### &gt; Labeling variable --x1--:</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">### &gt;    var    vals labs</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">### &gt; 13  x1  82.976 q020</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">### &gt; 14  x1  95.238 q040</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="do">### &gt; 15  x1 106.142 q060</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="do">### &gt; 16  x1 117.524 q080</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="do">### &gt; 17  x1  157.98 q100</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="do">### &gt; 18  x1      NA   NA</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="do">### &gt; Labeling variable --x2--:</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">### &gt;    var    vals labs</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">### &gt; 19  x2 0.22404 q020</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="do">### &gt; 20  x2 0.41608 q040</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="do">### &gt; 21  x2 0.62034 q060</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">### &gt; 22  x2 0.80538 q080</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">### &gt; 23  x2  0.9992 q100</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="do">### &gt; 24  x2      NA   NA</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="do">### &gt; Remember: This command uses partial vars arg matching.</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="do">### &gt; Use a more specific vars argument or set partial = FALSE</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="do">### &gt; ...if you want to restrict labeling to fewer/more specific variables.</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(df_temp), <span class="dv">5</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu   x1   x2</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   5 q100 q060</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White   2 q020 q100</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   3 q020 q080</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   4 q060 q040</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   4 q040 q020</span></span></code></pre></div>
+<p>As <code>add_quant_labs</code> adds those numerical range labels, the
+console output shows the actual quintile value of the supplied variable
+(here, “x1” and “x2”) that corresponds to each quintile (range) label.
+Any value at or below that value (and above the next-lowest quintile) is
+assigned that quintile label (as the call to <code>use_val_labs()</code>
+shows).</p>
+<p>We can use the same function to assign arbitrary, user-specified
+range labels. Here, we assign labels that differentiate values of “x1”
+and “x2” that are at or below 100 from values that are at or below
+150.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">data =</span> df_temp, <span class="at">vars =</span> <span class="st">&quot;x&quot;</span>, <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">150</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">partial =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="do">### &gt;   Dropping all value labels from variable --x1--.</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="do">### &gt; Labeling variable --x1--:</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="do">### &gt;    var vals  labs</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="do">### &gt; 19  x1  100 &lt;=100</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">### &gt; 20  x1  150 &lt;=150</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="do">### &gt; 21  x1   NA    NA</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="do">### &gt;   Dropping all value labels from variable --x2--.</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="do">### &gt; Warning in add_quant_labs(data = df_temp, vars = &quot;x&quot;, vals = c(100, 150), : </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="do">### &gt; Some of the supplied vals argument values are outside</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="do">### &gt; the observed range of var --x2-- values</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="do">### &gt; Labeling variable --x2--:</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="do">### &gt;    var vals  labs</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="do">### &gt; 16  x2  100 &lt;=100</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="do">### &gt; 17  x2  150 &lt;=150</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="do">### &gt; 18  x2   NA    NA</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="do">### &gt; Remember: This command uses partial vars arg matching.</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="do">### &gt; Use a more specific vars argument or set partial = FALSE</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="do">### &gt; ...if you want to restrict labeling to fewer/more specific variables.</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(df_temp), <span class="dv">5</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu    x1    x2</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   5 &lt;=150 &lt;=100</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White   2 &lt;=100 &lt;=100</span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   3 &lt;=100 &lt;=100</span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   4 &lt;=100 &lt;=100</span></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   4 &lt;=100 &lt;=100</span></span></code></pre></div>
+<p>Having demonstrated the basic of let’s use <code>add_quant1</code> to
+apply decile range labeling to variable “x1” only. This function only
+accepts one variable, but its name can be supplied unquoted.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_quant1</span>(df, x1, <span class="at">qtiles =</span> <span class="dv">5</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="do">### &gt; Labeling variable --x1--:</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">### &gt;    var    vals labs</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">### &gt; 13  x1  82.976 q020</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">### &gt; 14  x1  95.238 q040</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="do">### &gt; 15  x1 106.142 q060</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="do">### &gt; 16  x1 117.524 q080</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="do">### &gt; 17  x1  157.98 q100</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="do">### &gt; 18  x1      NA   NA</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(df), <span class="dv">5</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu   x1     x2</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   5 q100 0.5928</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White   2 q020 0.9116</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   3 q020 0.6993</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   4 q060 0.2243</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   4 q040 0.0099</span></span></code></pre></div>
+<p>We’ll preserve the “x1” range labels going forward, keeping “x2”
+unlabeled.</p>
+</div>
+<div id="add-many-to-one-value-labels-using-add_m1_lab" class="section level2">
+<h2>Add MANY-TO-ONE VALUE Labels Using <code>add_m1_lab()</code></h2>
+<p>If you wish to apply a single label to multiple distinct values, this
+can be done through successive calls to <code>add_m1_lab()</code> (or
+<code>add1m1()</code>, if working with a single variable). Here “m1” is
+shorthand for “many to one.”</p>
+<p>Note that each call to <code>add_m1_lab()</code> applies a single
+value label, so,<br />
+multiple calls are needed to apply multiple labels. Here, we illustrate
+this, applying the label “Some College+” to values 3, 4, or 5 of the
+variable “edu”, then applying other distinct labels to values 1 and 2,
+respectively.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(df, <span class="st">&quot;edu&quot;</span>, <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>), <span class="at">lab =</span> <span class="st">&quot;Some College+&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">### &gt; Labeling variable --edu--:</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">### &gt;    var vals          labs</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">### &gt; 19 edu    1             1</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">### &gt; 20 edu    2             2</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">### &gt; 21 edu    3 Some College+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">### &gt; 22 edu    4 Some College+</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">### &gt; 23 edu    5 Some College+</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">### &gt; 24 edu   NA            NA</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(df, <span class="st">&quot;edu&quot;</span>, <span class="at">vals =</span> <span class="dv">1</span>, <span class="at">lab =</span> <span class="st">&quot;Not HS Grad&quot;</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="do">### &gt; Labeling variable --edu--:</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="do">### &gt;    var vals          labs</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="do">### &gt; 13 edu    1   Not HS Grad</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="do">### &gt; 14 edu    2             2</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="do">### &gt; 15 edu    3 Some College+</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="do">### &gt; 16 edu    4 Some College+</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="do">### &gt; 17 edu    5 Some College+</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="do">### &gt; 18 edu   NA            NA</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(df, <span class="st">&quot;edu&quot;</span>, <span class="at">vals =</span> <span class="dv">2</span>, <span class="at">lab =</span> <span class="st">&quot;HSG, No College&quot;</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="do">### &gt; Labeling variable --edu--:</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="do">### &gt;    var vals            labs</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="do">### &gt; 13 edu    1     Not HS Grad</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="do">### &gt; 14 edu    2 HSG, No College</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="do">### &gt; 15 edu    3   Some College+</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="do">### &gt; 16 edu    4   Some College+</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="do">### &gt; 17 edu    5   Some College+</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="do">### &gt; 18 edu   NA              NA</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="fu">get_val_labs</span>(df)</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="do">### &gt;       var    vals            labs</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="do">### &gt; 1  gender       0            Male</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="do">### &gt; 2  gender       1          Female</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="do">### &gt; 3  gender       2           Other</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="do">### &gt; 4  gender      NA              NA</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="do">### &gt; 5  raceth       1           White</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="do">### &gt; 6  raceth       2           Black</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="do">### &gt; 7  raceth       3          Latino</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="do">### &gt; 8  raceth       4           Asian</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="do">### &gt; 9  raceth       5            AIAN</span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="do">### &gt; 10 raceth       6           Multi</span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="do">### &gt; 11 raceth       7           Other</span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="do">### &gt; 12 raceth      NA              NA</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a><span class="do">### &gt; 13    edu       1     Not HS Grad</span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a><span class="do">### &gt; 14    edu       2 HSG, No College</span></span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="do">### &gt; 15    edu       3   Some College+</span></span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a><span class="do">### &gt; 16    edu       4   Some College+</span></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a><span class="do">### &gt; 17    edu       5   Some College+</span></span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a><span class="do">### &gt; 18    edu      NA              NA</span></span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a><span class="do">### &gt; 19     x1  82.976            q020</span></span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a><span class="do">### &gt; 20     x1  95.238            q040</span></span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a><span class="do">### &gt; 21     x1 106.142            q060</span></span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a><span class="do">### &gt; 22     x1 117.524            q080</span></span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a><span class="do">### &gt; 23     x1  157.98            q100</span></span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a><span class="do">### &gt; 24     x1      NA              NA</span></span></code></pre></div>
+</div>
+<div id="add-variable-name-labels-using-add_name_labs" class="section level2">
+<h2>Add Variable NAME Labels Using <code>add_name_labs()</code></h2>
+<p>Now, let’s add (some fairly trivial) variable NAME labels</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_name_labs</span>(df, <span class="at">name.labs =</span> <span class="fu">c</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="st">&quot;age&quot;</span> <span class="ot">=</span> <span class="st">&quot;Age in years&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="st">&quot;raceth&quot;</span> <span class="ot">=</span> <span class="st">&quot;Racial/ethnic identity group category&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="st">&quot;gender&quot;</span> <span class="ot">=</span> <span class="st">&quot;Gender identity&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="st">&quot;edu&quot;</span> <span class="ot">=</span> <span class="st">&quot;Highest education level attained&quot;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="st">&quot;x1&quot;</span> <span class="ot">=</span> <span class="st">&quot;Space Invaders reaction time test scores&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="st">&quot;x2&quot;</span> <span class="ot">=</span> <span class="st">&quot;Galaga reaction time test scores&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+<div id="add-a-variable-frame-label-using-add_frame_lab" class="section level2">
+<h2>Add a variable “frame label” using <code>add_frame_lab()</code></h2>
+<p>Finally, we can provide an overall “frame” label, for the data set as
+a whole. Like the data.frame itself, this frame label is entirely
+fictional.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_frame_lab</span>(df, <span class="at">frame.lab =</span> <span class="st">&quot;Demographic and reaction time test score</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="st">                    records collected by Royal Statistical Agency of</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="st">                    Fictionaslaviaca. Data fictionally collected in the year</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="st">                    1987. As published in A. Smithee (1988). Some Fictional Data</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="st">                    for Your Amusement. Mad Magazine, 10(1), 1-24.&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">get_frame_lab</span>(df)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">### &gt;   data.frame</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">### &gt; 1         df</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">### &gt;                                                                                                                                                                                                                                                        frame.lab</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">### &gt; 1 Demographic and reaction time test score records collected by Royal Statistical Agency of Fictionaslaviaca. Data fictionally collected in the year 1987. As published in A. Smithee (1988). Some Fictional Data for Your Amusement. Mad Magazine, 10(1), 1-24.</span></span></code></pre></div>
+</div>
+<div id="get-label-lookup-tables-with-get_name_labs-and-get_val_labs" class="section level2">
+<h2>Get Label Lookup Tables with <code>get_name_labs()</code> and
+<code>get_val_labs()</code></h2>
+<p>Were we successful in adding our labels? It’s not obvious that we
+were.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu     x1     x2</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">### &gt; T-1  1  59      1      4   5 120.25 0.5928</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="do">### &gt; N-2  2  56      1      1   2  67.12 0.9116</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="do">### &gt; D-3  3  54      1      6   3  79.28 0.6993</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46      1      5   4  99.59 0.2243</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="do">### &gt; E-5  5  18      1      6   4  90.49 0.0099</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="do">### &gt; K-6  6  45      0      2   4  78.55 0.9250</span></span></code></pre></div>
+<p>Don’t be so sure. The labels are indeed there, lurking in the
+background:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">get_frame_lab</span>(df)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="do">### &gt;   data.frame</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">### &gt; 1         df</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">### &gt;                                                                                                                                                                                                                                                        frame.lab</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="do">### &gt; 1 Demographic and reaction time test score records collected by Royal Statistical Agency of Fictionaslaviaca. Data fictionally collected in the year 1987. As published in A. Smithee (1988). Some Fictional Data for Your Amusement. Mad Magazine, 10(1), 1-24.</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">get_name_labs</span>(df)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="do">### &gt;      var                                      lab</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="do">### &gt; 1     id                                       id</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="do">### &gt; 2    age                             Age in years</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="do">### &gt; 3 gender                          Gender identity</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="do">### &gt; 4 raceth    Racial/ethnic identity group category</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="do">### &gt; 5    edu         Highest education level attained</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="do">### &gt; 6     x1 Space Invaders reaction time test scores</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="do">### &gt; 7     x2         Galaga reaction time test scores</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="fu">get_val_labs</span>(df)</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="do">### &gt;       var    vals            labs</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="do">### &gt; 1  gender       0            Male</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="do">### &gt; 2  gender       1          Female</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="do">### &gt; 3  gender       2           Other</span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="do">### &gt; 4  gender      NA              NA</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="do">### &gt; 5  raceth       1           White</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="do">### &gt; 6  raceth       2           Black</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="do">### &gt; 7  raceth       3          Latino</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="do">### &gt; 8  raceth       4           Asian</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a><span class="do">### &gt; 9  raceth       5            AIAN</span></span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a><span class="do">### &gt; 10 raceth       6           Multi</span></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="do">### &gt; 11 raceth       7           Other</span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a><span class="do">### &gt; 12 raceth      NA              NA</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="do">### &gt; 13    edu       1     Not HS Grad</span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a><span class="do">### &gt; 14    edu       2 HSG, No College</span></span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="do">### &gt; 15    edu       3   Some College+</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="do">### &gt; 16    edu       4   Some College+</span></span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="do">### &gt; 17    edu       5   Some College+</span></span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="do">### &gt; 18    edu      NA              NA</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="do">### &gt; 19     x1  82.976            q020</span></span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="do">### &gt; 20     x1  95.238            q040</span></span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a><span class="do">### &gt; 21     x1 106.142            q060</span></span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a><span class="do">### &gt; 22     x1 117.524            q080</span></span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a><span class="do">### &gt; 23     x1  157.98            q100</span></span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a><span class="do">### &gt; 24     x1      NA              NA</span></span></code></pre></div>
+</div>
+<div id="subset-our-lookup-tables-to-streamline-output" class="section level2">
+<h2>Subset Our Lookup Tables to Streamline Output</h2>
+<p>The above commands return data.frames, and we can be more selective
+about what they return, if we’re interested in only certain
+variables.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">get_name_labs</span>(df, <span class="st">&quot;gender&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="do">### &gt;      var             lab</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="do">### &gt; 1 gender Gender identity</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">get_val_labs</span>(df, <span class="st">&quot;gender&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">### &gt;      var vals   labs</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="do">### &gt; 1 gender    0   Male</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="do">### &gt; 2 gender    1 Female</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="do">### &gt; 3 gender    2  Other</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="do">### &gt; 4 gender   NA     NA</span></span></code></pre></div>
+</div>
+<div id="back-up-label-attributes-using-get_all_lab_atts" class="section level2">
+<h2>“Back up” Label Attributes Using
+<code>get_all_lab_atts()</code></h2>
+<p>We can save both sets of labels in an external object (a list), as a
+backup.</p>
+<p>Why would we want to do this? Because certain R functions may
+silently discard our labels. Having them “backed up” (i.e., assigned to
+some other object) helps us recover quickly from such setbacks.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>zlab.df <span class="ot">&lt;-</span> <span class="fu">get_all_lab_atts</span>(df)</span></code></pre></div>
+</div>
+<div id="strip-away-all-label-attributes-using-strip_labs" class="section level2">
+<h2>Strip away All Label Attributes Using <code>strip_labs()</code></h2>
+<p>To simulate such a setback, let’s strip away the labels
+ourselves.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">strip_labs</span>(df)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(df) <span class="co"># nothing there</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="do">### &gt; named list()</span></span></code></pre></div>
+<p>They’re gone!</p>
+</div>
+<div id="restore-all-label-attributes-using-add_lab_atts" class="section level2">
+<h2>Restore All Label Attributes Using <code>add_lab_atts()</code></h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">add_lab_atts</span>(df, zlab.df)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(df)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="do">### &gt; $frame.lab</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="do">### &gt; [1] &quot;Demographic and reaction time test score records collected by Royal Statistical Agency of Fictionaslaviaca. Data fictionally collected in the year 1987. As published in A. Smithee (1988). Some Fictional Data for Your Amusement. Mad Magazine, 10(1), 1-24.&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="do">### &gt; $name.labs</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="do">### &gt;                                         id </span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="do">### &gt;                                       &quot;id&quot; </span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="do">### &gt;                                        age </span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="do">### &gt;                             &quot;Age in years&quot; </span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="do">### &gt;                                     gender </span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="do">### &gt;                          &quot;Gender identity&quot; </span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="do">### &gt;                                     raceth </span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="do">### &gt;    &quot;Racial/ethnic identity group category&quot; </span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="do">### &gt;                                        edu </span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="do">### &gt;         &quot;Highest education level attained&quot; </span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="do">### &gt;                                         x1 </span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="do">### &gt; &quot;Space Invaders reaction time test scores&quot; </span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="do">### &gt;                                         x2 </span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="do">### &gt;         &quot;Galaga reaction time test scores&quot; </span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="do">### &gt; $val.labs.gender</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="do">### &gt;        0        1        2       NA </span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="do">### &gt;   &quot;Male&quot; &quot;Female&quot;  &quot;Other&quot;     &quot;NA&quot; </span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="do">### &gt; $val.labs.raceth</span></span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="do">### &gt;        1        2        3        4        5        6        7       NA </span></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a><span class="do">### &gt;  &quot;White&quot;  &quot;Black&quot; &quot;Latino&quot;  &quot;Asian&quot;   &quot;AIAN&quot;  &quot;Multi&quot;  &quot;Other&quot;     &quot;NA&quot; </span></span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a><span class="do">### &gt; $val.labs.edu</span></span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a><span class="do">### &gt;                 1                 2                 3                 4 </span></span>
+<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a><span class="do">### &gt;     &quot;Not HS Grad&quot; &quot;HSG, No College&quot;   &quot;Some College+&quot;   &quot;Some College+&quot; </span></span>
+<span id="cb16-33"><a href="#cb16-33" tabindex="-1"></a><span class="do">### &gt;                 5                NA </span></span>
+<span id="cb16-34"><a href="#cb16-34" tabindex="-1"></a><span class="do">### &gt;   &quot;Some College+&quot;              &quot;NA&quot; </span></span>
+<span id="cb16-35"><a href="#cb16-35" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb16-36"><a href="#cb16-36" tabindex="-1"></a><span class="do">### &gt; $val.labs.x1</span></span>
+<span id="cb16-37"><a href="#cb16-37" tabindex="-1"></a><span class="do">### &gt;  82.976  95.238 106.142 117.524  157.98      NA </span></span>
+<span id="cb16-38"><a href="#cb16-38" tabindex="-1"></a><span class="do">### &gt;  &quot;q020&quot;  &quot;q040&quot;  &quot;q060&quot;  &quot;q080&quot;  &quot;q100&quot;    &quot;NA&quot;</span></span></code></pre></div>
+<p>Phew! They’re back.</p>
+</div>
+<div id="overlay-value-labels-with-use_val_labs-and-with_val_labs" class="section level2">
+<h2>Overlay Value Labels with <code>use_val_labs()</code> and
+<code>with_val_labs()</code></h2>
+<p>We can overlay labels in place of values if we wish to view the
+former.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(df), <span class="dv">5</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth             edu   x1     x2</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   Some College+ q100 0.5928</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White HSG, No College q020 0.9116</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   Some College+ q020 0.6993</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   Some College+ q060 0.2243</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   Some College+ q040 0.0099</span></span></code></pre></div>
+<p>We can use with()-like non-standard evaluation, which is helpful in a
+few limited cases. Note how <code>with_val_labs</code> behaves
+below.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">with</span>(df, <span class="fu">table</span>(gender, raceth))</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="do">### &gt;       raceth</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="do">### &gt; gender  1  2  3  4  5  6  7</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="do">### &gt;      0 83 66 62 65 64 68 61</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="do">### &gt;      1 70 74 79 56 83 69 64</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="do">### &gt;      2  3  7  3  6  8  3  6</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="fu">with_val_labs</span>(df, <span class="fu">table</span>(gender, raceth))</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="do">### &gt;         raceth</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="do">### &gt; gender   AIAN Asian Black Latino Multi Other White</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="do">### &gt;   Female   83    56    74     79    69    64    70</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="do">### &gt;   Male     64    65    66     62    68    61    83</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="do">### &gt;   Other     8     6     7      3     3     6     3</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="fu">with</span>(<span class="fu">use_val_labs</span>(df), <span class="fu">table</span>(gender, raceth))</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="do">### &gt;         raceth</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="do">### &gt; gender   AIAN Asian Black Latino Multi Other White</span></span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="do">### &gt;   Female   83    56    74     79    69    64    70</span></span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="do">### &gt;   Male     64    65    66     62    68    61    83</span></span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="do">### &gt;   Other     8     6     7      3     3     6     3</span></span></code></pre></div>
+<p>A more compact alias for <code>use_val_labs()</code> is available:
+<code>uvl()</code>. When used in conjunction with descriptive functions
+from Base R or external packages, <code>uvl()</code> offers more
+interpretable output.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># xtabs typical output</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">xtabs</span>(<span class="sc">~</span>raceth, <span class="at">data =</span> df)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="do">### &gt; raceth</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="do">### &gt;   1   2   3   4   5   6   7 </span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="do">### &gt; 156 147 144 127 155 140 131</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co"># with df wrapped in `uvl()` or `use_val_labs()`</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="fu">xtabs</span>(<span class="sc">~</span>raceth, <span class="at">data =</span> <span class="fu">uvl</span>(df))</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="do">### &gt; raceth</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="do">### &gt;   AIAN  Asian  Black Latino  Multi  Other  White </span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="do">### &gt;    155    127    147    144    140    131    156</span></span></code></pre></div>
+<p>See also <code>tabl()</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># `collapse::qsu()`</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co"># with labels &quot;off&quot; (i.e., using regular values of &quot;raceth&quot; as by var)</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>by_demog_val <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">qsu</span>(df, <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;x2&quot;</span>), <span class="at">by =</span> <span class="sc">~</span>raceth)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>by_demog_val</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="do">### &gt;      N    Mean      SD     Min     Max</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="do">### &gt; 1  156  0.5067  0.2696  0.0018  0.9966</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="do">### &gt; 2  147  0.4922  0.2755  0.0041  0.9951</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="do">### &gt; 3  144  0.4951   0.299  0.0172  0.9992</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="do">### &gt; 4  127  0.5461  0.2873   0.006  0.9885</span></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="do">### &gt; 5  155  0.5476  0.2995  0.0076   0.994</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="do">### &gt; 6  140  0.5163  0.2798  0.0099  0.9915</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="do">### &gt; 7  131  0.5132  0.2786  0.0014  0.9918</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co"># with labels &quot;on&quot; (i.e., using labels, thanks to `uvl()` aka `use_val_labs()`)</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a>by_demog_lab <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">qsu</span>(<span class="fu">uvl</span>(df), <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;x2&quot;</span>), <span class="at">by =</span> <span class="sc">~</span>raceth)</span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a>by_demog_lab</span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="do">### &gt;           N    Mean      SD     Min     Max</span></span>
+<span id="cb20-18"><a href="#cb20-18" tabindex="-1"></a><span class="do">### &gt; AIAN    155  0.5476  0.2995  0.0076   0.994</span></span>
+<span id="cb20-19"><a href="#cb20-19" tabindex="-1"></a><span class="do">### &gt; Asian   127  0.5461  0.2873   0.006  0.9885</span></span>
+<span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a><span class="do">### &gt; Black   147  0.4922  0.2755  0.0041  0.9951</span></span>
+<span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a><span class="do">### &gt; Latino  144  0.4951   0.299  0.0172  0.9992</span></span>
+<span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a><span class="do">### &gt; Multi   140  0.5163  0.2798  0.0099  0.9915</span></span>
+<span id="cb20-23"><a href="#cb20-23" tabindex="-1"></a><span class="do">### &gt; Other   131  0.5132  0.2786  0.0014  0.9918</span></span>
+<span id="cb20-24"><a href="#cb20-24" tabindex="-1"></a><span class="do">### &gt; White   156  0.5067  0.2696  0.0018  0.9966</span></span></code></pre></div>
+<p>Likewise, <code>wvl()</code> serves as a compact alias for
+<code>with_val_labs()</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">wvl</span>(df, <span class="fu">table</span>(gender, raceth)) <span class="co"># compact alias for with_val_labs</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="do">### &gt;         raceth</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="do">### &gt; gender   AIAN Asian Black Latino Multi Other White</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="do">### &gt;   Female   83    56    74     79    69    64    70</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="do">### &gt;   Male     64    65    66     62    68    61    83</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="do">### &gt;   Other     8     6     7      3     3     6     3</span></span></code></pre></div>
+</div>
+<div id="overlay-name-labels-with-with_name_labs" class="section level2">
+<h2>Overlay Name Labels with <code>with_name_labs()</code></h2>
+<p>We can use <code>with_name_labs()</code> (or alias
+<code>wnl()</code>) to overlay name labels in place column names in
+various expressions. Note here that our arguments are in terms of column
+names, but the output is in terms of the corresponding name labels.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># verify that we still have name labels</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">get_name_labs</span>(df)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="do">### &gt;      var                                      lab</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="do">### &gt; 1     id                                       id</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="do">### &gt; 2    age                             Age in years</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="do">### &gt; 3 gender                          Gender identity</span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="do">### &gt; 4 raceth    Racial/ethnic identity group category</span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="do">### &gt; 5    edu         Highest education level attained</span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="do">### &gt; 6     x1 Space Invaders reaction time test scores</span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="do">### &gt; 7     x2         Galaga reaction time test scores</span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="co"># demo wnl() (note that with_name_labs() will achieve same result)</span></span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="fu">wnl</span>(df, <span class="fu">xtabs</span>(x1 <span class="sc">~</span> gender)) <span class="co"># data arg always goes first, followed by experession</span></span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="do">### &gt; Gender identity</span></span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a><span class="do">### &gt;        0        1        2 </span></span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a><span class="do">### &gt; 46790.57 50012.94  3588.85</span></span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a><span class="fu">wnl</span>(df, <span class="fu">aov</span>(x1 <span class="sc">~</span> gender)) <span class="co"># data arg always goes first, followed by experession</span></span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a><span class="do">### &gt; Call:</span></span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a><span class="do">### &gt;    aov(formula = `Space Invaders reaction time test scores` ~ `Gender identity`)</span></span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a><span class="do">### &gt; Terms:</span></span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a><span class="do">### &gt;                 `Gender identity` Residuals</span></span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a><span class="do">### &gt; Sum of Squares              226.5  403242.8</span></span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a><span class="do">### &gt; Deg. of Freedom                 1       998</span></span>
+<span id="cb22-26"><a href="#cb22-26" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb22-27"><a href="#cb22-27" tabindex="-1"></a><span class="do">### &gt; Residual standard error: 20.10102</span></span>
+<span id="cb22-28"><a href="#cb22-28" tabindex="-1"></a><span class="do">### &gt; Estimated effects may be unbalanced</span></span>
+<span id="cb22-29"><a href="#cb22-29" tabindex="-1"></a></span>
+<span id="cb22-30"><a href="#cb22-30" tabindex="-1"></a><span class="fu">wnl</span>(df, <span class="fu">lm</span>(x2 <span class="sc">~</span> gender <span class="sc">*</span> raceth <span class="sc">+</span> age))</span>
+<span id="cb22-31"><a href="#cb22-31" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb22-32"><a href="#cb22-32" tabindex="-1"></a><span class="do">### &gt; Call:</span></span>
+<span id="cb22-33"><a href="#cb22-33" tabindex="-1"></a><span class="do">### &gt; lm(formula = `Galaga reaction time test scores` ~ `Gender identity` * </span></span>
+<span id="cb22-34"><a href="#cb22-34" tabindex="-1"></a><span class="do">### &gt;     `Racial/ethnic identity group category` + `Age in years`)</span></span>
+<span id="cb22-35"><a href="#cb22-35" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb22-36"><a href="#cb22-36" tabindex="-1"></a><span class="do">### &gt; Coefficients:</span></span>
+<span id="cb22-37"><a href="#cb22-37" tabindex="-1"></a><span class="do">### &gt;                                               (Intercept)  </span></span>
+<span id="cb22-38"><a href="#cb22-38" tabindex="-1"></a><span class="do">### &gt;                                                 0.5439910  </span></span>
+<span id="cb22-39"><a href="#cb22-39" tabindex="-1"></a><span class="do">### &gt;                                         `Gender identity`  </span></span>
+<span id="cb22-40"><a href="#cb22-40" tabindex="-1"></a><span class="do">### &gt;                                                -0.0533033  </span></span>
+<span id="cb22-41"><a href="#cb22-41" tabindex="-1"></a><span class="do">### &gt;                   `Racial/ethnic identity group category`  </span></span>
+<span id="cb22-42"><a href="#cb22-42" tabindex="-1"></a><span class="do">### &gt;                                                -0.0023013  </span></span>
+<span id="cb22-43"><a href="#cb22-43" tabindex="-1"></a><span class="do">### &gt;                                            `Age in years`  </span></span>
+<span id="cb22-44"><a href="#cb22-44" tabindex="-1"></a><span class="do">### &gt;                                                -0.0003929  </span></span>
+<span id="cb22-45"><a href="#cb22-45" tabindex="-1"></a><span class="do">### &gt; `Gender identity`:`Racial/ethnic identity group category`  </span></span>
+<span id="cb22-46"><a href="#cb22-46" tabindex="-1"></a><span class="do">### &gt;                                                 0.0126283</span></span></code></pre></div>
+<p>Base plots without and with name labels “on.”</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">with</span>(df, <span class="fu">hist</span>(x1))) <span class="co"># using with()</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">wnl</span>(df, <span class="fu">hist</span>(x1))) <span class="co"># using wnl(); compare to previous histogram</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">with</span>(df, <span class="fu">plot</span>(x1, x2))) <span class="co"># using with()</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">wnl</span>(df, <span class="fu">plot</span>(x1, x2))) <span class="co"># using wnl(); compare to previous scatterplot</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="transform-values-to-labels-using-use_val_labs" class="section level2">
+<h2>Transform Values to Labels Using <code>use_val_labs()</code></h2>
+<p>Since <code>use_val_labs()</code> returns a data.frame, we can use
+this function to recode all of our value-labeled variables so that the
+labels become the values in the returned data.frame. Be thoughtful about
+whether and where you assign the result: this can’t be reversed with a
+simple command (another good reason to use
+<code>get_all_lab_atts</code>() and <code>add_lab_atts()</code>).</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>df_swap <span class="ot">&lt;-</span> <span class="fu">use_val_labs</span>(df)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">head</span>(df_swap)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth             edu   x1     x2</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   Some College+ q100 0.5928</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White HSG, No College q020 0.9116</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   Some College+ q020 0.6993</span></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   Some College+ q060 0.2243</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   Some College+ q040 0.0099</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="do">### &gt; K-6  6  45   Male  Black   Some College+ q020 0.9250</span></span></code></pre></div>
+</div>
+<div id="add-labels-columns-using-add_lab_cols" class="section level2">
+<h2>Add Labels Columns Using <code>add_lab_cols()</code></h2>
+<p>Less destructively, we can add label columns to our data.frame while
+retaining the values columns.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>df_plus <span class="ot">&lt;-</span> <span class="fu">add_lab_cols</span>(df)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">head</span>(df_plus[<span class="fu">c</span>(<span class="st">&quot;raceth&quot;</span>, <span class="st">&quot;raceth_lab&quot;</span>, <span class="st">&quot;gender&quot;</span>, <span class="st">&quot;gender_lab&quot;</span>)])</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="do">### &gt;     raceth raceth_lab gender gender_lab</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="do">### &gt; T-1      4      Asian      1     Female</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="do">### &gt; N-2      1      White      1     Female</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="do">### &gt; D-3      6      Multi      1     Female</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="do">### &gt; Q-4      5       AIAN      1     Female</span></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a><span class="do">### &gt; E-5      6      Multi      1     Female</span></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a><span class="do">### &gt; K-6      2      Black      0       Male</span></span></code></pre></div>
+</div>
+<div id="show-select-rows-using-headl-taill-somel" class="section level2">
+<h2>Show Select Rows Using <code>headl()</code>, <code>taill()</code>,
+<code>somel()</code></h2>
+<p>Base R includes the <code>head()</code> and <code>tail()</code>
+functions, which allow you to show the first n or last n rows of a
+data.frame. The car package offers a similar function called
+<code>some()</code>, which allows you to show a random n rows of a
+data.frame.</p>
+<p>labelr provides versions of these functions that will display value
+labels in place of values (akin to <code>use_val_labs()</code>). Below,
+each of the three standard functions is demonstrated, followed by its
+labelr counterpart.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">5</span>) <span class="co"># Base R function utils::head()</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu     x1     x2</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="do">### &gt; T-1  1  59      1      4   5 120.25 0.5928</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="do">### &gt; N-2  2  56      1      1   2  67.12 0.9116</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="do">### &gt; D-3  3  54      1      6   3  79.28 0.6993</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46      1      5   4  99.59 0.2243</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="do">### &gt; E-5  5  18      1      6   4  90.49 0.0099</span></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a><span class="fu">headl</span>(df, <span class="dv">5</span>) <span class="co"># labelr function headl() (note the &quot;l&quot;)</span></span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth             edu   x1     x2</span></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a><span class="do">### &gt; T-1  1  59 Female  Asian   Some College+ q100 0.5928</span></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="do">### &gt; N-2  2  56 Female  White HSG, No College q020 0.9116</span></span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a><span class="do">### &gt; D-3  3  54 Female  Multi   Some College+ q020 0.6993</span></span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46 Female   AIAN   Some College+ q060 0.2243</span></span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a><span class="do">### &gt; E-5  5  18 Female  Multi   Some College+ q040 0.0099</span></span>
+<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" tabindex="-1"></a><span class="fu">tail</span>(df, <span class="dv">5</span>) <span class="co"># Base R function utils::tail()</span></span>
+<span id="cb29-18"><a href="#cb29-18" tabindex="-1"></a><span class="do">### &gt;          id age gender raceth edu     x1     x2</span></span>
+<span id="cb29-19"><a href="#cb29-19" tabindex="-1"></a><span class="do">### &gt; Z-996   996  63      0      1   4  92.36 0.0447</span></span>
+<span id="cb29-20"><a href="#cb29-20" tabindex="-1"></a><span class="do">### &gt; S-997   997  18      0      4   4 147.40 0.2252</span></span>
+<span id="cb29-21"><a href="#cb29-21" tabindex="-1"></a><span class="do">### &gt; K-998   998  45      0      5   2 106.87 0.1610</span></span>
+<span id="cb29-22"><a href="#cb29-22" tabindex="-1"></a><span class="do">### &gt; I-999   999  46      1      4   2 119.13 0.7666</span></span>
+<span id="cb29-23"><a href="#cb29-23" tabindex="-1"></a><span class="do">### &gt; H-1000 1000  68      0      6   5  70.38 0.5123</span></span>
+<span id="cb29-24"><a href="#cb29-24" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" tabindex="-1"></a><span class="fu">taill</span>(df, <span class="dv">5</span>) <span class="co"># labelr function taill() (note the &quot;l&quot;)</span></span>
+<span id="cb29-26"><a href="#cb29-26" tabindex="-1"></a><span class="do">### &gt;          id age gender raceth             edu   x1     x2</span></span>
+<span id="cb29-27"><a href="#cb29-27" tabindex="-1"></a><span class="do">### &gt; Z-996   996  63   Male  White   Some College+ q040 0.0447</span></span>
+<span id="cb29-28"><a href="#cb29-28" tabindex="-1"></a><span class="do">### &gt; S-997   997  18   Male  Asian   Some College+ q100 0.2252</span></span>
+<span id="cb29-29"><a href="#cb29-29" tabindex="-1"></a><span class="do">### &gt; K-998   998  45   Male   AIAN HSG, No College q080 0.1610</span></span>
+<span id="cb29-30"><a href="#cb29-30" tabindex="-1"></a><span class="do">### &gt; I-999   999  46 Female  Asian HSG, No College q100 0.7666</span></span>
+<span id="cb29-31"><a href="#cb29-31" tabindex="-1"></a><span class="do">### &gt; H-1000 1000  68   Male  Multi   Some College+ q020 0.5123</span></span>
+<span id="cb29-32"><a href="#cb29-32" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">some</span>(df, <span class="dv">5</span>) <span class="co"># car package function car::some()</span></span>
+<span id="cb29-34"><a href="#cb29-34" tabindex="-1"></a><span class="do">### &gt;        id age gender raceth edu     x1     x2</span></span>
+<span id="cb29-35"><a href="#cb29-35" tabindex="-1"></a><span class="do">### &gt; H-89   89  24      0      3   3 110.56 0.9992</span></span>
+<span id="cb29-36"><a href="#cb29-36" tabindex="-1"></a><span class="do">### &gt; W-425 425  52      1      4   5 108.73 0.0726</span></span>
+<span id="cb29-37"><a href="#cb29-37" tabindex="-1"></a><span class="do">### &gt; W-663 663  29      0      6   3  75.43 0.8891</span></span>
+<span id="cb29-38"><a href="#cb29-38" tabindex="-1"></a><span class="do">### &gt; M-743 743  28      1      1   4 107.95 0.4214</span></span>
+<span id="cb29-39"><a href="#cb29-39" tabindex="-1"></a><span class="do">### &gt; P-983 983  31      0      7   2 111.65 0.8703</span></span>
+<span id="cb29-40"><a href="#cb29-40" tabindex="-1"></a></span>
+<span id="cb29-41"><a href="#cb29-41" tabindex="-1"></a><span class="fu">somel</span>(df, <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">1837</span>) <span class="co"># labelr function somel() (note the &quot;l&quot;)</span></span>
+<span id="cb29-42"><a href="#cb29-42" tabindex="-1"></a><span class="do">### &gt;        id age gender raceth             edu   x1     x2</span></span>
+<span id="cb29-43"><a href="#cb29-43" tabindex="-1"></a><span class="do">### &gt; B-407 407  45 Female Latino   Some College+ q020 0.3781</span></span>
+<span id="cb29-44"><a href="#cb29-44" tabindex="-1"></a><span class="do">### &gt; O-634 634  33   Male  Asian   Some College+ q060 0.9275</span></span>
+<span id="cb29-45"><a href="#cb29-45" tabindex="-1"></a><span class="do">### &gt; F-893 893  56   Male  White   Some College+ q080 0.9966</span></span>
+<span id="cb29-46"><a href="#cb29-46" tabindex="-1"></a><span class="do">### &gt; S-361 361  53 Female  Asian HSG, No College q020 0.5263</span></span>
+<span id="cb29-47"><a href="#cb29-47" tabindex="-1"></a><span class="do">### &gt; K-452 452  40   Male Latino   Some College+ q100 0.3242</span></span></code></pre></div>
+<p>Note that <code>some()</code> and <code>somel()</code> will not
+return the same random rows.</p>
+</div>
+<div id="filter-using-labels-with-flab" class="section level2">
+<h2>“Filter Using Labels” with <code>flab()</code></h2>
+<p>Similarly, we can filter on value labels, even when they’re
+“off”.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">head</span>(df) <span class="co"># value labels can work for use even when we don&#39;t see them</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="do">### &gt;     id age gender raceth edu     x1     x2</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="do">### &gt; T-1  1  59      1      4   5 120.25 0.5928</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="do">### &gt; N-2  2  56      1      1   2  67.12 0.9116</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="do">### &gt; D-3  3  54      1      6   3  79.28 0.6993</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="do">### &gt; Q-4  4  46      1      5   4  99.59 0.2243</span></span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="do">### &gt; E-5  5  18      1      6   4  90.49 0.0099</span></span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="do">### &gt; K-6  6  45      0      2   4  78.55 0.9250</span></span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">flab</span>(df, raceth <span class="sc">==</span> <span class="st">&quot;Asian&quot;</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">&quot;Female&quot;</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a><span class="do">### &gt; Remember: Any filtering conditions involving value-labeled variables must be expressed</span></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="do">### &gt; in terms of the (quoted character) value labels, not the variable values themselves. </span></span>
+<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a><span class="do">### &gt; To filter using values (not labels) of value-labeled variables, try, e.g., sfilter().</span></span>
+<span id="cb30-15"><a href="#cb30-15" tabindex="-1"></a><span class="fu">head</span>(df1)</span>
+<span id="cb30-16"><a href="#cb30-16" tabindex="-1"></a><span class="do">### &gt;      id age gender raceth edu     x1     x2</span></span>
+<span id="cb30-17"><a href="#cb30-17" tabindex="-1"></a><span class="do">### &gt; T-1   1  59      1      4   5 120.25 0.5928</span></span>
+<span id="cb30-18"><a href="#cb30-18" tabindex="-1"></a><span class="do">### &gt; D-40 40  60      1      4   4  78.12 0.9885</span></span>
+<span id="cb30-19"><a href="#cb30-19" tabindex="-1"></a><span class="do">### &gt; E-67 67  39      1      4   5  98.21 0.6244</span></span>
+<span id="cb30-20"><a href="#cb30-20" tabindex="-1"></a><span class="do">### &gt; I-73 73  36      1      4   2  98.42 0.2102</span></span>
+<span id="cb30-21"><a href="#cb30-21" tabindex="-1"></a><span class="do">### &gt; V-80 80  27      1      4   4 122.62 0.3137</span></span>
+<span id="cb30-22"><a href="#cb30-22" tabindex="-1"></a><span class="do">### &gt; Q-92 92  44      1      4   2 102.40 0.7108</span></span></code></pre></div>
+</div>
+<div id="subset-using-labels-with-slab" class="section level2">
+<h2>“Subset using labels” with <code>slab()</code></h2>
+<p>If we also want to streamline which columns are returned, we can
+switch from <code>flab()</code> to <code>slab()</code>. Note that
+<code>slab()</code> requires that a filtering condition be passed.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">slab</span>(df, raceth <span class="sc">==</span> <span class="st">&quot;Black&quot;</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">&quot;Male&quot;</span>, gender, raceth), <span class="dv">10</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="do">### &gt; Remember: Any slab() filtering conditions involving value-labeled variables must be expressed</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="do">### &gt; in terms of the (quoted character) value labels, not the variable values themselves. </span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="do">### &gt; To filter using values (not labels) of value-labeled variables, try, e.g., ssubset().</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="do">### &gt;       gender raceth</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a><span class="do">### &gt; K-6        0      2</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="do">### &gt; F-22       0      2</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="do">### &gt; E-30       0      2</span></span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a><span class="do">### &gt; O-46       0      2</span></span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="do">### &gt; Q-48       0      2</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="do">### &gt; F-72       0      2</span></span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a><span class="do">### &gt; T-117      0      2</span></span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a><span class="do">### &gt; K-149      0      2</span></span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a><span class="do">### &gt; M-161      0      2</span></span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a><span class="do">### &gt; A-167      0      2</span></span></code></pre></div>
+</div>
+<div id="tabulate-frequencies-with-tabl" class="section level2">
+<h2>Tabulate frequencies with <code>tabl()</code></h2>
+<p>…in terms of values</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tabl</span>(df, <span class="at">vars =</span> <span class="st">&quot;raceth&quot;</span>), <span class="dv">20</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="do">### &gt; Note: To filter zero-frequency rows (i.e., un-observed value combinations)</span></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="do">### &gt; set zero.rm = TRUE.</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="do">### &gt;   raceth   n</span></span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="do">### &gt; 1      1 156</span></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="do">### &gt; 2      5 155</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="do">### &gt; 3      2 147</span></span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="do">### &gt; 4      3 144</span></span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="do">### &gt; 5      6 140</span></span>
+<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a><span class="do">### &gt; 6      7 131</span></span>
+<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a><span class="do">### &gt; 7      4 127</span></span></code></pre></div>
+<p>…in terms of labels</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tabl</span>(df, <span class="at">vars =</span> <span class="st">&quot;raceth&quot;</span>, <span class="at">labs.on =</span> <span class="cn">TRUE</span>), <span class="dv">20</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="do">### &gt; Note: To filter zero-frequency rows (i.e., un-observed value combinations)</span></span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">### &gt; set zero.rm = TRUE.</span></span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a><span class="do">### &gt;   raceth   n</span></span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a><span class="do">### &gt; 1  White 156</span></span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a><span class="do">### &gt; 2   AIAN 155</span></span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a><span class="do">### &gt; 3  Black 147</span></span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a><span class="do">### &gt; 4 Latino 144</span></span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a><span class="do">### &gt; 5  Multi 140</span></span>
+<span id="cb33-11"><a href="#cb33-11" tabindex="-1"></a><span class="do">### &gt; 6  Other 131</span></span>
+<span id="cb33-12"><a href="#cb33-12" tabindex="-1"></a><span class="do">### &gt; 7  Asian 127</span></span></code></pre></div>
+<p>…without specifying variables</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tabl</span>(df, <span class="at">labs.on =</span> <span class="cn">TRUE</span>), <span class="dv">20</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="do">### &gt; Excluding variable --id-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="do">### &gt; Excluding variable --age-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a><span class="do">### &gt; Excluding variable --x2-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a><span class="do">### &gt; Note: To filter zero-frequency rows (i.e., un-observed value combinations)</span></span>
+<span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a><span class="do">### &gt; set zero.rm = TRUE.</span></span>
+<span id="cb34-11"><a href="#cb34-11" tabindex="-1"></a><span class="do">### &gt;    gender raceth           edu   x1  n</span></span>
+<span id="cb34-12"><a href="#cb34-12" tabindex="-1"></a><span class="do">### &gt; 1    Male  Other Some College+ q020 18</span></span>
+<span id="cb34-13"><a href="#cb34-13" tabindex="-1"></a><span class="do">### &gt; 2    Male  White Some College+ q020 14</span></span>
+<span id="cb34-14"><a href="#cb34-14" tabindex="-1"></a><span class="do">### &gt; 3    Male  White Some College+ q060 14</span></span>
+<span id="cb34-15"><a href="#cb34-15" tabindex="-1"></a><span class="do">### &gt; 4  Female   AIAN Some College+ q020 13</span></span>
+<span id="cb34-16"><a href="#cb34-16" tabindex="-1"></a><span class="do">### &gt; 5  Female   AIAN Some College+ q060 13</span></span>
+<span id="cb34-17"><a href="#cb34-17" tabindex="-1"></a><span class="do">### &gt; 6  Female Latino Some College+ q040 13</span></span>
+<span id="cb34-18"><a href="#cb34-18" tabindex="-1"></a><span class="do">### &gt; 7  Female Latino Some College+ q100 13</span></span>
+<span id="cb34-19"><a href="#cb34-19" tabindex="-1"></a><span class="do">### &gt; 8    Male   AIAN Some College+ q040 13</span></span>
+<span id="cb34-20"><a href="#cb34-20" tabindex="-1"></a><span class="do">### &gt; 9  Female   AIAN Some College+ q080 12</span></span>
+<span id="cb34-21"><a href="#cb34-21" tabindex="-1"></a><span class="do">### &gt; 10 Female  Asian Some College+ q080 12</span></span>
+<span id="cb34-22"><a href="#cb34-22" tabindex="-1"></a><span class="do">### &gt; 11 Female  Black Some College+ q060 12</span></span>
+<span id="cb34-23"><a href="#cb34-23" tabindex="-1"></a><span class="do">### &gt; 12   Male  Multi Some College+ q020 12</span></span>
+<span id="cb34-24"><a href="#cb34-24" tabindex="-1"></a><span class="do">### &gt; 13   Male  Multi Some College+ q100 12</span></span>
+<span id="cb34-25"><a href="#cb34-25" tabindex="-1"></a><span class="do">### &gt; 14   Male  White Some College+ q080 12</span></span>
+<span id="cb34-26"><a href="#cb34-26" tabindex="-1"></a><span class="do">### &gt; 15 Female Latino Some College+ q020 11</span></span>
+<span id="cb34-27"><a href="#cb34-27" tabindex="-1"></a><span class="do">### &gt; 16 Female  White Some College+ q080 11</span></span>
+<span id="cb34-28"><a href="#cb34-28" tabindex="-1"></a><span class="do">### &gt; 17   Male  Asian Some College+ q040 11</span></span>
+<span id="cb34-29"><a href="#cb34-29" tabindex="-1"></a><span class="do">### &gt; 18   Male  Black Some College+ q040 11</span></span>
+<span id="cb34-30"><a href="#cb34-30" tabindex="-1"></a><span class="do">### &gt; 19   Male Latino Some College+ q100 11</span></span>
+<span id="cb34-31"><a href="#cb34-31" tabindex="-1"></a><span class="do">### &gt; 20 Female   AIAN Some College+ q040 10</span></span></code></pre></div>
+<p>…in proportions</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tabl</span>(df, <span class="at">labs.on =</span> <span class="cn">TRUE</span>, <span class="at">prop.digits =</span> <span class="dv">3</span>), <span class="dv">20</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="do">### &gt; Excluding variable --id-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="do">### &gt; Excluding variable --age-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="do">### &gt; Excluding variable --x2-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a><span class="do">### &gt; Note: To filter zero-frequency rows (i.e., un-observed value combinations)</span></span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a><span class="do">### &gt; set zero.rm = TRUE.</span></span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="do">### &gt;    gender raceth           edu   x1     n</span></span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a><span class="do">### &gt; 1    Male  Other Some College+ q020 0.018</span></span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a><span class="do">### &gt; 2    Male  White Some College+ q020 0.014</span></span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a><span class="do">### &gt; 3    Male  White Some College+ q060 0.014</span></span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a><span class="do">### &gt; 4  Female   AIAN Some College+ q020 0.013</span></span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a><span class="do">### &gt; 5  Female   AIAN Some College+ q060 0.013</span></span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a><span class="do">### &gt; 6  Female Latino Some College+ q040 0.013</span></span>
+<span id="cb35-18"><a href="#cb35-18" tabindex="-1"></a><span class="do">### &gt; 7  Female Latino Some College+ q100 0.013</span></span>
+<span id="cb35-19"><a href="#cb35-19" tabindex="-1"></a><span class="do">### &gt; 8    Male   AIAN Some College+ q040 0.013</span></span>
+<span id="cb35-20"><a href="#cb35-20" tabindex="-1"></a><span class="do">### &gt; 9  Female   AIAN Some College+ q080 0.012</span></span>
+<span id="cb35-21"><a href="#cb35-21" tabindex="-1"></a><span class="do">### &gt; 10 Female  Asian Some College+ q080 0.012</span></span>
+<span id="cb35-22"><a href="#cb35-22" tabindex="-1"></a><span class="do">### &gt; 11 Female  Black Some College+ q060 0.012</span></span>
+<span id="cb35-23"><a href="#cb35-23" tabindex="-1"></a><span class="do">### &gt; 12   Male  Multi Some College+ q020 0.012</span></span>
+<span id="cb35-24"><a href="#cb35-24" tabindex="-1"></a><span class="do">### &gt; 13   Male  Multi Some College+ q100 0.012</span></span>
+<span id="cb35-25"><a href="#cb35-25" tabindex="-1"></a><span class="do">### &gt; 14   Male  White Some College+ q080 0.012</span></span>
+<span id="cb35-26"><a href="#cb35-26" tabindex="-1"></a><span class="do">### &gt; 15 Female Latino Some College+ q020 0.011</span></span>
+<span id="cb35-27"><a href="#cb35-27" tabindex="-1"></a><span class="do">### &gt; 16 Female  White Some College+ q080 0.011</span></span>
+<span id="cb35-28"><a href="#cb35-28" tabindex="-1"></a><span class="do">### &gt; 17   Male  Asian Some College+ q040 0.011</span></span>
+<span id="cb35-29"><a href="#cb35-29" tabindex="-1"></a><span class="do">### &gt; 18   Male  Black Some College+ q040 0.011</span></span>
+<span id="cb35-30"><a href="#cb35-30" tabindex="-1"></a><span class="do">### &gt; 19   Male Latino Some College+ q100 0.011</span></span>
+<span id="cb35-31"><a href="#cb35-31" tabindex="-1"></a><span class="do">### &gt; 20 Female   AIAN Some College+ q040 0.010</span></span></code></pre></div>
+<p>…cross-tab style</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">tabl</span>(df, <span class="at">labs.on =</span> <span class="cn">TRUE</span>, <span class="at">wide.col =</span> <span class="st">&quot;gender&quot;</span>), <span class="dv">20</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="do">### &gt; Excluding variable --id-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a><span class="do">### &gt; Excluding variable --age-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a><span class="do">### &gt; Excluding variable --x2-- (includes decimals or exceeds max.unique.vals).</span></span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a><span class="do">### &gt; Note: To filter zero-frequency rows (i.e., un-observed value combinations)</span></span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a><span class="do">### &gt; set zero.rm = TRUE.</span></span>
+<span id="cb36-11"><a href="#cb36-11" tabindex="-1"></a><span class="do">### &gt;    raceth           edu   x1 Male Female Other</span></span>
+<span id="cb36-12"><a href="#cb36-12" tabindex="-1"></a><span class="do">### &gt; 1   Other Some College+ q020   18      5     1</span></span>
+<span id="cb36-13"><a href="#cb36-13" tabindex="-1"></a><span class="do">### &gt; 2   White Some College+ q020   14      5     0</span></span>
+<span id="cb36-14"><a href="#cb36-14" tabindex="-1"></a><span class="do">### &gt; 3   White Some College+ q060   14      5     2</span></span>
+<span id="cb36-15"><a href="#cb36-15" tabindex="-1"></a><span class="do">### &gt; 4    AIAN Some College+ q020    6     13     1</span></span>
+<span id="cb36-16"><a href="#cb36-16" tabindex="-1"></a><span class="do">### &gt; 5    AIAN Some College+ q060    8     13     0</span></span>
+<span id="cb36-17"><a href="#cb36-17" tabindex="-1"></a><span class="do">### &gt; 6  Latino Some College+ q040    8     13     0</span></span>
+<span id="cb36-18"><a href="#cb36-18" tabindex="-1"></a><span class="do">### &gt; 7  Latino Some College+ q100   11     13     0</span></span>
+<span id="cb36-19"><a href="#cb36-19" tabindex="-1"></a><span class="do">### &gt; 8    AIAN Some College+ q040   13     10     1</span></span>
+<span id="cb36-20"><a href="#cb36-20" tabindex="-1"></a><span class="do">### &gt; 9    AIAN Some College+ q080    4     12     3</span></span>
+<span id="cb36-21"><a href="#cb36-21" tabindex="-1"></a><span class="do">### &gt; 10  Asian Some College+ q080    5     12     0</span></span>
+<span id="cb36-22"><a href="#cb36-22" tabindex="-1"></a><span class="do">### &gt; 11  Black Some College+ q060    9     12     1</span></span>
+<span id="cb36-23"><a href="#cb36-23" tabindex="-1"></a><span class="do">### &gt; 12  Multi Some College+ q020   12     10     1</span></span>
+<span id="cb36-24"><a href="#cb36-24" tabindex="-1"></a><span class="do">### &gt; 13  Multi Some College+ q100   12     10     0</span></span>
+<span id="cb36-25"><a href="#cb36-25" tabindex="-1"></a><span class="do">### &gt; 14  White Some College+ q080   12     11     0</span></span>
+<span id="cb36-26"><a href="#cb36-26" tabindex="-1"></a><span class="do">### &gt; 15 Latino Some College+ q020    8     11     2</span></span>
+<span id="cb36-27"><a href="#cb36-27" tabindex="-1"></a><span class="do">### &gt; 16  Asian Some College+ q040   11      6     0</span></span>
+<span id="cb36-28"><a href="#cb36-28" tabindex="-1"></a><span class="do">### &gt; 17  Black Some College+ q040   11      6     1</span></span>
+<span id="cb36-29"><a href="#cb36-29" tabindex="-1"></a><span class="do">### &gt; 18  Black Some College+ q020    9     10     2</span></span>
+<span id="cb36-30"><a href="#cb36-30" tabindex="-1"></a><span class="do">### &gt; 19 Latino Some College+ q060   10     10     1</span></span>
+<span id="cb36-31"><a href="#cb36-31" tabindex="-1"></a><span class="do">### &gt; 20 Latino Some College+ q080    5     10     0</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

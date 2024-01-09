@@ -1,0 +1,54 @@
+#' Check Whether Data Frame Has Any labelr Attributes
+#'
+#' @description
+#' `check_any_lab_atts` returns FALSE if your data.frame has no labelr-generated
+#' meta-data attributes (still) associated with it (at all or of a specific
+#' sub-type), and TRUE if it does.
+#'
+#' @details
+#' By default (labs = "any"), this function looks to see if your data.frame's
+#' attributes includes any attribute with a name containing the substring
+#' "frame.lab", "name.labs", "val.labs", and/or "factor." These are the core
+#' substrings of the label meta-data attributes that labelr creates and
+#' manipulates. If you wish to narrow your search for a specific labelr,
+#' attribute, you may supply this as a character (sub)string (e.g.,
+#' check_any_lab_atts(df, "val.labs.cyl") to see if the variable "cyl"
+#' has variable value label meta-data). But make sure that your second argument
+#' is meaningful (e.g., check_any_lab_atts(iris, "row.") will return TRUE
+#' true based on the presence of a standard "row.names" attribute, which has
+#' nothing to do with labels.
+#'
+#' @param data the data.frame you are checking for the presence (or absence)
+#' of labelr meta-data.
+#' @param labs which label meta-data you are looking for. Default of "any"
+#' will look for types "frame.lab", "name.labs","val.labs", and "factor."
+#' (period is part of the substring), which are the core labelr meta-data.
+#' To search more narrowly, you can try things like labs = "val.labs",
+#' labs="name.labs", etc.
+#' @return TRUE if any instance of the default or user-specified meta-data
+#' attribute is found, FALSE if not.
+#' @export
+#' @examples
+#' # make toy demographic (gender, raceth, etc.) data set
+#' df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+#' # let's add variable VALUE labels for variable "raceth"
+#' df <- add_val_labs(df,
+#'   vars = "raceth", vals = c(1:7),
+#'   labs = c("White", "Black", "Hispanic", "Asian", "AIAN", "Multi", "Other"),
+#'   max.unique.vals = 50
+#' )
+#'
+#' check_any_lab_atts(df)
+check_any_lab_atts <- function(data, labs = "any") {
+  all_labs <- c("name.labs", "val.labs", "factor.", "frame.lab")
+  if (labs == "any") labs <- all_labs
+
+  lab_atts <- FALSE
+  for (i in seq_along(labs)) {
+    this_att <- labs[i]
+    lab_atts[i] <- any(grepl(this_att, names(attributes(data))))
+  }
+
+  labs_check_res <- any(lab_atts)
+  return(labs_check_res)
+}
