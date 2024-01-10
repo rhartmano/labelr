@@ -442,3 +442,8 @@ value label end state: \n
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
+
+
+#' @export
+#' @rdname add_val1
+avl1 <- add_val1
