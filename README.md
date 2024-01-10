@@ -6,10 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of labelr is to support the creation and use of a few different
-types of labels in the context of R data.frames. Specifically, labelr
-supports three core types of data.frame labels, the last of which comes
-in three flavors:
+This package supports creation and use of a few different types of labels 
+for R data.frames. Specifically, labelr supports three core types of 
+data.frame labels, the last of which comes in three flavors:
 
 1.  **Frame labels** - Each data.frame may be given a single “frame
     label” of 500 characters or fewer, which may describe key general
