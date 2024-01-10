@@ -6,8 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-This package supports creation and use of a few different types of labels 
-for R data.frames. Specifically, labelr supports three core types of 
+The labelr package supports creation and use of three classes of 
 data.frame labels, the last of which comes in three flavors:
 
 1.  **Frame labels** - Each data.frame may be given a single “frame
