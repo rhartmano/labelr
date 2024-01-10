@@ -21,10 +21,10 @@ data.frame labels, the last of which comes in three flavors.
     label might be “State of Birth”. Or, if a variable called “trust1”
     consisted of responses to the consumer survey question, “How much do
     you trust BBC news to give you unbiased information?,” a sensible
-    name label might be “BBC Trust.” As such, name labels are comparable
-    to what Stata and SAS call “variable labels.”
+    name label might be “BBC Trust.” Name labels are comparable to what
+    Stata and SAS call “variable labels.”
 
-3.  **Value labels** - labelr offers three kinds of value labels.
+4.  **Value labels** - labelr offers three kinds of value labels.
 
     - *One-to-one labels* - The canonical value-labeling use case
       entails mapping distinct values of a variable to distinct labels
