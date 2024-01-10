@@ -55,10 +55,10 @@ data.frame labels, the last of which comes in three flavors.
 
 Assuming devtools is installed, labelr can be installed by calling:
 
-<!-- ``` r -->
+```r
 install.packages("devtools")
 devtools::install_github("rhartmano/labelr")
-
+```
 ## Usage
 
 Assign labels to your data.frame, its variables, and/or specific
