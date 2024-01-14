@@ -2,9 +2,12 @@
 % Please edit documentation in R/use_name_labs.R
 \name{use_name_labs}
 \alias{use_name_labs}
+\alias{unl}
 \title{Swap Name Labels for Variable Names}
 \usage{
 use_name_labs(data, vars = NULL)
+
+unl(data, vars = NULL)
 }
 \arguments{
 \item{data}{the data.frame whose name labels you wish to "use" (aka swap,

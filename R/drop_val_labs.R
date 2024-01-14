@@ -147,3 +147,7 @@ Use specific var argument or drop_val1() to restrict this operation to fewer/mor
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
+
+#' @export
+#' @rdname drop_val_labs
+dvl <- drop_val_labs

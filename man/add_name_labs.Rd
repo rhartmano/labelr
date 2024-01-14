@@ -2,6 +2,7 @@
 % Please edit documentation in R/add_name_labs.R
 \name{add_name_labs}
 \alias{add_name_labs}
+\alias{anl}
 \title{Add or Modify Data Frame Variable Name Labels}
 \usage{
 add_name_labs(
@@ -11,6 +12,8 @@ add_name_labs(
   labs = NULL,
   init.max = NULL
 )
+
+anl(data, name.labs = NULL, vars = NULL, labs = NULL, init.max = NULL)
 }
 \arguments{
 \item{data}{the data.frame you wish to begin labeling.}

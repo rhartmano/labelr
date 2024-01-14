@@ -2,9 +2,12 @@
 % Please edit documentation in R/drop_frame_lab.R
 \name{drop_frame_lab}
 \alias{drop_frame_lab}
+\alias{dfl}
 \title{Remove Frame Label Attribute from a Data Frame}
 \usage{
 drop_frame_lab(data)
+
+dfl(data)
 }
 \arguments{
 \item{data}{the data.frame with a frame label that you wish to drop (and which

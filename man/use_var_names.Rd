@@ -2,9 +2,12 @@
 % Please edit documentation in R/use_var_names.R
 \name{use_var_names}
 \alias{use_var_names}
+\alias{uvn}
 \title{Swap (back) Original Variable Names for Name Labels}
 \usage{
 use_var_names(data, vars = NULL)
+
+uvn(data, vars = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

@@ -112,3 +112,8 @@ use_name_labs <- function(data, vars = NULL) {
   }
   return(data)
 }
+
+#' @export
+#' @rdname use_name_labs
+unl <- use_name_labs
+

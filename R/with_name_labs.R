@@ -198,3 +198,7 @@ does not use with_name_labs())\n')
     }
   )
 }
+
+#' @export
+#' @rdname with_name_labs
+wnl <- with_name_labs

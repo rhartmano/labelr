@@ -212,3 +212,7 @@ add_name_labs <- function(data,
 
   return(data)
 }
+
+#' @export
+#' @rdname add_name_labs
+anl <- add_name_labs

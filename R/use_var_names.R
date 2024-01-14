@@ -110,3 +110,7 @@ use_var_names <- function(data, vars = NULL) {
   }
   return(data)
 }
+
+#' @export
+#' @rdname use_var_names
+uvn <- use_var_names

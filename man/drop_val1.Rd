@@ -2,9 +2,12 @@
 % Please edit documentation in R/drop_val1.R
 \name{drop_val1}
 \alias{drop_val1}
+\alias{dvl1}
 \title{Drop a Single Variable's Value Labels}
 \usage{
 drop_val1(data, var)
+
+dvl1(data, var)
 }
 \arguments{
 \item{data}{a data.frame.}

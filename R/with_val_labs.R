@@ -62,3 +62,8 @@ with_val_labs <- function(data, ...) {
   data <- as_base_data_frame(data)
   with(use_val_labs(data), ...)
 }
+
+#' @export
+#' @rdname with_val_labs
+wvl <- with_val_labs
+

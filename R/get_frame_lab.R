@@ -39,3 +39,7 @@ get_frame_lab <- function(data) {
   frame.data <- data.frame(data.frame = dfname, frame.lab = frame_lab)
   return(frame.data)
 }
+
+#' @export
+#' @rdname get_frame_lab
+gfl <- get_frame_lab

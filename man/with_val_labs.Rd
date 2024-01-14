@@ -2,9 +2,12 @@
 % Please edit documentation in R/with_val_labs.R
 \name{with_val_labs}
 \alias{with_val_labs}
+\alias{wvl}
 \title{Evaluate an Expression in a Value Labels-on Data Environment}
 \usage{
 with_val_labs(data, ...)
+
+wvl(data, ...)
 }
 \arguments{
 \item{data}{a data.frame with value-labeled columns.}

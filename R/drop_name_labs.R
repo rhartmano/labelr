@@ -98,3 +98,7 @@ drop_name_labs <- function(data, vars = NULL) {
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
+
+#' @export
+#' @rdname drop_name_labs
+dnl <- drop_name_labs

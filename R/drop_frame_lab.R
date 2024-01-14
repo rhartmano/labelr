@@ -37,3 +37,7 @@ drop_frame_lab <- function(data) {
 
   return(data)
 }
+
+#' @export
+#' @rdname drop_frame_lab
+dfl <- drop_frame_lab

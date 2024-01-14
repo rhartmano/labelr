@@ -251,3 +251,7 @@ calls to use_val_labs().
 
   return(data)
 }
+
+#' @export
+#' @rdname use_val_labs
+uvl <- use_val_labs

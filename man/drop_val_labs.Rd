@@ -2,9 +2,12 @@
 % Please edit documentation in R/drop_val_labs.R
 \name{drop_val_labs}
 \alias{drop_val_labs}
+\alias{dvl}
 \title{Drop Value Labels from One or More Variables}
 \usage{
 drop_val_labs(data, vars = NULL, partial = FALSE, not.vars = NULL)
+
+dvl(data, vars = NULL, partial = FALSE, not.vars = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

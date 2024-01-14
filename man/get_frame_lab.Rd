@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_frame_lab.R
 \name{get_frame_lab}
 \alias{get_frame_lab}
+\alias{gfl}
 \title{Return a Data Frame's Frame Label}
 \usage{
 get_frame_lab(data)
+
+gfl(data)
 }
 \arguments{
 \item{data}{a data.frame.}

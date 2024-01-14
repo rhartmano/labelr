@@ -2,9 +2,12 @@
 % Please edit documentation in R/with_both_labs.R
 \name{with_both_labs}
 \alias{with_both_labs}
+\alias{wbl}
 \title{Overlay Variable Name and Value Labels Onto Arbitrary R Function Calls}
 \usage{
 with_both_labs(data, ...)
+
+wbl(data, ...)
 }
 \arguments{
 \item{data}{a data.frame with variable name labels and variable value labels.}

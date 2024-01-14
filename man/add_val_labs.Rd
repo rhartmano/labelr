@@ -2,9 +2,21 @@
 % Please edit documentation in R/add_val_labs.R
 \name{add_val_labs}
 \alias{add_val_labs}
+\alias{avl}
 \title{Add or Modify a Variable's Value Labels}
 \usage{
 add_val_labs(
+  data,
+  vars,
+  vals,
+  labs,
+  partial = FALSE,
+  not.vars = NULL,
+  max.unique.vals = 10,
+  init = FALSE
+)
+
+avl(
   data,
   vars,
   vals,

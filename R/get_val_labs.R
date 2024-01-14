@@ -102,3 +102,7 @@ get_val_labs <- function(data, var = NULL) {
 
   return(labs_data)
 }
+
+#' @export
+#' @rdname get_val_labs
+gvl <- get_val_labs

@@ -2,9 +2,12 @@
 % Please edit documentation in R/with_name_labs.R
 \name{with_name_labs}
 \alias{with_name_labs}
+\alias{wnl}
 \title{Overlay Variable Name Labels Onto Arbitrary R Function Calls}
 \usage{
 with_name_labs(data, ...)
+
+wnl(data, ...)
 }
 \arguments{
 \item{data}{a data.frame with name labels.}

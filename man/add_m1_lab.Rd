@@ -2,9 +2,21 @@
 % Please edit documentation in R/add_m1_lab.R
 \name{add_m1_lab}
 \alias{add_m1_lab}
+\alias{am1l}
 \title{Apply One Label to Multiple Values}
 \usage{
 add_m1_lab(
+  data,
+  vars,
+  vals,
+  lab,
+  partial = FALSE,
+  not.vars = NULL,
+  max.unique.vals = 10,
+  init = FALSE
+)
+
+am1l(
   data,
   vars,
   vals,

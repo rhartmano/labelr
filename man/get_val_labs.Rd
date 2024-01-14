@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_val_labs.R
 \name{get_val_labs}
 \alias{get_val_labs}
+\alias{gvl}
 \title{Return Lookup Table of Variable Values and Value Labels}
 \usage{
 get_val_labs(data, var = NULL)
+
+gvl(data, var = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

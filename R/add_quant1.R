@@ -274,3 +274,7 @@ Too many or too few labs supplied.\n")
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
+
+#' @export
+#' @rdname add_quant1
+aql1 <- add_quant1

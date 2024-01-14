@@ -2,9 +2,20 @@
 % Please edit documentation in R/add_quant_labs.R
 \name{add_quant_labs}
 \alias{add_quant_labs}
+\alias{aql}
 \title{Associate Numerical Threshold-based Value Labels with Select Numerical Variables}
 \usage{
 add_quant_labs(
+  data,
+  vars,
+  qtiles = NULL,
+  vals = NULL,
+  labs = NULL,
+  partial = FALSE,
+  not.vars = NULL
+)
+
+aql(
   data,
   vars,
   qtiles = NULL,

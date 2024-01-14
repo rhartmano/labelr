@@ -58,3 +58,7 @@ get_name_labs <- function(data, vars = NULL) {
 
   return(labs_back)
 }
+
+#' @export
+#' @rdname get_name_labs
+gnl <- get_name_labs

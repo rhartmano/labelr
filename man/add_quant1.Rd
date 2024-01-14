@@ -2,9 +2,12 @@
 % Please edit documentation in R/add_quant1.R
 \name{add_quant1}
 \alias{add_quant1}
+\alias{aql1}
 \title{Associate Numerical Threshold-based Value Labels with a Single Numerical Variable}
 \usage{
 add_quant1(data, var, qtiles = NULL, vals = NULL, labs = NULL)
+
+aql1(data, var, qtiles = NULL, vals = NULL, labs = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

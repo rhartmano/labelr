@@ -2,9 +2,12 @@
 % Please edit documentation in R/drop_name_labs.R
 \name{drop_name_labs}
 \alias{drop_name_labs}
+\alias{dnl}
 \title{Remove Name Label Attributes from a Data Frame}
 \usage{
 drop_name_labs(data, vars = NULL)
+
+dnl(data, vars = NULL)
 }
 \arguments{
 \item{data}{the data.frame with name labels that you wish to drop (and which

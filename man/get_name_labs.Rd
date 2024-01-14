@@ -2,9 +2,12 @@
 % Please edit documentation in R/get_name_labs.R
 \name{get_name_labs}
 \alias{get_name_labs}
+\alias{gnl}
 \title{Return Lookup Table of Variable Names and Name Labels}
 \usage{
 get_name_labs(data, vars = NULL)
+
+gnl(data, vars = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

@@ -305,3 +305,7 @@ Use a more specific vars argument or set partial = FALSE
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
+
+#' @export
+#' @rdname add_quant_labs
+aql <- add_quant_labs

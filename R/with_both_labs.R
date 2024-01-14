@@ -210,3 +210,7 @@ does not use with_both_labs())\n')
     }
   )
 }
+
+#' @export
+#' @rdname with_both_labs
+wbl <- with_both_labs

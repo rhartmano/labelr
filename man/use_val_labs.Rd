@@ -2,9 +2,12 @@
 % Please edit documentation in R/use_val_labs.R
 \name{use_val_labs}
 \alias{use_val_labs}
+\alias{uvl}
 \title{Swap Variable Value Labels for Variable Values}
 \usage{
 use_val_labs(data, vars = NULL)
+
+uvl(data, vars = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}
