@@ -2,9 +2,12 @@
 % Please edit documentation in R/add_frame_lab.R
 \name{add_frame_lab}
 \alias{add_frame_lab}
+\alias{afl}
 \title{Add or Modify a Data Frame "Frame Label"}
 \usage{
 add_frame_lab(data, frame.lab = NULL)
+
+afl(data, frame.lab = NULL)
 }
 \arguments{
 \item{data}{a data.frame.}

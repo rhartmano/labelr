@@ -1,10 +1,10 @@
 Package: labelr
 Title: Tools for Working with Data Frame, Variable, and Value Labels
 Version: 1.0.0 
-Authors@R: person("Robert", "Hartman", "", email = "rhartman@mite.org", role = c("aut", "cre"))
+Authors@R: c(person("Robert", "Hartman", "", email = "rhartman@mite.org", role = c("aut", "cre")), person("The MITRE Corporation", role = "cph"))
 Maintainer: Robert Hartman <rhartman@mitre.org>
-Description: Lightweight tools to create, modify, use, discard, and restore different types of labels.
-License: GPL (>= 3)
+Description: Lightweight tools to create and use different types of data.frame labels.
+License: GPL (>= 3) + File LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

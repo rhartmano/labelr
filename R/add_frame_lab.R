@@ -63,3 +63,7 @@ add_frame_lab <- function(data,
 
   return(data)
 }
+
+#' @export
+#' @rdname add_frame_lab
+afl <- add_frame_lab

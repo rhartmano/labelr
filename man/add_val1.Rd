@@ -2,9 +2,12 @@
 % Please edit documentation in R/add_val1.R
 \name{add_val1}
 \alias{add_val1}
+\alias{avl1}
 \title{Add or Modify a Single Variable's Value Labels}
 \usage{
 add_val1(data, var, vals, labs, max.unique.vals = 10, init = FALSE)
+
+avl1(data, var, vals, labs, max.unique.vals = 10, init = FALSE)
 }
 \arguments{
 \item{data}{a data.frame.}
