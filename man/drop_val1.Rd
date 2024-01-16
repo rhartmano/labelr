@@ -28,8 +28,8 @@ and the former is easier to type
 }
 \details{
 Note: \code{drop_val1} is the \code{drop_val_labs} analogue to \code{add_val1}: just as
-\code{add_val1} is a variant of \code{add_val_labs} that allows you to  specify only
-one variable at a time unquoted for value labeling, \code{drop_val1} allows you to
+\code{add_val1} is a variant of \code{add_val_labs} that allows you to specify only one
+variable at a time unquoted for value labeling, \code{drop_val1} allows you to
 pass one unquoted variable name at a time for value dropping. See those
 functions for further details regarding the conventions.
 }

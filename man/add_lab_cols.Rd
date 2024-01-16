@@ -55,6 +55,9 @@ conceptual relationship to their "parent" variables, serving as pragmatic
 adjuncts and/or surrogates for their parent variables wherever and to
 whatever extent may be useful). See also \code{use_val_labs}, \code{use_vals},
 \code{add_val_labs}, \code{add_val1}, \code{get_val_labs}, \code{drop_val_labs}, and \code{drop_val1}.
+
+If you wish to convert a single, value-labeled column's values to labels and
+return the result as a stand-alone vector, see \code{val_labs_vec}.
 }
 \examples{
 # one variable at a time, mtcars

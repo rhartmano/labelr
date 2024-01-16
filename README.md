@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The labelr package supports creation and use of three classes of 
+The labelr package supports creation and use of three classes of
 data.frame labels, the last of which comes in three flavors.
 
 1.  **Frame labels** - Each data.frame may be given a single “frame
@@ -24,7 +24,7 @@ data.frame labels, the last of which comes in three flavors.
     name label might be “BBC Trust.” Name labels are comparable to what
     Stata and SAS call “variable labels.”
 
-4.  **Value labels** - labelr offers three kinds of value labels.
+3.  **Value labels** - labelr offers three kinds of value labels.
 
     - *One-to-one labels* - The canonical value-labeling use case
       entails mapping distinct values of a variable to distinct labels
@@ -53,11 +53,14 @@ data.frame labels, the last of which comes in three flavors.
 
 ## Installation
 
-The labelr package can be installed from GitHub using the devtools package.
-```r
-install.packages("devtools")
-devtools::install_github("rhartmano/labelr")
-```
+Assuming devtools is installed, labelr can be installed by calling: The
+labelr package can be installed from GitHub using the devtools package.
+
+<!-- ``` r -->
+<!-- install.packages("devtools")``` -->
+<!-- devtools::install_github("rhartmano/labelr")``` -->
+<!-- ``` -->
+
 ## Usage
 
 Assign labels to your data.frame, its variables, and/or specific
@@ -196,26 +199,16 @@ get_all_lab_atts(mt2) # show that they are back
 #> [1] "Data extracted from the 1974 MotorTrend US magazine, comprising fuel consumption and 10 aspects of automobiledesign and performance for 32 automobiles (1973–74 models). Source: Hendersonand Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411."
 #> 
 #> $name.labs
-#>                                        mpg 
-#>                        "Miles/(US) gallon" 
-#>                                        cyl 
-#>                      "Number of cylinders" 
-#>                                       disp 
-#>                    "Displacement (cu.in.)" 
-#>                                         hp 
-#>                         "Gross horsepower" 
-#>                                       drat 
-#>                          "Rear axle ratio" 
-#>                                         wt 
-#>                        "Weight (1000 lbs)" 
-#>                                       qsec 
-#>                            "1/4 mile time" 
-#>                                         vs 
-#>      "Engine (0 = V-shaped, 1 = straight)" 
-#>                                         am 
-#> "Transmission (0 = automatic, 1 = manual)" 
-#>                                       gear 
-#>                  "Number of forward gears" 
+#>                                        mpg                                        cyl 
+#>                        "Miles/(US) gallon"                      "Number of cylinders" 
+#>                                       disp                                         hp 
+#>                    "Displacement (cu.in.)"                         "Gross horsepower" 
+#>                                       drat                                         wt 
+#>                          "Rear axle ratio"                        "Weight (1000 lbs)" 
+#>                                       qsec                                         vs 
+#>                            "1/4 mile time"      "Engine (0 = V-shaped, 1 = straight)" 
+#>                                         am                                       gear 
+#> "Transmission (0 = automatic, 1 = manual)"                  "Number of forward gears" 
 #>                                       carb 
 #>                    "Number of carburetors" 
 #> 
@@ -369,16 +362,10 @@ wbl(mt2, lm(qsec ~ am + gear + wt * drat))
 #>     `Number of forward gears` + `Weight (1000 lbs)` * `Rear axle ratio`)
 #> 
 #> Coefficients:
-#>                                      (Intercept)  
-#>                                            7.658  
-#> `Transmission (0 = automatic, 1 = manual)`manual  
-#>                                           -4.419  
-#>                      `Number of forward gears`4+  
-#>                                            3.097  
-#>                              `Weight (1000 lbs)`  
-#>                                            4.419  
-#>                                `Rear axle ratio`  
-#>                                            3.904  
-#>            `Weight (1000 lbs)`:`Rear axle ratio`  
-#>                                           -1.598
+#>                                      (Intercept)  `Transmission (0 = automatic, 1 = manual)`manual  
+#>                                            7.658                                            -4.419  
+#>                      `Number of forward gears`4+                               `Weight (1000 lbs)`  
+#>                                            3.097                                             4.419  
+#>                                `Rear axle ratio`             `Weight (1000 lbs)`:`Rear axle ratio`  
+#>                                            3.904                                            -1.598
 ```

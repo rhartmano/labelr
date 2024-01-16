@@ -10,8 +10,8 @@
 #'
 #' @details
 #' Note: `drop_val1` is the `drop_val_labs` analogue to `add_val1`: just as
-#' `add_val1` is a variant of `add_val_labs` that allows you to  specify only
-#' one variable at a time unquoted for value labeling, `drop_val1` allows you to
+#' `add_val1` is a variant of `add_val_labs` that allows you to specify only one
+#' variable at a time unquoted for value labeling, `drop_val1` allows you to
 #' pass one unquoted variable name at a time for value dropping. See those
 #' functions for further details regarding the conventions.
 #'

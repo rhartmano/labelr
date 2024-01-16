@@ -4,33 +4,24 @@
 #' Add variable value-specific, descriptive value labels to a data.frame.
 #'
 #' @details
-#' Note 1: `avl1` is a compact alias for `add_val1`: they do the same thing,
-#' and the former is easier to type
-#'
-#' Note 2: `add_val1` is a variant of `add_val_labs` that allows you to specify
-#' only one var to label at a time but that allows you to pass its name without
-#' quoting it (compare add_val1(mtcars, am) to add_val_labs(mtcars, "am").
-#'
-#' Note 3: `add_val1` is intended for associating value labels with binary,
-#' nominal, or ordinal (e.g., integer) variables, where each of a limited number
-#' of distinct values is to be associated one-to-one with a distinct value label.
-#' To assign labels to ranges of numerical variables, see `add_quant_labs` (or
+#' `add_val1` is intended for associating value labels with binary, nominal, or
+#' ordinal (e.g., integer) variables, where each of a limited number of distinct
+#' values is to be associated one-to-one with a distinct value label. To assign
+#' labels to ranges of numerical variables, see `add_quant_labs` (or
 #' `add_quant1`). To apply the same label to multiple distinct values of a
 #' variable, see `add_m1_lab` or `add1m1`.
 #'
 #' `add_val1` works with other labelr functions (e.g., `add_val_labs`,
 #' `drop_val_labs`, `get_val_labs`, `use_val_labs`, `add_lab_cols`) to
 #' facilitate the creation, accessing, modification, use, or deletion of
-#' variable value labels, each of which is uniquely associated with a
-#' specific distinct value of a specific variable (e.g., "Manual Transmission"
-#' might be the value label for the distinct value mtcars$am==1).
+#' variable value labels.
 #'
-#' When using `add_val1` or `add_val_labs`, each distinct variable value can
-#' receive one and only one value label, and for any given variable, each unique
-#' label can be assigned to only one unique value (e.g., mtcars$gear==3 and
-#' mtcars$gear==4 cannot both share a single "3 or 4 gears" label: each of these
-#' two distinct values must have its own label). This latter constraint may be
-#' relaxed by using `add_m1_lab`.
+#' Note 1: `add_val1` is a variant of `add_val_labs` that allows you to specify
+#' only one var to label at a time but that allows you to pass its name without
+#' quoting it (compare add_val1(mtcars, am) to add_val_labs(mtcars, "am").
+#'
+#' Note 2: `avl1` is a compact alias for `add_val1`: they do the same thing,
+#' and the former is easier to type
 #'
 #' @param data a data.frame.
 #' @param var the unquoted name of the variable to which value labels will be

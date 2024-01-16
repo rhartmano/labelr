@@ -11,10 +11,7 @@
 #' @details
 #' `drop_val_labs` works with other labelr functions (e.g., `add_val_labs`,
 #' `get_val_labs`, `use_val_labs`, `add_lab_cols`) to facilitate the creation,
-#' accessing, modification, use, or deletion of variable value labels, each of
-#' which is uniquely associated with a specific distinct value of a specific
-#' variable (e.g., "Manual Transmission" might be the value label for the
-#' distinct value mtcars$am==1).
+#' accessing, modification, use, or deletion of variable value labels.
 #'
 #' @param data a data.frame.
 #' @param vars a character vector that corresponds to the name(s) (or substring

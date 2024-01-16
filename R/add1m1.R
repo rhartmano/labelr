@@ -7,12 +7,12 @@
 #' @details
 #' Note 1: `add1m1` is a variant of `add_m1_lab` that allows you to specify
 #' only one var to label but allows you to pass its name without quoting it
-#' (compare add1m1(mtcars, am, ...) to add_m1_lab(mtcars, "carb", ...).
+#' (compare `add1m1`(mtcars, am, ...) to `add_m1_lab`(mtcars, "carb", ...).
 #'
-#' Note 2: `add1m1` (and `add_m1_lab`) allow the user to assign the same value
+#' Note 2: `add1m1` (and `add_m1_lab`) allows the user to assign the same value
 #' label to multiple distinct values of a variable ("m1" is short for
 #' "many-to-one"). This is in contrast to `add_val1` (and `add_val_labs`), which
-#' require a strict one-to-one mapping of distinct variable values and distinct
+#' requires a strict one-to-one mapping of distinct variable values and distinct
 #' value labels.
 #'
 #' @param data a data.frame.

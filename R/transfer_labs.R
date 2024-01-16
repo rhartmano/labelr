@@ -100,7 +100,7 @@ transfer_labs <- function(data, from, to) {
   from_var_val_label <- paste0("val.labs.", from)
   to_var_val_label <- paste0("val.labs.", to)
 
-  # shift val.labs from from var to to var
+  # shift val.labs from "from" var to "to" var
   if (check_labs_att(data, from_var_val_label)) {
     attributes(data)[[to_var_val_label]] <- attributes(data)[[from_var_val_label]]
     attributes(data)[[from_var_val_label]] <- NULL

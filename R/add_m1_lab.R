@@ -8,11 +8,10 @@
 #' Note: `am1l` is a compact alias for `add_m1_labs`: they do the same thing,
 #' and the former is easier to type
 #'
-#' add_m1_lab` (and `add1m1`) allow the user to assign the same value
-#' label to multiple distinct values of a variable ("m1" is short for
-#' "many-to-one"). This is in contrast to `add_val_labs` and `add_val1`, which
-#' require a strict one-to-one mapping of distinct variable values and distinct
-#' value labels.
+#' add_m1_lab` (and `add1m1`) allows the user to assign the same value label to
+#' multiple distinct values of a variable ("m1" is short for "many-to-one").
+#' This is in contrast to `add_val_labs` and `add_val1`, which require a strict
+#' one-to-one mapping of distinct variable values and distinct value labels.
 #'
 #' If partial = TRUE, `add_m1_lab` will apply the specified labeling scheme to
 #' all variables that contain a key variable name substring of interest

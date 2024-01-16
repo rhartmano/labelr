@@ -34,16 +34,18 @@ labels and cannot be undone. If you wish to preserve variable values, be sure
 to assign the result of \code{use_val_labs} to a new object (vs. overwriting the
 data.frame you supply to the data argument), OR use \code{add_lab_cols} to add
 variables containing value labels to the supplied data set without replacing
-the original variables. For other ways to leverage value labels for common
-data management or inspection tasks, while preserving raw data values in
-returned object, see \code{flab} ("filter using labels"), \code{slab} ("subset using
-labels"), \code{tabl} (tabulate frequencies using labels), \code{somel}, \code{headl},
-and \code{taill}.
+the original variables, OR use \code{val_abs_vec} to replace a single column's
+values with its value labels and return the result as a stand-alone character
+vector. For other ways to leverage value labels for common data management or
+inspection tasks, while preserving raw data values in returned object, see
+\code{flab} ("filter using labels"), \code{slab} ("subset using labels"), \code{tabl}
+(tabulate frequencies using labels), \code{somel}, \code{headl}, and \code{taill}.
 
 \code{use_val_labs} works with \code{add_val_labs}, \code{add_val1}, \code{add_quant_labs},
 \code{add_q1}, \code{add_m1_lab}, \code{add1m1}, \code{get_val_labs}, \code{drop_val_labs}, and
 \code{drop_val1} to facilitate creation, modification, accessing, use, and
-destruction of variable-specific value labels for variable names.
+destruction of variable-specific value labels.
+
 \code{use_val_labs} takes a variable value-labeled data.frame and substitutes each
 (labelled) variable's labels for its values, returning a data.frame whose
 dimensions, names, and members are the same as the inputted data.frame. This

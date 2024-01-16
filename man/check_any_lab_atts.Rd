@@ -11,7 +11,7 @@ check_any_lab_atts(data, labs = "any")
 of labelr meta-data.}
 
 \item{labs}{which label meta-data you are looking for. Default of "any"
-will look for types "frame.lab", "name.labs","val.labs", and "factor."
+will look for types "frame.lab", "name.labs", "val.labs", and "factor."
 (period is part of the substring), which are the core labelr meta-data.
 To search more narrowly, you can try things like labs = "val.labs",
 labs="name.labs", etc.}

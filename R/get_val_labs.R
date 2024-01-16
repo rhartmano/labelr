@@ -1,11 +1,23 @@
 #' Return Lookup Table of Variable Values and Value Labels
 #'
 #' @description
-#' For a variable-value-labeled data.frame, `get_val_labs` returns a derivative
-#' data.frame that features the variable name, value, and associated value
-#' labels for each value-labeled variable.
+#' For a data.frame with value-labeled variables, `get_val_labs` returns a
+#' derivative data.frame that shows the value-to-label mapping for each unique
+#' value of each value-labeled variable.
 #'
-#' Note: `gvl` is a compact alias for `get_val_labs`: they do the same thing,
+#' @details
+#' Note 1: Columns of the returned data.frame are coerced to character for
+#' display purposes, as a result of concatenating value information from
+#' different variables of potentially different classes. In particular, all
+#' elements of the "vals" column are expressed as character even if the
+#' underlying values themselves are numeric. Accordingly, the data.frame returned
+#' by `get_val_labs` is intended to facilitate --visual-- display and inspection
+#' of what (if any) value label has been associated with each variable value; it
+#' is --not-- intended to be used for accurate determination of the underlying
+#' classes or types of the variables as they exist in the primary data.frame that
+#' you passed to it.
+#'
+#' Note 2: `gvl` is a compact alias for `get_val_labs`: they do the same thing,
 #' and the former is easier to type
 #'
 #' @param data a data.frame.
@@ -13,19 +25,11 @@
 #' (If NULL, returned data.frame will contain all variable value labels).
 #' @return A three-column data.frame, consisting of "var", "vals", and "labs"
 #' columns, where each row corresponds to a unique value of a value-labeled
-#' variable (column) from the user-supplied data.frame (or, for value-labeled
-#' numerical variables, the upper bound of numerical values that fall within a
-#' given value label). Note that all "vals" of "vals" column are typically
-#' expressed as character even if the underlying values are, e.g., integer,
-#' because the "vals" column typically includes values from multiple input
-#' data.frame variables, which may be of various classes, such as integer,
-#' character, factor. Accordingly, the `get_val_labs`-returned data.frame is
-#' intended to facilitate --visual-- inspection of what (if any) value label
-#' have been attached to each variable value; it is --not-- intended to be used
-#' for accurate interrogation of the underlying classes or types of variables in
-#' the primary data.frame that you passed to it. For that, use, e.g.,
-#' sapply(data, class), sapply(use_val_labs(data), class), etc. on that primary
-#' data.frame.
+#' variable (column) from the user-supplied data.frame OR -- for variables
+#' labeled using `add_quant_labs` (or `add_quant1`) -- the upper bound of
+#' numerical values that fall within that label's range of coverage. Note that
+#' all variables of the returned data.frame are coerced to character (see Note 1
+#' of details).
 #' @export
 #' @examples
 #' # add val labs to multiple variables at once

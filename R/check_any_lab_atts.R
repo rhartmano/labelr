@@ -21,7 +21,7 @@
 #' @param data the data.frame you are checking for the presence (or absence)
 #' of labelr meta-data.
 #' @param labs which label meta-data you are looking for. Default of "any"
-#' will look for types "frame.lab", "name.labs","val.labs", and "factor."
+#' will look for types "frame.lab", "name.labs", "val.labs", and "factor."
 #' (period is part of the substring), which are the core labelr meta-data.
 #' To search more narrowly, you can try things like labs = "val.labs",
 #' labs="name.labs", etc.

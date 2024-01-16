@@ -16,7 +16,7 @@
 #' corresponding, respective column names and variable value in any returned
 #' object or side effects. Your function call (expression) should refer to
 #' columns of the data.frame passed via your data argument, NOT their name
-#' labels, as the intent is to allow you to pass functions in terms ofthe
+#' labels, as the intent is to allow you to pass functions in terms of the
 #' (typically much more concise and familiar) column names while having the
 #' results displayed / presented in terms of the more informative (but more
 #' verbose and typically non-standard) name labels. See examples.

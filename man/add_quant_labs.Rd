@@ -74,26 +74,27 @@ information added, and previous user-added labelr label information
 preserved.
 }
 \description{
-Add variable-specific value labels based on threshold cuts of a numerical variable.
+Add variable-specific value labels based on threshold cuts of a numerical
+variable.
 }
 \details{
 Note: \code{aql} is a compact alias for \code{add_quant_labs}: they do the same thing,
-and the former is easier to type
+and the former is easier to type.
 
 Numerical variables that feature decimals or large numbers of distinct values
 are not eligible to receive conventional value labels. \code{add_quant_labs} allows
-one to label such variables according to user-supplied value thresholds or
-quantile membership, with the assigned value label meta-data attribute
-indicating the upper bound (inclusive) of numerical values of the variable
-(column) that fall within that label. This approach to value-labeling deviates
-from labelr's general requirement that there be a one-to-one mapping between
-distinct labels and distinct variable values (see also \code{add_m1_lab}).
+one to label such variables according to user-supplied value thresholds
+(i.e., cutpoints) OR quantile membership, Thus, unlike value labels added
+with \code{add_val_labs} (and \code{add_val1}), \code{add_quant_labs} (and \code{add_quant1})
+will apply the same value label to all values that fall within the numerical
+value range defined by each threshold (cutpoint). For still another
+value-labeling approach, see \code{add_m1_lab} (and \code{add1m1}).
 
 Note: Quantity labels cannot be added incrementally through repeated calls
-to \code{add_quant_labs}: each new call will overwrite all value labels that may have
-been applied to the specified vars in any previous \code{add_quant_labs} calls.
-This is in contrast to \code{add_val_labs}, \code{add_m1_lab}, and related functions,
-which do allow for incremental value-labeling.
+to \code{add_quant_labs}: each new call will overwrite all value labels applied to
+the specified vars in any previous \code{add_quant_labs} calls. This is in
+contrast to \code{add_val_labs} (which allows for incremental value-labeling) and
+\code{add_m1_lab} (which requires incremental value-labeling).
 }
 \examples{
 # mtcars demo

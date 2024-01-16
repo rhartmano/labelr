@@ -20,7 +20,7 @@ data.frame.
 Note: To minimize dependencies and complexities, labelr label-assigning
 functions are designed to work exclusively with Base R data.frames, not
 alternative data structures like matrices or augmented data.frames, such as
-data.table-s or tibbles. The suggested labeling workflow is to first assign
+data.tables or tibbles. The suggested labeling workflow is to first assign
 and work with labels using a Base R data.frame and then convert the resulting
 object to an augmented data.frame as desired and without any assumption that
 labelr labels or functions will smoothly interoperate with the augmented

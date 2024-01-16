@@ -66,4 +66,3 @@ with_val_labs <- function(data, ...) {
 #' @export
 #' @rdname with_val_labs
 wvl <- with_val_labs
-

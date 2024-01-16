@@ -5,31 +5,27 @@
 #' numerical variable.
 #'
 #' @details
-#' Note: `aql1` is a compact alias for `add_quant1`: they do the same thing, and
-#' the former is easier to type
-#'
-#' Note: `add_quant1` is a variant of `add_quant_labs` that allows you to specify
-#' only one var to label at a time but that allows you to pass its name without
-#' quoting it (compare add_quant1(mtcars, mpg) to add_quant_labs(mtcars, "mpg").
+#' `add_quant1` is a variant of `add_quant_labs` that allows you to specify only
+#' one var to label but allows you to pass its name without quoting it (compare
+#' `add_quant1`(mtcars, mpg) to `add_quant_labs`(mtcars, "mpg").
 #'
 #' Numerical variables that feature decimals or large numbers of distinct values
-#' are not eligible to receive conventional value labels. Like `add_quant_labs`,
-#' `add_quant1` allows one to label such variables according to user-supplied
-#' value thresholds or quantile membership, with the assigned value label
-#' meta-data attribute indicating the upper bound (inclusive) of numerical values
-#' of the variable (column) that fall within that label. This approach to
-#' value-labeling deviates from labelr's general requirement that there be a
-#' one-to-one mapping between distinct labels and distinct variable values (see
-#' also `add_m1_lab`).
+#' are not eligible to receive conventional value labels. `add_quant1` allows
+#' one to label such variables according to user-supplied value thresholds
+#' (i.e., cutpoints) OR quantile membership, Thus, unlike value labels added
+#' with `add_val_labs` (and `add_val1`), `add_quant1` (and `add_quant_labs`)
+#' will apply the same value label to all values that fall within the numerical
+#' value range defined by each threshold (cutpoint). For still another
+#' value-labeling approach, see `add_m1_lab` (and `add1m1`).
 #'
-#' Note: Quantity labels cannot be added incrementally through repeated calls
-#' to `add_quant_labs`: each new call will overwrite all value labels that may
-#' have been applied to the specified var in any previous `add_quant1` or
-#' `add_quant_labs` calls.
+#' Note 1: Quantity labels cannot be added incrementally through repeated calls
+#' to `add_quant1`: each new call will overwrite all value labels applied to
+#' the specified vars in any previous `add_quant1` calls. This is in contrast to
+#' `add_val_labs` (which allows for incremental value-labeling) and `add_m1_lab`
+#' (which requires incremental value-labeling).
 #'
-#' This is in contrast to `add_val_labs` and `add_val1`, which do allow for
-#' incremental value-labeling through repeated calls that build upon earlier
-#' calls.
+#' Note 2: `aql1` is a compact alias for `add_quant1`: they do the same thing, and
+#' the former is easier to type
 #'
 #' @param data a data.frame.
 #' @param var the unquoted name of the variable to which value labels will be
@@ -164,7 +160,7 @@ No variable found that matches the name of your var argument.\n")
       # check for excessive qtiles
       if (qtiles > 100 || qtiles < 2) {
         stop("
-qtiles argument must be >1 and cannot exeed 100.\n")
+qtiles argument must be >1 and cannot exceed 100.\n")
       }
 
       # get mapping labs to percentile max vals

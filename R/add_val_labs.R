@@ -17,9 +17,7 @@
 #' `add_val_labs` works with other labelr functions (e.g., `add_val1`,
 #' `drop_val_labs`, `get_val_labs`, `use_val_labs`, `add_lab_cols`) to
 #' facilitate the creation, accessing, modification, use, or deletion of
-#' variable value labels, each of which is uniquely associated with a
-#' specific distinct value of a specific variable (e.g., "Manual Transmission"
-#' might be the value label for the distinct value mtcars$am==1).
+#' variable value labels.
 #'
 #' When using `add_val_labs` or `add_val1`, each distinct variable value can
 #' receive one and only one value label, and for any given variable, each unique

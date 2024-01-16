@@ -31,6 +31,9 @@
 #' adjuncts and/or surrogates for their parent variables wherever and to
 #' whatever extent may be useful). See also `use_val_labs`, `use_vals`,
 #' `add_val_labs`, `add_val1`, `get_val_labs`, `drop_val_labs`, and `drop_val1`.
+#'
+#' If you wish to convert a single, value-labeled column's values to labels and
+#' return the result as a stand-alone vector, see `val_labs_vec`.
 #' @param data the data.frame whose variable value labels you wish to leverage
 #' to add labels-on version of value-labeled variables to the supplied
 #' data.frame.

@@ -13,16 +13,18 @@
 #' to assign the result of `use_val_labs` to a new object (vs. overwriting the
 #' data.frame you supply to the data argument), OR use `add_lab_cols` to add
 #' variables containing value labels to the supplied data set without replacing
-#' the original variables. For other ways to leverage value labels for common
-#' data management or inspection tasks, while preserving raw data values in
-#' returned object, see `flab` ("filter using labels"), `slab` ("subset using
-#' labels"), `tabl` (tabulate frequencies using labels), `somel`, `headl`,
-#' and `taill`.
+#' the original variables, OR use `val_abs_vec` to replace a single column's
+#' values with its value labels and return the result as a stand-alone character
+#' vector. For other ways to leverage value labels for common data management or
+#' inspection tasks, while preserving raw data values in returned object, see
+#' `flab` ("filter using labels"), `slab` ("subset using labels"), `tabl`
+#' (tabulate frequencies using labels), `somel`, `headl`, and `taill`.
 #'
 #' `use_val_labs` works with `add_val_labs`, `add_val1`, `add_quant_labs`,
 #' `add_q1`, `add_m1_lab`, `add1m1`, `get_val_labs`, `drop_val_labs`, and
 #' `drop_val1` to facilitate creation, modification, accessing, use, and
-#' destruction of variable-specific value labels for variable names.
+#' destruction of variable-specific value labels.
+#'
 #' `use_val_labs` takes a variable value-labeled data.frame and substitutes each
 #' (labelled) variable's labels for its values, returning a data.frame whose
 #' dimensions, names, and members are the same as the inputted data.frame. This
@@ -30,7 +32,6 @@
 #' tail(), View()) or labeled value frequencies (e.g., table()) using the
 #' (potentially) more intuitively meaningful value labels (e.g., gender=1 values
 #' displayed as "Male" instead of 1).
-#'
 #' @param data a data.frame.
 #' @param vars the names of the columns (variables) for which labels-on
 #' versions of the variable will replace the original variable in the returned

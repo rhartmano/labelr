@@ -51,10 +51,7 @@ and the former is easier to type
 \details{
 \code{drop_val_labs} works with other labelr functions (e.g., \code{add_val_labs},
 \code{get_val_labs}, \code{use_val_labs}, \code{add_lab_cols}) to facilitate the creation,
-accessing, modification, use, or deletion of variable value labels, each of
-which is uniquely associated with a specific distinct value of a specific
-variable (e.g., "Manual Transmission" might be the value label for the
-distinct value mtcars$am==1).
+accessing, modification, use, or deletion of variable value labels.
 }
 \examples{
 # make a "Likert"-type fake data set to demo
