@@ -6,8 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The labelr package supports creation and use of three classes of
-data.frame labels, the last of which comes in three flavors.
+labelr is an experimental (“beta”) R package that supports creation and
+use of three classes of data.frame labels, the last of which comes in
+three flavors.
 
 1.  **Frame labels** - Each data.frame may be given a single “frame
     label” of 500 characters or fewer, which may describe key general

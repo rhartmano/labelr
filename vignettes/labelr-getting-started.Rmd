@@ -1,0 +1,1276 @@
+---
+title: "Labelr - An Introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Labelr - An Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  error = TRUE,
+  comment = "### >"
+)
+```
+
+## A Whirlwind Tour
+labelr is an experimental ("beta") R package that supports creation and use of 
+multiple types of labels for data.frames and data.frame variables (columns). 
+This vignette provides an ad hoc introduction to core and ancillary labelr 
+functionalities and uses cases. 
+
+## Types of Labels
+labelr supports three core types of data.frame labels, the last of which comes 
+in three flavors:
+
+1. **Frame labels** - Each data.frame may be given a single "frame label" of 500 
+  characters or fewer, which may describe key general features or characteristics
+  of the data set (e.g., source, date produced or published, high-level 
+  contents). 
+  
+2. **Name labels** - Each variable may be given exactly one name label, which is 
+  an extended variable name or brief description of the variable. For example, 
+  if a variable called "st_b" refers to a survey respondent's state of birth, 
+  then a sensible and useful name label might be "State of Birth". Or, if a 
+  variable called "trust1" consisted of responses to the consumer survey 
+  question, "How much do you trust BBC news to give you unbiased information?," 
+  a sensible name label might be "BBC News Trust." As such, name labels are 
+  comparable to what Stata and SAS call "variable labels."
+
+3. **Value labels** - labelr offers three kinds of value labels. 
+    * *One-to-one labels* - The canonical value-labeling use case entails mapping 
+     distinct values of a variable to distinct labels in a one-to-one fashion, so
+     that each value label uniquely identifies a substantive value. For instance, 
+     an administrative data set might assign the integers 1-7 to seven distinct 
+     racial/ethnic groups, and value labels would be critical in mapping those 
+     numbers to socially substantive racial/ethnic category concepts (e.g., 
+     Which number corresponds to the category "Asian American?"). 
+    
+    * *Many-to-one labels* - In an alternative use case, value labels may serve to
+     distill or "bucket" distinct variable values in a way that deliberately 
+     "throws away" information for purposes of simplification. For example, one 
+     may wish to give the single label "Agree" to the responses "Very Strongly 
+     Agree," "Strongly Agree," and "Agree." Or one may wish to differentiate 
+     self-identified "White" respondents from "People of Color," applying the 
+     latter value label to all categories other than "White."
+    
+    * *Numerical range labels* - Finally, one may wish to carve a numerical 
+     variable into an ordinal or qualitative range, such as dichotomizing a
+     variable or dividing it into quantiles. Numerical range labels support 
+     one-to-many assignment of a single value label to a range of numerical 
+     values for a given variable.
+
+
+## Core Use Cases and Capabilities
+More specifically, labelr functions support the following actions:
+
+1. Assigning variable value labels, name labels, and a frame label to data.frames 
+   and modifying those labels thereafter.
+   
+2. Generating and accessing simple look-up table-style data.frames to inform or
+   remind you about a given variable's name label, frame label, or the value 
+   labels that correspond to its unique values (i.e., Which racial/ethnic 
+   identity category label corresponds to a value of 3?).
+   
+3. Swapping out variable names for variable labels and back again.
+
+4. Replacing variables' values with their corresponding labels.
+
+5. Augmenting a data.frame by adding columns of variable labels that can exist
+   alongside the original columns (variables) from which they were derived.
+   
+6. Engaging in `base::subset()`-like row-filtering, using value labels to guide 
+   the filtering but returning a subsetted data.frame in terms of the original 
+   variable values.
+
+7. Tabulating value frequencies that can be expressed in terms of raw values or
+   value labels -- again, without explicitly modifying or converting the raw 
+   data.frame values.
+   
+8. Preserving and restoring a data.frame's labels in the event that 
+   some unsupported R operation destroys them.
+   
+9. Applying a single value-labeling scheme to many variables at once (for 
+   example, assigning the same set of Likert-scale labels ("Strongly Agree," 
+   etc.) to all variables that share a common variable name character substring.
+
+
+## Adding and Looking up Frame, Name, and Value Labels
+We'll start our exploration of core labelr functions with a fake "demographic" 
+data.frame. First, though, let's load the package labelr.
+
+```{r setup}
+# install.packages("devtools")
+# devtools::install_github("rhartmano/labelr")
+library(labelr)
+```
+
+Note: To minimize dependencies and reduce unexpected behaviors, labelr works 
+exclusively with Base R data.frames and vectors and **will coerce any augmented 
+data.frame (e.g., tibble, data.table) to a base data.frame.** The suggested 
+workflow is to affix and use labels **before** coercing to an augmented 
+data.frame if at all. While some augmented data.frames and their functions may 
+"play well" with labelr-style labels, this is not guaranteed.
+
+### Make Toy Demographic Data.Frame
+We'll use `make_demo_data()` (included with labelr) to create the fictional 
+data set.
+
+```{r}
+set.seed(555) # for reproducibility
+df <- make_demo_data(n = 1000) # you can specify the number of fictional obs.
+
+# make a backup for later comparison
+df_copy <- df
+```
+
+### Add a Variable "FRAME label" Using `add_frame_lab()` 
+We'll start our labeling session by providing a fittingly fictional high-level 
+description of this fictional data set (labelr calls this a FRAME label).
+
+```{r}
+df <- add_frame_lab(df, frame.lab = "Demographic and reaction time test score
+                    records collected by Royal Statistical Agency of
+                    Fictionaslavica. Data fictionally collected in the year
+                    1987. As published in A. Smithee (1988). Some Fictional Data
+                    for Your Amusement. Mad Magazine, 10(1), 1-24.")
+
+
+get_frame_lab(df)
+```
+
+### Add Variable NAME Labels Using `add_name_labs()` 
+Now, let's add (some fairly trivial) variable NAME labels
+
+```{r}
+df <- add_name_labs(df, name.labs = c(
+  "age" = "Age in years",
+  "raceth" = "Racial/ethnic identity group category",
+  "gender" = "Gender identity category",
+  "edu" = "Highest education level attained",
+  "x1" = "Space Invaders reaction time test scores",
+  "x2" = "Galaga reaction time test scores"
+))
+```
+
+Even if we do nothing else with these name labels, we can access or manipulate a
+simple lookup table as needed.
+
+```{r}
+get_name_labs(df)
+```
+
+### Add VALUE labels Using `add_val_labs()`
+Now, let's do some VALUE labeling. First, let's use `add_val_labs()` to add 
+one-to-one value labels for the variable "raceth". Note: max.unique.vals sets an 
+upper limit on the number of unique values a variable may have and still be 
+considered "value-label-able." Additionally, labelr sets an overall upper limit 
+of 5000 unique value labels permissible per variable. 
+
+```{r}
+df <- add_val_labs(df, # data.frame with to-be-value-labeled column
+  vars = "raceth", # quoted variable name of to-be-labeled variable/column
+  vals = c(1:7), # label values 1 through 7, inclusive
+  labs = c(
+    "White", "Black", "Hispanic", # apply these labels in this order to vals 1-7
+    "Asian", "AIAN", "Multi", "Other"
+  ),
+  max.unique.vals = 10 # maximum number of unique values permitted
+)
+```
+
+Note that the NA label is generated regardless of whether there are any actual 
+NA values, as a way of letting you know that labelr handles NA (and "irregular") 
+value-labeling without your help. We'll illustrate this further later on.
+
+### Add Value Labels Using `add_val1()`
+Now let's add value labels for variable "gender." Function `add_val1` is a 
+variant of `add_val_labs` that allows you to supply the variable name unquoted, 
+provided you are value-labeling only one variable. (It's not evident from the 
+above, but `add_val_labs` supports labeling multiple variables at once).
+
+```{r}
+df <- add_val1(
+  data = df,
+  var = gender, # contrast this var argument to the vars argument demo'd above
+  vals = c(0, 1, 2), # the values to be labeled
+  labs = c("Male", "Female", "Other"), # the labels, applied in order to the vals
+  max.unique.vals = 10
+)
+```
+
+Once again, we can create a lookup table with the labels-to-values mappings. 
+Because we used `add_val_labs()` and `add_val`(), each unique value of our 
+value-labeled variables will (must) have one unique label (one-to-one mapping), 
+and any unique values that were not explicitly assigned a label will be given 
+one automatically (the value itself, coerced to character as needed).
+
+```{r}
+get_val_labs(df)
+```
+
+### Add NUMERICAL RANGE Labels Using `add_quant_labs()`
+Traditionally, value labels are intended for categorical variables, such as 
+binary, nominal, or (integer) ordinal variables with limited numbers of distinct 
+categories. Further, as just noted, value labels that are added using 
+`add_val_labs` (or `add_val1`) are constrained to map one-to-one to distinct 
+values: No two distinct values can share a label or vice versa.
+
+If you wish to apply a label to a range of values of a numerical variable,
+such as labeling each value according to the quintile or decile to which it 
+belongs, you can use `add_quant_labs()` (or `add_quant1`) to do so.
+
+Here, we will use `add_quant_labs` with the partial argument set to TRUE to 
+apply quintile range labels to **all variables** of df that have an "x" in their 
+names (i.e., vars "x1" and "x2"). We'll demonstrate this capability further at 
+the end of this vignette.
+
+```{r}
+df_temp <- add_quant_labs(data = df, vars = "x", qtiles = 5, partial = TRUE)
+```
+
+As `add_quant_labs` adds those numerical range labels, the console output shows
+the actual quintile value of the supplied variable(s) (here, "x1" and "x2") that 
+corresponds to each quintile (range) label. Any value at or below that value 
+(and above the next-lowest quintile value) is assigned the corresponding 
+quintile label. In this case, the labels were generated automatically, but the 
+user can override this and specify different label text.
+
+**Be careful** with setting partial to TRUE like this: If your data set featured 
+a column called "sex" or that featured the suffix "max," `add_quant_labs()` 
+would attempt to apply the value labeling scheme to that column as well! 
+
+We can use the same function to assign arbitrary, user-specified range labels. 
+Here, we assign numerical range labels based on an arbitrary cutpoint that 
+differentiate values of "x1" and "x2" that are at or below 100 from values that 
+are at or below 150 (but greater than 100).
+
+```{r}
+df_temp <- add_quant_labs(
+  data = df_temp, vars = "x", vals = c(100, 150),
+  partial = TRUE
+)
+```
+
+Having demonstrated the basic functionality, let's use `add_quant1` to apply 
+decile range labeling to the single variable "x1" only. This function only 
+accepts one variable, but its name can be supplied unquoted.
+
+```{r}
+df <- add_quant1(df, # data.frame
+  x1, # variable to value-label
+  qtiles = 5
+) # number quintiles to define numerical range labels
+```
+
+We'll preserve the "x1" range labels going forward, keeping "x2" unlabeled.
+
+### Add MANY-TO-ONE VALUE Labels Using `add_m1_lab()`
+If you wish to apply a single label to multiple distinct values, this can be
+done through successive calls to `add_m1_lab()` (or `add1m1()`, if working with
+a single variable). Here "m1" is shorthand for "many to one" (many values get 
+the same one value label). 
+
+Note that each call to `add_m1_lab()` applies a single value label, so,  
+multiple calls are needed to apply multiple labels. Here, we illustrate this 
+workflow, applying the label "Some College+" to values 3, 4, or 5 of the 
+variable "edu", then applying other distinct labels to values 1 and 2, 
+respectively.
+
+```{r}
+df <- add_m1_lab(df, "edu", vals = c(3:5), lab = "Some College+")
+
+df <- add_m1_lab(df, "edu", vals = 1, lab = "Not HS Grad")
+
+df <- add_m1_lab(df, "edu", vals = 2, lab = "HSG, No College")
+
+get_val_labs(df)
+```
+
+### Where Do We Stand?
+All of this is nice, but have we really accomplished anything? A casual view of 
+the data.frame raises doubts: it does not appear to have changed from its its 
+initial state. 
+
+```{r}
+head(df_copy, 3) # our pre-labeling copy of the data.frame
+
+head(df, 3) # our latest, post-labeling version of same data.frame
+```
+
+But labeling has introduced unobtrusive but important features for us to use. 
+We'll put them to work in a moment. But first let's back them up in case we lose 
+them. 
+
+## Preserving and Restoring Labels
+Lose them, you say? labelr labels are data.frame attributes, and certain Base R
+functions (like some forms of subsetting) are known to destroy attributes. For 
+this reason, once you're done labeling your data.frame, it's wise to create an 
+in-session backup of your label information by assigning it to a stand-alone 
+object. You can do this with `get_all_lab_atts()`, which will return all labels 
+(frame, name, and value) as a list that you can subsequently (re-) attach to a 
+data.frame.
+
+```{r}
+labs.df <- get_all_lab_atts(df)
+```
+
+Now, we can remove them explicitly, simulating what certain R functions do 
+implicitly.
+
+```{r}
+df <- strip_labs(df) # remove our labels
+get_all_lab_atts(df) # show that they're gone
+```
+
+Now, let's restore them, using the labs.df list object we just created.
+
+```{r}
+df <- add_lab_atts(df, labs.df)
+
+get_all_lab_atts(df)
+```
+
+We're back(ed up)!
+
+In addition to this hack, labelr provides label-preserving variants of common 
+data management functions, including `sfilter()`, `sselect()`, `ssubset()`, 
+`srename()`, `ssort()`, and others (the "s" prefix is for "safely," as in, "your
+labels will be safely retained"). Other popular packages (e.g., "dplyr") also 
+preserve label attributes. An advantage of labelr functions like `sselect()` is 
+that they they will update the label attributes of affected columns. For example, 
+if your use of `sselect()` or `sdrop` removes a column from the returned 
+data.frame, any labels associated with that column will be removed from the 
+data.frame's attributes, as well.
+
+## "Using" Value Labels
+Now that our data.frame is labeled (and our labels backed up), let's demonstrate 
+some ways that we can use them.
+
+### Show First, Last, or Random Rows with Value Labels Overlaid
+Base R includes the `head()` and `tail()` functions, which allow you to show the
+first n or last n rows of a data.frame. In addition, the "car" package offers a 
+similar function called `some()`, which allows you to show a random n rows of a 
+data.frame.
+
+labelr provides versions of these functions that will display value labels in 
+place of values (without actually altering the values in the underlying 
+data.frame). Let's demonstrate each of the three standard functions, followed by 
+its labelr counterpart (Note: the unconventional rownames, e.g., "T-1," "N-2," 
+are unique row identifiers, provided as aid to help you visually locate a 
+literal row that may appear across calls.
+
+```{r}
+head(df, 5) # Base R function utils::head()
+
+headl(df, 5) # labelr function headl() (note the "l")
+
+tail(df, 5) # Base R function utils::tail()
+
+taill(df, 5) # labelr function taill() (note the extra "l")
+
+set.seed(293)
+car::some(df, 5) # car package function car::some()
+
+set.seed(293)
+somel(df, 5) # labelr function somel() (note the "l")
+```
+
+Note that `some()` and `somel()` both return random rows, but they will not 
+necessarily return the same random rows, even with the same random number seed.
+
+### Swap out Values for Labels with `use_val_labs()` and `uvl()`
+With `use_val_labs()`, we can generalize this overlaying (aka "turning 
+on" aka "swapping in") of value labels to the entire data.frame. We might do 
+this temporarily, to visualize the labels in place of values.
+
+```{r}
+use_val_labs(df)[1:20, ] # headl() is just a more compact shortcut for this
+```
+
+We can wrap a call to this function around our data.frame and pass to other 
+functions, which may yield more interpretable output, depending on the function.
+Here is an illustration that passes a `use_val_labvs()` -wrapped data.frame to 
+the `qsu()`function of the collapse package. To save typing, we'll use `uvl()`, 
+a more compact alias for `use_val_labs()`. 
+
+First we show the unwrapped call to `collapse::qsu()`, followed by an otherwise 
+identical call that wraps the data.frame in `uvl()`. Focus your eyes on the 
+leftmost column of the console outputs of the respective calls.
+
+```{r}
+# `collapse::qsu()`
+# with labels "off" (i.e., using regular values of "raceth" as by var)
+(by_demog_val <- collapse::qsu(df, cols = c("x2"), by = ~raceth))
+
+# with labels "on" (i.e., using labels, thanks to `uvl()`)
+(by_demog_lab <- collapse::qsu(uvl(df), cols = c("x2"), by = ~raceth))
+```
+
+Note that the second call would achieve the same result if we used `use_val_labs()`,
+but `uvl()` is more compact for typing and printing purposes.
+
+### Non-standard Evaluation using `with_val_labs()` and `wvn`
+labelr also offers an option to overlay ("swap out") value labels using 
+`base::with()`-like non-standard evaluation. This is helpful in a few specific 
+cases. 
+
+```{r}
+with(df, table(gender, raceth)) # base::with()
+
+with_val_labs(df, table(gender, raceth)) # labelr::with_val_labs()
+
+wvl(df, table(gender, raceth)) # labelr::wvl is a more compact alias
+
+with(use_val_labs(df), table(gender, raceth)) # this does same thing
+```
+
+In a little bit, we'll see that we have some parallel options for overlaying 
+("turning on") NAME labels.
+
+### Add value labels back to the data.frame with `add_lab_cols()`
+If all this wrapping and interactive toggling back and forth is making you 
+dizzy, we could do something more permanent. 
+
+For example, we can assign the result of a `use_val_labs()` call to an object. 
+The result will be a data.frame with the same names and dimensions as the one 
+supplied, with value labels replacing values for all value-labeled variables 
+(or for a subset of those variables, if you specify them). Those variables will 
+coerced to character (if they were not already). Since there is no "undo" 
+shortcut for this action, it is safest to assign the result to a new object.
+
+```{r}
+df_labd <- use_val_labs(df)
+head(df_labd) # note, this is utils::head(), not labelr::headl()
+```
+
+Better still, we do not strictly need to choose between values and labels. We 
+can use `add_lab_cols()` to preserve all existing variables (columns), including 
+the value-labeled ones, while adding to our data.frame an additional 
+labels-as-values column for each value-labeled column. 
+
+Easier done than said, perhaps. Take a look:
+
+```{r}
+df_plus_labs <- add_lab_cols(df)
+head(df_plus_labs[c("gender", "gender_lab", "raceth", "raceth_lab")])
+```
+
+### "Filter values using labels" with `flab()` 
+We can filter a value-labeled data.frame on the basis for value labels, 
+returning the subsetted data.frame expressed in terms of the original values 
+(i.e., with the labels still in the background). For example, here we use the 
+more semantically meaningful value labels to filter our data.frame.
+
+```{r}
+head(df)
+
+df1 <- flab(df, raceth == "Asian" & gender == "Female")
+
+head(df1, 5) # returned df1 is in terms of values, just like df
+
+headl(df1, 5) # note use of labelr::headl; labels are there
+```
+
+### "Subset using labels" with `slab()` 
+As with `base::subset()`, we can also limit which columns we return.
+
+```{r}
+head(slab(df, raceth == "Black" & gender == "Male", gender, raceth), 10)
+```
+
+In the case of `slab()`, we simply list the desired columns -- unquoted and 
+comma-separated -- after the filter
+
+### Tabulate frequencies with `tabl()`
+labelr's `tabl()` function supports count tabulations with labels turned "on"
+or "off" and offers some other functionalities. For example, tables can be 
+generated... 
+
+...in terms of values
+```{r}
+head(tabl(df), 20) # labs.on = FALSE is default
+```
+...or in terms of labels
+```{r}
+head(tabl(df, labs.on = TRUE), 20) # labs.on = TRUE is not the default
+```
+...in proportions
+```{r}
+head(tabl(df, labs.on = TRUE, prop.digits = 3), 20)
+```
+...cross-tab style
+```{r}
+head(tabl(df, labs.on = TRUE, wide.col = "gender"), 20)
+```
+...with non-value-labeled data.frames
+```{r}
+tabl(iris, "Species") # explicit vars arg with one-var ("Species")
+
+tabl(mtcars, zero.rm = TRUE) # vars arg null
+```
+
+## "Using" NAME labels 
+Just as we used `use_val_labs()` to swap out values for value labels, we can 
+use `use_name_labs()` to swap out variable names for variable NAME labels. Let's
+illustrate this with the mtcars data.frame.
+
+First we'll construct a vector of named labels.
+
+```{r}
+names_labs_vec <- c(
+  "mpg" = "Miles/(US) gallon",
+  "cyl" = "Number of cylinders",
+  "disp" = "Displacement (cu.in.)",
+  "hp" = "Gross horsepower",
+  "drat" = "Rear axle ratio",
+  "wt" = "Weight (1000 lbs)",
+  "qsec" = "1/4 mile time",
+  "vs" = "Engine (0 = V-shaped, 1 = straight)",
+  "am" = "Transmission (0 = automatic, 1 = manual)",
+  "gear" = "Number of forward gears",
+  "carb" = "Number of carburetors"
+)
+```
+
+Now, we will apply them to mtcars and assign the resulting data.frame to a new 
+data.frame called mt2.
+
+```{r}
+mt2 <- add_name_labs(mtcars,
+  vars = names(names_labs_vec),
+  labs = names_labs_vec
+)
+```
+
+Here is an alternative syntax (same end state)
+
+```{r}
+mt2 <- add_name_labs(mtcars,
+  name.labs = c(
+    "mpg" = "Miles/(US) gallon",
+    "cyl" = "Number of cylinders",
+    "disp" = "Displacement (cu.in.)",
+    "hp" = "Gross horsepower",
+    "drat" = "Rear axle ratio",
+    "wt" = "Weight (1000 lbs)",
+    "qsec" = "1/4 mile time",
+    "vs" = "Engine (0 = V-shaped, 1 = straight)",
+    "am" = "Transmission (0 = automatic, 1 = manual)",
+    "gear" = "Number of forward gears",
+    "carb" = "Number of carburetors"
+  )
+)
+```
+
+Now, let's swap out names for NAME labels.
+```{r}
+mt2 <- use_name_labs(mt2)
+
+head(mt2[c(1, 2)])
+```
+
+Yikes, the longer column names stretch things out quite a bit.
+
+One thing we can do is use `get_name_labs` to get a look-up table, then use 
+copy-and-paste to work with these. For example: 
+
+```{r}
+lm(`Miles/(US) gallon` ~ `Number of cylinders`, data = mt2) # pasting in var names
+lm(mpg ~ cyl, data = use_var_names(mt2)) # same result if name labels are "off"
+```
+
+But freehand typing or copy-paste is clunky and tedious. There are other less 
+painful  ways we can use these NAME labels, once we've turned them on.
+
+```{r}
+sapply(mt2, median) # get the median for every name-labeled variable
+
+collapse::qsu(mt2) # use an external package for more informative descriptives
+```
+
+Okay, let's revert back to our original variable names.
+
+```{r}
+mt2 <- use_var_names(mt2)
+head(mt2[c(1, 2)])
+```
+
+We can use `with_name_labs()` (or the more compact alias `wnl()`) to display 
+name labels in place of column names in fairly flexible ways.
+
+First, let's show that mt2's name labels are "off," then we'll verify that the 
+labels are still there in the background.
+
+```{r}
+# first, show mt2 with name labels off but verify that we still have name labels
+head(mt2)
+get_name_labs(mt2)
+```
+
+Now, pay attention to the variable names in the console output of the following calls:
+
+```{r}
+# demo wnl() (note that with_name_labs() will achieve same result)
+wnl(mt2, t.test(mpg ~ am))
+
+wnl(mt2, lm(mpg ~ am))
+
+wnl(mt2, summary(mt2))
+
+wnl(mt2, xtabs(~gear))
+
+with(mt2, xtabs(~gear)) # compare to directly above
+```
+
+Keep in mind that `wnl()` is intended for self-contained calls involving 
+exploratory analysis activities, like simple plots, descriptives, and models. 
+It's based on fairly brittle regular expressions and **will throw an error** if 
+you are using particularly exotic operators, trying out multi-step workflows, or 
+attempting to use it for data management or cleaning. Still, as shown above, it 
+works reasonably well for a range of "workhorse" commands.
+
+## NA and "Irregular" Values
+labelr is no fan of NA values or other "irregular" values, which are defined as
+infinite values, not-a-number values, and character values that look like them
+(e.g., "NAN", "INF", "inf", "Na"). 
+
+When value-labeling a column / variable, 
+such values are automatically given the catch-all label "NA" (which will be 
+converted to an actual NA in any columns created by `add_lab_cols()` or 
+`use_val_labs()`). You do not need (and should not try) to specify this yourself, 
+and you should not try to over-ride labelr on this. If you want to use labelr 
+AND you present with these sorts of values, your options are to accept the 
+default "NA" label or convert these values to something else before labeling. 
+The reasoning is that value labels are rarely appropriate for the types of 
+variables and scenarios where you absolutely need to preserve the nuances of 
+exotic values like -Inf and NaN. 
+
+With that said, let's see how labelr handles this, with an assist from our old
+friend mtcars (packaged with R's base distribution).
+
+First, let's assign mtcars to a new data.frame object that we will besmirch.
+```{r}
+mtbad <- mtcars
+```
+
+Let's get on with the besmirching.
+```{r}
+mtbad[1, 1:11] <- NA
+rownames(mtbad)[1] <- "Missing Car"
+mtbad[2, "am"] <- Inf
+mtbad[3, "gear"] <- -Inf
+mtbad[5, "carb"] <- NaN
+mtbad[2, "mpg"] <- Inf
+mtbad[3, "mpg"] <- NaN
+
+# add a character variable, for demonstration purposes
+# if it makes you feel better, you can pretend these are Consumer Reports or
+# ...JD Power ratings or something
+set.seed(9202) # for reproducibility
+mtbad$grade <- sample(c("A", "B", "C"), nrow(mtbad), replace = TRUE)
+mtbad[4, "grade"] <- NA
+mtbad[5, "grade"] <- "NA"
+mtbad[6, "grade"] <- "Inf"
+
+# see where this leaves us
+head(mtbad)
+
+sapply(mtbad, class)
+```
+Now, let's add value labels to this unruly data.frame. Note that `add_val1` 
+automatically detects and handles irregular values and gives us a lot of 
+visibility into its value-labeling actions.
+
+```{r}
+mtlabs <- mtbad |>
+  add_val1(grade,
+    vals = c("A", "B", "C"),
+    labs = c("Gold", "Silver", "Bronze")
+  ) |>
+  add_val1(am,
+    vals = c(0, 1),
+    labs = c("auto", "stick")
+  ) |>
+  add_val1(carb,
+    vals = c(1, 2, 3, 4, 6, 8), # not the most inspired use of labels
+    labs = c(
+      "1c", "2c", "3c",
+      "4c", "6c", "8c"
+    )
+  ) |>
+  add_val1(gear,
+    vals = 3:5, # again, not the most compelling use case
+    labs = c(
+      "3-speed",
+      "4-speed",
+      "5-speed"
+    )
+  ) |>
+  add_quant1(mpg, qtiles = 4) # add quartile-based value labels
+```
+
+```{r}
+get_val_labs(mtlabs, "am") # NA values were detected and dealt with
+```
+
+Let's streamline the data.frame with `sselect()` to make it more manageable.
+
+```{r}
+mtless <- sselect(mtlabs, mpg, cyl, am, gear, carb, grade) # safely select
+
+head(mtless, 5) # note that the irregular values are still here
+```
+
+Notice how all irregular values are coerced to NA when we substitute labels for 
+values with `use_val_labs()`.
+
+```{r}
+head(use_val_labs(mtless), 5) # but they all go to NA if we `use_val_labs`
+```
+
+Now, let's try an `add_lab_cols()` view.
+
+```{r}
+mtlabs_plus <- add_lab_cols(mtlabs, c("mpg", "am")) # this creates and adds "am_lab" col
+mtlabs_plus <- sselect(mtlabs_plus, mpg, mpg_lab, am, am_lab) # let's select down to these two
+
+head(mtlabs_plus) # here's where we landed
+```
+
+What if we had tried to explicitly label the NA values and/or irregular values 
+themselves? We would have failed. 
+
+```{r}
+# Trying to Label an Irregular Value (-Inf)
+mtbad <- add_val1(
+  data = mtcars,
+  var = gear,
+  vals = -Inf,
+  labs = c("neg.inf")
+)
+
+# Trying to Label an Irregular Value (NA)
+mtbad <- add_val_labs(
+  data = mtbad,
+  vars = "grade",
+  vals = NA,
+  labs = c("miss")
+)
+
+# Trying to Label an Irregular Value (NaN)
+mtbad <- add_val_labs(
+  data = mtbad,
+  vars = "carb",
+  vals = NaN,
+  labs = c("nan-v")
+)
+
+# labelr also treats "character variants" of irregular values as irregular values.
+mtbad <- add_val1(
+  data = mtbad,
+  var = carb,
+  vals = "NAN",
+  labs = c("nan-v")
+)
+```
+
+Again, labelr handles NA and irregular values and resists our efforts to take 
+such matters into our own hands.
+
+## Factors fand Value Labels
+R's concept of a factor variable shares some affinities with the concept of a
+value-labeled variable and can be viewed as one approach to value labeling. 
+However, factors can manifest idiosyncratic and surprising behaviors depending 
+on the function to which you're trying to apply them. They are character-like, 
+but they are not character values. They are built on top of integers, but they 
+won't submit to all of the operations that integers do. They do some very handy 
+things in certain model-fitting applications, but their behavior "under the hood" 
+can be counter-intuitive or opaque. Simply put, they are their own thing.
+
+So, while factors have their purposes, it would be nice to associate value 
+labels with the distinct values of data.frame variables in a manner that 
+preserves the integrity and transparency of the underlying values (factors tend 
+to be a bit opaque about this) and that allows you to view or use the labels in 
+flexible ways.
+
+And if you wanted to work with a factor, it would be nice if you could add value 
+labels to it without it ceasing to be and behave like a factor. 
+
+### Adding Labels to a Factor
+With that said, let's see if we can have our label-factor cake and eat it, too, 
+using the iris data.frame that comes pre-packaged with R. 
+
+```{r}
+unique(iris$Species)
+
+sapply(iris, class) # nothing up our sleeve -- "Species" is a factor
+```
+
+Let's add value labels to "Species" and assign the result to a new data.frame 
+that we'll call irlab. For our value labels, we'll use "se","ve", and "vi", 
+which are not adding much new information, but they will help to illustrate what 
+we can do with labelr and a factor variable.
+
+```{r}
+irlab <- add_val_labs(iris,
+  vars = "Species",
+  vals = c("setosa", "versicolor", "virginica"),
+  labs = c("se", "ve", "vi")
+)
+
+# this also would've worked
+# irlab_dos <- add_val1(iris, Species,
+#   vals = c("setosa", "versicolor", "virginica"),
+#   labs = c("se", "ve", "vi")
+# )
+```
+
+Note that we could have just as (or even more) easily used `add_val1()`. 
+`add_val_labs()` is useful if we want to value-label many variables at once 
+(according to a common labeling scheme -- think likert responses to a survey),
+but `add_val1()` works for a single variable at a time and allows us to avoid
+quoting our column name, if that matters to us. Let's prove that they're the 
+same.
+
+Let's take a look at irlab -- "Species" in particular.
+
+First, note that irlab looks and acts just like iris in the usual ways that 
+matter
+
+```{r}
+summary(iris)
+
+summary(irlab)
+
+head(iris, 4)
+
+head(irlab, 4)
+
+lm(Sepal.Length ~ Sepal.Width + Species, data = iris)
+
+lm(Sepal.Length ~ Sepal.Width + Species, data = irlab) # values are same
+```
+
+Note also that irlab's "Species" is still a factor, just like its iris 
+counterpart/parent.
+
+```{r}
+sapply(irlab, class)
+
+levels(irlab$Species)
+```
+
+But irlab's "Species" has value labels!
+
+```{r}
+get_val_labs(irlab, "Species")
+```
+
+And they work.
+
+```{r}
+head(use_val_labs(irlab))
+ir_v <- flab(irlab, Species == "vi")
+head(ir_v, 5)
+```
+
+Our take-aways so far? Factors can be value-labeled while staying factors, and 
+we can use the labels to do labelr-y things with those factors. We can have both.
+
+We may want to go further and add the labeled variable alongside the factor version.
+
+```{r}
+irlab_aug <- add_lab_cols(irlab, vars = "Species")
+```
+
+This gives us a new variable called "Species_lab". Let's get select rows of the 
+resulting data.frame, since we want to see all the different species.
+
+```{r}
+set.seed(231)
+sample_rows <- sample(seq_len(nrow(irlab)), 10, replace = FALSE)
+
+irlab_aug[sample_rows, ]
+
+sapply(irlab_aug, class)
+
+with(irlab_aug, table(Species, Species_lab))
+```
+
+Caution: Replacing the entire data.frame using `use_val_labs()` WILL coerce 
+factors to character, since the value labels are character values, not 
+recognized factor levels
+
+```{r}
+ir_char <- use_val_labs(irlab) # we assign this to a new data.frame
+sapply(ir_char, class)
+
+head(ir_char, 3)
+
+class(ir_char$Species) # it's character
+```
+
+Of course, even then, we could explicitly coerce the labels to be factors if we 
+wanted
+
+```{r}
+ir_fact <- use_val_labs(irlab)
+
+ir_fact$Species <- factor(ir_char$Species,
+  levels = c("se", "ve", "vi"),
+  labels = c("se", "ve", "vi")
+)
+head(ir_fact, 3)
+
+class(ir_fact$Species) # it's a factor
+
+levels(ir_fact$Species) # it's a factor
+```
+
+We've recovered.
+
+```{r}
+with(ir_fact, tapply(Sepal.Width, Species, mean))
+with(irlab, tapply(Sepal.Width, Species, mean))
+with(iris, tapply(Sepal.Width, Species, mean))
+```
+
+### Ordered factors
+Value labels work with ordered factors, too. Let's make a fictional ordered 
+factor that we add to ir_ord. We can pretend that this is some sort of judge's 
+overall quality rating, if that helps.
+
+```{r}
+ir_ord <- iris
+
+set.seed(293)
+qrating <- c("AAA", "AA", "A", "BBB", "AA", "BBB", "A")
+
+ir_ord$qrat <- sample(qrating, 150, replace = TRUE)
+
+ir_ord$qrat <- factor(ir_ord$qrat,
+  ordered = TRUE,
+  levels = c("AAA", "AA", "A", "BBB")
+)
+```
+
+Where do we stand with this factor?
+
+```{r}
+levels(ir_ord$qrat)
+
+class(ir_ord$qrat)
+```
+
+Now, let's add value labels to it.
+
+```{r}
+ir_ord <- add_val_labs(ir_ord,
+  vars = "qrat",
+  vals = c("AAA", "AA", "A", "BBB"),
+  labs = c(
+    "unimpeachable",
+    "excellent",
+    "very good",
+    "meh"
+  )
+)
+```
+
+Let's add a separate column with those labels as a distinct (character) variable 
+unto itself, existing in addition to (not replacing) "qrat".
+
+```{r}
+ir_ord <- add_lab_cols(ir_ord, vars = "qrat")
+
+head(ir_ord, 10)
+
+with(ir_ord, table(qrat_lab, qrat))
+
+class(ir_ord$qrat)
+
+levels(ir_ord$qrat)
+
+class(ir_ord$qrat_lab)
+
+get_val_labs(ir_ord, "qrat") # labs are still there for qrat
+
+get_val_labs(ir_ord, "qrat_lab") # no labs here; this is just a character var
+```
+
+It appears that you really can have it all, where "it all" is defined as 
+"factors and labels."
+
+## Labels and Larger Data Frames
+labelr is not intended for "large" data.frames, which is a fuzzy concept. To
+give a sense of what labelr **can** handle, let's see it in action with the 
+NYC Flights 2013 data set: a moderate-not-big data.frame of ~340K rows.
+
+Let's load labelr and the nycflights13 package.
+```{r}
+opening_ding <- Sys.time() # to time labelr
+
+library(nycflights13)
+```
+
+We'll assign the data.frame to one we call df.
+```{r}
+df <- flights
+
+nrow(df)
+```
+We'll add a "frame label," which describes the data.frame overall.
+```{r}
+df <- add_frame_lab(df, frame.lab = "On-time data for all flights that
+                    departed NYC (i.e. JFK, LGA or EWR) in 2013.")
+```
+Let's see what this did.
+```{r}
+attr(df, "frame.lab") # check for attribute
+
+get_frame_lab(df) # return frame.lab alongside data.frame name as a data.frame
+
+get_frame_lab(df)$frame.lab
+```
+Now, let's assign variable NAME labels.
+
+```{r}
+names_labs_vec <- c(
+  "year" = "Year of departure",
+  "month" = "Month of departure",
+  "year" = "Day of departure",
+  "dep_time" = "Actual departure time (format HHMM or HMM), local tz",
+  "arr_time" = "Actual arrival time (format HHMM or HMM), local tz",
+  "sched_dep_time" = "Scheduled departure times (format HHMM or HMM)",
+  "sched_arr_time" = "Scheduled arrival time (format HHMM or HMM)",
+  "dep_delay" = "Departure delays, in minutes",
+  "arr_delay" = "Arrival delays, in minutes",
+  "carrier" = "Two letter airline carrier abbreviation",
+  "flight" = "Flight number",
+  "tailnum" = "Plane tail number",
+  "origin" = "Flight origin airport code",
+  "dest" = "Flight destination airport code",
+  "air_time" = "Minutes spent in the air",
+  "distance" = "Miles between airports",
+  "hour" = "Hour of scheduled departure time",
+  "minute" = "Minutes component of scheduled departure time",
+  "time_hour" = "Scheduled date and hour of the flight as a POSIXct date"
+)
+
+df <- add_name_labs(df, name.labs = names_labs_vec)
+
+get_name_labs(df) # show that they've been added
+```
+
+Let's add variable VALUE labels for variable "carrier." Helpfully, this ships 
+with the nycflights13 package itself.
+
+```{r}
+airlines <- nycflights13::airlines
+
+head(airlines)
+```
+
+The carrier field of airlines matches the carrier column of df (formerly, flights)
+```{r}
+ny_val <- airlines$carrier
+```
+
+The name field of airlines gives us the full airline names.
+```{r}
+ny_lab <- airlines$name
+```
+
+df (flights) also has an integer month variable. We will "hand-jam" month value 
+labels
+
+```{r}
+ny_month_vals <- c(1:12) # values
+ny_month_labs <- c(
+  "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+) # labels
+```
+
+Let's add these value labels. First, we'll demo `add_val1()`, then 
+`add_val_labs()`, then `add_quant_labs()`.
+
+```{r}
+df <- add_val1(df,
+  var = carrier, vals = ny_val,
+  labs = ny_lab,
+  max.unique.vals = 20
+)
+```
+
+```{r}
+df <- add_val_labs(df,
+  vars = "month",
+  vals = ny_month_vals,
+  labs = ny_month_labs,
+  max.unique.vals = 20
+)
+```
+
+```{r}
+df <- add_quant_labs(df, "dep_time", qtiles = 5)
+```
+
+Let's see where this leaves us.
+
+```{r}
+get_val_labs(df)
+```
+
+We can use `head()` to get a baseline look at select rows and variables
+```{r}
+head(df[c("origin", "dep_time", "dest", "year", "month", "carrier")])
+```
+
+Now, let's do the same for a version we modified with `use_val_labs()`. Note that
+this cannot be "undone" (except for the usual clunky way of re-running our script
+up to this point and not doing this!).
+
+```{r}
+df_swapd <- use_val_labs(df)
+
+head(df_swapd[c("origin", "dep_time", "dest", "year", "month", "carrier")])
+```
+
+Instead of replacing values (which we can't undo), it might be safer to simply
+add "value-labels-on" character variables to the data.frame. This adds nearly
+675K new cells, but let's throw caution to the wind with `add_lab_cols()`.
+
+```{r}
+df_plus <- add_lab_cols(df, vars = c("carrier", "month", "dep_time"))
+
+head(df_plus[c(
+  "origin", "dest", "year",
+  "month", "month_lab",
+  "dep_time", "dep_time_lab",
+  "carrier", "carrier_lab"
+)])
+```
+
+We can use `flab()` to filter df based on month and carrier, even when value
+labels are "invisible" (i.e., existing only as attributes() meta-data.
+
+```{r}
+# labels are not visible (they exist only as attributes() meta-data)
+head(df[c("carrier", "arr_delay")])
+
+# we still can use them to filter (note: we're filtering on "JetBlue Airways",
+# ...NOT its obscure code "B6")
+df_fl <- flab(df, carrier == "JetBlue Airways" & arr_delay > 20)
+
+# here's what's returned when we filtered on "JetBlue Airways" using flab()
+head(df_fl[c("carrier", "arr_delay")])
+
+# double-check that this is JetBlue
+head(use_val_labs(df_fl)[c("carrier", "arr_delay")])
+```
+
+How long did this entire NYC Flights session take on a 16GB RAM laptop?
+```{r}
+the_buzzer <- Sys.time()
+the_buzzer - opening_ding
+```
+
+## "Bulk" Value Labeling with Partial Variable Name Matching
+One more special topic, before we conclude this vignette. 
+
+As shown earlier, functions for adding value labels (e.g., `add_val_labs`, 
+`add_quant_labs` and `add_m1_lab`) will do partial matching if the partial 
+argument is set to TRUE. Let's use labelr's `make_likert_data()` function 
+to generate some fake Likert scale-style survey data to demonstrate this more 
+fully. 
+
+```{r}
+set.seed(272) # for reproducibility
+dflik <- make_likert_data(scale = 1:7) # another labelr function
+head(dflik)
+```
+We'll put the values we wish to label and the labels we wish to use in 
+stand-alone vectors, which we will supply to `add_val_labs` in a moment.
+
+```{r}
+vals2label <- 1:7
+labs2use <- c(
+  "VSD",
+  "SD",
+  "D",
+  "N",
+  "A",
+  "SA",
+  "VSA"
+)
+```
+
+Now, let's associate/apply the value labels to ALL vars with "x" in their name 
+and also to var "y3." Note: partial = TRUE.
+
+```{r}
+dflik <- add_val_labs(
+  data = dflik, vars = c("x", "y3"), ###  note the vars args
+  vals = vals2label,
+  labs = labs2use,
+  partial = TRUE # applying to all cols with "x" or "y3" substring in names
+)
+```
+
+That's a lot of information! For a more compact sense of things, let's compare 
+dflik with value labels present but "off" to labels "on."
+
+First, present but "off."
+
+```{r}
+head(dflik)
+```
+
+Now, let's "turn on" (use) these value labels.
+```{r}
+lik1 <- uvl(dflik) # assign to new object, since we can't "undo"
+head(lik1) # we could have skipped previous call by using labelr::headl(dflik)
+```
+
+Yea, verily: All variables with "x" in their name (and "y3") got the labels! 
+
+Suppose we want to drop these value labels for a select few, but not all, of 
+these variables. `drop_val_labs` can get the job done.
+
+```{r}
+dfdrop <- drop_val_labs(dflik,
+  c("x2", "y3"),
+  partial = FALSE
+)
+```
+
+Most of our previously labeled columns remain so; but not "x2" and "y3."
+```{r}
+get_val_labs(dfdrop, "x2")
+```
+
+Compare to values for variable "x1" (we did not drop value labels from this one)
+```{r}
+get_val_labs(dfdrop, "x1")
+```
+
+Just like we did with `add_val_labs()`, we also can use a single command to drop 
+value labels from all variables with "x" in their variable names.
+```{r}
+dfxgone <- drop_val_labs(dflik,
+  c("x"),
+  partial = TRUE # note
+)
+```
+
+"y3" still has value labels, but now **all** "x" var value labels are gone.
+```{r}
+get_val_labs(dfxgone)
+```
+
+## Conclusion
+This concludes our whirlwind tour of labelr functionalities. You graduated!
