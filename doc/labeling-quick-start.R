@@ -10,7 +10,8 @@ knitr::opts_chunk$set(
 library(labelr)
 
 ## -----------------------------------------------------------------------------
-df <- make_demo_data(n = 1000, seed = 555)
+set.seed(555)
+df <- make_demo_data(n = 1000)
 
 ## -----------------------------------------------------------------------------
 df <- add_frame_lab(df, frame.lab = "Demographic and reaction time test score
@@ -148,7 +149,8 @@ by_demog_lab <- collapse::qsu(uvl(df), cols = c("x2"), by = ~raceth)
 by_demog_lab
 
 ## -----------------------------------------------------------------------------
-dflik <- make_likert_data(scale = 1:7, seed = 272)
+set.seed(272)
+dflik <- make_likert_data(scale = 1:7)
 head(dflik)
 
 ## -----------------------------------------------------------------------------
@@ -347,18 +349,6 @@ mt2 <- add_val1(
     "eight-cyl"
   )
 )
-
-## -----------------------------------------------------------------------------
-mt2 <- add_val_labs(
-  data = mt2,
-  vars = "am",
-  vals = c(99),
-  labs = c("friend")
-)
-
-get_name_labs(mt2)
-
-get_val_labs(mt2)
 
 ## -----------------------------------------------------------------------------
 # for "disp", add numerical range labels based on quantiles (here, quintiles)

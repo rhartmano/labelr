@@ -42,7 +42,8 @@ may provide faster sorting while preserving labelr attributes.
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set
-df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+set.seed(555)
+df <- make_demo_data(n = 1000) # another labelr:: function
 
 # let's add variable VALUE labels for variable "raceth"
 df <- add_val_labs(df,

@@ -4,14 +4,12 @@
 \alias{somel}
 \title{Return a Random Sample of Data Frame Rows with Value Labels Visible}
 \usage{
-somel(data, n = 6L, seed = 123)
+somel(data, n = 6L)
 }
 \arguments{
 \item{data}{a data.frame.}
 
 \item{n}{the number of random rows of the data.frame to return.}
-
-\item{seed}{the random number seed to pass to set.seed (inside function).}
 }
 \value{
 a data.frame.
@@ -26,7 +24,8 @@ of n value-labeled rows of that data.frame
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set
-df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+set.seed(555)
+df <- make_demo_data(n = 1000) # another labelr:: function
 # let's add variable VALUE labels for variable "raceth"
 df <- add_val_labs(df,
   vars = "raceth", vals = c(1:7),

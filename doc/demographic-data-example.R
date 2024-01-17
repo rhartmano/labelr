@@ -10,7 +10,8 @@ knitr::opts_chunk$set(
 library(labelr)
 
 ## -----------------------------------------------------------------------------
-df <- make_demo_data(n = 1000, seed = 555)
+set.seed(555)
+df <- make_demo_data(n = 1000)
 
 head(df)
 

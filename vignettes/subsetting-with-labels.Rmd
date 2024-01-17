@@ -34,14 +34,15 @@ Let's use labelr's `make_demo_data()` command to create a fake "demographic"
 data.frame that we'll subset using `flab()` and `slab()`.
 
 ```{r}
-df <- make_demo_data(n = 50, seed = 4511)
+set.seed(555)
+df <- make_demo_data(n = 50)
 
 nrow(df)
 
 head(df)
 ```
 Note that the funky row names are here to help you get a fix on the stable or
-changing state of literal rows as they move through the worfklow.
+changing state of literal rows as they move through the workflow.
 
 ```{r}
 head(rownames(df))

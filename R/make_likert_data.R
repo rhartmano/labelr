@@ -8,8 +8,7 @@
 #' @details
 #' Data is entirely fictional and strictly for purposes of demonstrating labelr.
 #'
-#' @param rows number of observations (`nrow`) to create.
-#' @param seed random number seed to pass to `set.seed` for reproducibility.
+#' @param n number of observations (rows) of hypothetical data set to create.
 #' @param scale the sequence of distinct integer values describing the raw /
 #' naive numerical codings of Likert-type survey items.
 #' @param rownames create memorable but arbitrary rownames for inspection (if
@@ -20,7 +19,8 @@
 #' @examples
 #' # add_val_labs() "vars" arg will do partial matching if partial = TRUE
 #' # in this case, we catch all vars with "x" in their name
-#' dflik <- make_likert_data(scale = 1:7, seed = 272)
+#' set.seed(272)
+#' dflik <- make_likert_data(scale = 1:7)
 #' vals2label <- 1:7
 #' labs2use <- c(
 #'   "VSD",
@@ -43,24 +43,22 @@
 #' # see vars = args above
 #' lik1 <- use_val_labs(dflik)
 #' head(lik1)
-make_likert_data <- function(rows = 1000,
-                             seed = 123,
+make_likert_data <- function(n = 1000,
                              scale = 1:7,
                              rownames = TRUE) {
-  set.seed(seed)
-  id <- 1:rows
+  id <- 1:n
   data <- data.frame(id = id)
 
   for (i in seq_len(5)) {
     this_coln <- ncol(data) + 1
-    x <- sample(c(scale), rows, replace = TRUE)
+    x <- sample(c(scale), n, replace = TRUE)
     data <- cbind(data, x)
     names(data)[this_coln] <- paste0("x", i)
   }
 
   for (i in seq_len(5)) {
     this_coln <- ncol(data) + 1
-    y <- sample(c(scale), rows, replace = TRUE)
+    y <- sample(c(scale), n, replace = TRUE)
     data <- cbind(data, y)
     names(data)[this_coln] <- paste0("y", i)
   }

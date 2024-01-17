@@ -40,7 +40,8 @@ for use in exploring/demonstrating labelr functionality. Here, we'll create a
 1000-observation data.frame.
 
 ```{r}
-df <- make_demo_data(n = 1000, seed = 555)
+set.seed(555)
+df <- make_demo_data(n = 1000)
 
 head(df)
 ```
@@ -345,12 +346,15 @@ tail(df, 5) # Base R function utils::tail()
 
 taill(df, 5) # labelr function taill() (note the "l")
 
+set.seed(294)
 car::some(df, 5) # car package function car::some()
 
-somel(df, 5, seed = 1837) # labelr function somel() (note the "l")
+set.seed(294)
+somel(df, 5) # labelr function somel() (note the "l")
 ```
 
-Note that `some()` and `somel()` will not return the same random rows.
+Note that `some()` and `somel()` will not return the same random rows, even with 
+the same seed.
 
 
 ## "Filter Using Labels" with `flab()` 

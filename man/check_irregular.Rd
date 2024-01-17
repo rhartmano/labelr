@@ -30,8 +30,8 @@ to NA values (i.e., \code{check_irregular} will return TRUE where/if found).}
 
 \item{any}{if TRUE, return a 1L vector that is TRUE if any irregular/NA-esque
 value is found in the vector x, FALSE if no such value is found; if
-any=FALSE, function is vectorized AND will return a logical value for every
-element of x (TRUE if that specific value meets the "irregular"-ity test).}
+any=FALSE, function will return a logical value for every element of x
+(TRUE if that specific value meets the "irregular"-ity test).}
 }
 \value{
 A logical vector (1L if any==TRUE; length of x if any==FALSE).

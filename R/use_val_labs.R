@@ -102,7 +102,8 @@
 #' # make a "Likert"-type fake data set to demo
 #' # note, by default, add_val_labs() "vars" arg will do partial matching
 #' # in this case, we catch all vars with "x" in their name
-#' dflik <- make_likert_data(scale = 1:7, seed = 272)
+#' set.seed(272)
+#' dflik <- make_likert_data(scale = 1:7)
 #' vals2label <- 1:7
 #' labs2use <- c(
 #'   "VSD",

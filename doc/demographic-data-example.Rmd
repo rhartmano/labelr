@@ -40,7 +40,8 @@ for use in exploring/demonstrating labelr functionality. Here, we'll create a
 1000-observation data.frame.
 
 ```{r}
-df <- make_demo_data(n = 1000, seed = 555)
+set.seed(555)
+df <- make_demo_data(n = 1000)
 
 head(df)
 ```

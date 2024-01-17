@@ -9,12 +9,12 @@
 #' `headl` and `taill`.
 #' @param data a data.frame.
 #' @param n the number of random rows of the data.frame to return.
-#' @param seed the random number seed to pass to set.seed (inside function).
 #' @return a data.frame.
 #' @export
 #' @examples
 #' # make toy demographic (gender, raceth, etc.) data set
-#' df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+#' set.seed(555)
+#' df <- make_demo_data(n = 1000) # another labelr:: function
 #' # let's add variable VALUE labels for variable "raceth"
 #' df <- add_val_labs(df,
 #'   vars = "raceth", vals = c(1:7),
@@ -32,11 +32,10 @@
 #' )
 #'
 #' somel(df) # same, but with value labels in place of values
-somel <- function(data, n = 6L, seed = 123) {
+somel <- function(data, n = 6L) {
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
   these_atts <- get_all_lab_atts(data)
-  set.seed(seed)
   inds2sample <- seq_len(nrow(data))
   inds <- sample(inds2sample, n, replace = FALSE)
   datax <- data[inds, ]

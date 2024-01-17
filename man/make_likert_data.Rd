@@ -4,12 +4,10 @@
 \alias{make_likert_data}
 \title{Construct a Fake Likert Survey Response Data Frame}
 \usage{
-make_likert_data(rows = 1000, seed = 123, scale = 1:7, rownames = TRUE)
+make_likert_data(n = 1000, scale = 1:7, rownames = TRUE)
 }
 \arguments{
-\item{rows}{number of observations (\code{nrow}) to create.}
-
-\item{seed}{random number seed to pass to \code{set.seed} for reproducibility.}
+\item{n}{number of observations (rows) of hypothetical data set to create.}
 
 \item{scale}{the sequence of distinct integer values describing the raw /
 naive numerical codings of Likert-type survey items.}
@@ -31,7 +29,8 @@ Data is entirely fictional and strictly for purposes of demonstrating labelr.
 \examples{
 # add_val_labs() "vars" arg will do partial matching if partial = TRUE
 # in this case, we catch all vars with "x" in their name
-dflik <- make_likert_data(scale = 1:7, seed = 272)
+set.seed(272)
+dflik <- make_likert_data(scale = 1:7)
 vals2label <- 1:7
 labs2use <- c(
   "VSD",

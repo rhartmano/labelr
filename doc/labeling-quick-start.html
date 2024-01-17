@@ -340,8 +340,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div id="a-whirlind-tour" class="section level2">
-<h2>A Whirlind Tour</h2>
+<div id="a-whirlwind-tour" class="section level2">
+<h2>A Whirlwind Tour</h2>
 <p>This vignette provides an ad hoc introduction to a smattering of
 labelr functionalities and uses cases. Other brief vignettes cover
 additional issues and applications, offering a mix of new material and
@@ -439,7 +439,8 @@ do some things with those labels.</p>
 <h3>Make toy demographic data.frame</h3>
 <p>This function (included with labelr) creates fake “demographic” data
 intended for use in exploring/demonstrating labelr functionality.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">make_demo_data</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">seed =</span> <span class="dv">555</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">555</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">make_demo_data</span>(<span class="at">n =</span> <span class="dv">1000</span>)</span></code></pre></div>
 </div>
 <div id="add-a-variable-frame-label-using-add_frame_lab" class="section level3">
 <h3>Add a variable “frame label” using <code>add_frame_lab()</code></h3>
@@ -1101,15 +1102,16 @@ name</p>
 <h3>Make fake likert data to explore labelr</h3>
 <p><code>make_likert_data</code> is another labelr-provided
 function.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>dflik <span class="ot">&lt;-</span> <span class="fu">make_likert_data</span>(<span class="at">scale =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">seed =</span> <span class="dv">272</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">head</span>(dflik)</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">### &gt;     id x1 x2 x3 x4 x5 y1 y2 y3 y4 y5</span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">### &gt; U-1  1  5  7  2  2  2  7  1  1  4  2</span></span>
-<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="do">### &gt; O-2  2  6  2  7  6  2  3  5  4  1  4</span></span>
-<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="do">### &gt; H-3  3  7  7  5  5  6  6  4  1  5  7</span></span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="do">### &gt; Z-4  4  4  5  5  4  5  6  3  7  3  4</span></span>
-<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="do">### &gt; C-5  5  3  3  3  1  6  2  7  6  3  5</span></span>
-<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="do">### &gt; P-6  6  7  3  5  3  7  5  7  1  6  2</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">272</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>dflik <span class="ot">&lt;-</span> <span class="fu">make_likert_data</span>(<span class="at">scale =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">head</span>(dflik)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">### &gt;     id x1 x2 x3 x4 x5 y1 y2 y3 y4 y5</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="do">### &gt; U-1  1  5  7  2  2  2  7  1  1  4  2</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="do">### &gt; O-2  2  6  2  7  6  2  3  5  4  1  4</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="do">### &gt; H-3  3  7  7  5  5  6  6  4  1  5  7</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="do">### &gt; Z-4  4  4  5  5  4  5  6  3  7  3  4</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="do">### &gt; C-5  5  3  3  3  1  6  2  7  6  3  5</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="do">### &gt; P-6  6  7  3  5  3  7  5  7  1  6  2</span></span></code></pre></div>
 <p>Put the variables we wish to label and the labels to use in
 stand-alone vectors, which we will supply to <code>add_val_labs</code>
 in a moment.</p>
@@ -1606,53 +1608,6 @@ fairly flexible ways.</p>
 <span id="cb55-14"><a href="#cb55-14" tabindex="-1"></a><span class="do">### &gt; 12 cyl    6   six-cyl</span></span>
 <span id="cb55-15"><a href="#cb55-15" tabindex="-1"></a><span class="do">### &gt; 13 cyl    8 eight-cyl</span></span>
 <span id="cb55-16"><a href="#cb55-16" tabindex="-1"></a><span class="do">### &gt; 14 cyl   NA        NA</span></span></code></pre></div>
-<p>There’s no law against adding not-yet-needed value labels</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_val_labs</span>(</span>
-<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
-<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;am&quot;</span>,</span>
-<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a>  <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">99</span>),</span>
-<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>  <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;friend&quot;</span>)</span>
-<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a>)</span>
-<span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a><span class="do">### &gt; Warning in add_val_labs(data = mt2, vars = &quot;am&quot;, vals = c(99), labs = c(&quot;friend&quot;)): </span></span>
-<span id="cb56-8"><a href="#cb56-8" tabindex="-1"></a><span class="do">### &gt;   Var --am-- does not currently possess all of the vals you have specified.</span></span>
-<span id="cb56-9"><a href="#cb56-9" tabindex="-1"></a><span class="do">### &gt; Labeling variable --am--:</span></span>
-<span id="cb56-10"><a href="#cb56-10" tabindex="-1"></a><span class="do">### &gt;   var vals      labs</span></span>
-<span id="cb56-11"><a href="#cb56-11" tabindex="-1"></a><span class="do">### &gt; 5  am    0 automatic</span></span>
-<span id="cb56-12"><a href="#cb56-12" tabindex="-1"></a><span class="do">### &gt; 6  am    1    manual</span></span>
-<span id="cb56-13"><a href="#cb56-13" tabindex="-1"></a><span class="do">### &gt; 7  am   99    friend</span></span>
-<span id="cb56-14"><a href="#cb56-14" tabindex="-1"></a><span class="do">### &gt; 8  am   NA        NA</span></span>
-<span id="cb56-15"><a href="#cb56-15" tabindex="-1"></a></span>
-<span id="cb56-16"><a href="#cb56-16" tabindex="-1"></a><span class="fu">get_name_labs</span>(mt2)</span>
-<span id="cb56-17"><a href="#cb56-17" tabindex="-1"></a><span class="do">### &gt;     var                                      lab</span></span>
-<span id="cb56-18"><a href="#cb56-18" tabindex="-1"></a><span class="do">### &gt; 1   mpg                        Miles/(US) gallon</span></span>
-<span id="cb56-19"><a href="#cb56-19" tabindex="-1"></a><span class="do">### &gt; 2   cyl                      Number of cylinders</span></span>
-<span id="cb56-20"><a href="#cb56-20" tabindex="-1"></a><span class="do">### &gt; 3  disp                    Displacement (cu.in.)</span></span>
-<span id="cb56-21"><a href="#cb56-21" tabindex="-1"></a><span class="do">### &gt; 4    hp                         Gross horsepower</span></span>
-<span id="cb56-22"><a href="#cb56-22" tabindex="-1"></a><span class="do">### &gt; 5  drat                          Rear axle ratio</span></span>
-<span id="cb56-23"><a href="#cb56-23" tabindex="-1"></a><span class="do">### &gt; 6    wt                        Weight (1000 lbs)</span></span>
-<span id="cb56-24"><a href="#cb56-24" tabindex="-1"></a><span class="do">### &gt; 7  qsec                            1/4 mile time</span></span>
-<span id="cb56-25"><a href="#cb56-25" tabindex="-1"></a><span class="do">### &gt; 8    vs      Engine (0 = V-shaped, 1 = straight)</span></span>
-<span id="cb56-26"><a href="#cb56-26" tabindex="-1"></a><span class="do">### &gt; 9    am Transmission (0 = automatic, 1 = manual)</span></span>
-<span id="cb56-27"><a href="#cb56-27" tabindex="-1"></a><span class="do">### &gt; 10 gear                  Number of forward gears</span></span>
-<span id="cb56-28"><a href="#cb56-28" tabindex="-1"></a><span class="do">### &gt; 11 carb                    Number of carburetors</span></span>
-<span id="cb56-29"><a href="#cb56-29" tabindex="-1"></a></span>
-<span id="cb56-30"><a href="#cb56-30" tabindex="-1"></a><span class="fu">get_val_labs</span>(mt2)</span>
-<span id="cb56-31"><a href="#cb56-31" tabindex="-1"></a><span class="do">### &gt;     var vals      labs</span></span>
-<span id="cb56-32"><a href="#cb56-32" tabindex="-1"></a><span class="do">### &gt; 1   cyl    4  four-cyl</span></span>
-<span id="cb56-33"><a href="#cb56-33" tabindex="-1"></a><span class="do">### &gt; 2   cyl    6   six-cyl</span></span>
-<span id="cb56-34"><a href="#cb56-34" tabindex="-1"></a><span class="do">### &gt; 3   cyl    8 eight-cyl</span></span>
-<span id="cb56-35"><a href="#cb56-35" tabindex="-1"></a><span class="do">### &gt; 4   cyl   NA        NA</span></span>
-<span id="cb56-36"><a href="#cb56-36" tabindex="-1"></a><span class="do">### &gt; 5    am    0 automatic</span></span>
-<span id="cb56-37"><a href="#cb56-37" tabindex="-1"></a><span class="do">### &gt; 6    am    1    manual</span></span>
-<span id="cb56-38"><a href="#cb56-38" tabindex="-1"></a><span class="do">### &gt; 7    am   99    friend</span></span>
-<span id="cb56-39"><a href="#cb56-39" tabindex="-1"></a><span class="do">### &gt; 8    am   NA        NA</span></span>
-<span id="cb56-40"><a href="#cb56-40" tabindex="-1"></a><span class="do">### &gt; 9  carb    1    1-carb</span></span>
-<span id="cb56-41"><a href="#cb56-41" tabindex="-1"></a><span class="do">### &gt; 10 carb    2   2-carbs</span></span>
-<span id="cb56-42"><a href="#cb56-42" tabindex="-1"></a><span class="do">### &gt; 11 carb    3   3-carbs</span></span>
-<span id="cb56-43"><a href="#cb56-43" tabindex="-1"></a><span class="do">### &gt; 12 carb    4   4-carbs</span></span>
-<span id="cb56-44"><a href="#cb56-44" tabindex="-1"></a><span class="do">### &gt; 13 carb    6   6-carbs</span></span>
-<span id="cb56-45"><a href="#cb56-45" tabindex="-1"></a><span class="do">### &gt; 14 carb    8   8-carbs</span></span>
-<span id="cb56-46"><a href="#cb56-46" tabindex="-1"></a><span class="do">### &gt; 15 carb   NA        NA</span></span></code></pre></div>
 </div>
 <div id="add-and-numerical-range-value-labels" class="section level3">
 <h3>Add and NUMERICAL RANGE value labels</h3>
@@ -1662,217 +1617,217 @@ fairly flexible ways.</p>
 quintile label, the highest value of “mpg” that falls within that value
 range will be recorded and will be returned by
 <code>get_val_labs()</code> and used by <code>use_val_labs()</code>.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># for &quot;disp&quot;, add numerical range labels based on quantiles (here, quintiles)</span></span>
-<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(<span class="at">data =</span> mt2, <span class="at">vars =</span> <span class="st">&quot;disp&quot;</span>, <span class="at">qtiles =</span> <span class="dv">5</span>)</span>
-<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a><span class="do">### &gt; Labeling variable --disp--:</span></span>
-<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="do">### &gt;     var  vals labs</span></span>
-<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a><span class="do">### &gt; 16 disp 120.1 q020</span></span>
-<span id="cb57-6"><a href="#cb57-6" tabindex="-1"></a><span class="do">### &gt; 17 disp   160 q040</span></span>
-<span id="cb57-7"><a href="#cb57-7" tabindex="-1"></a><span class="do">### &gt; 18 disp 275.8 q060</span></span>
-<span id="cb57-8"><a href="#cb57-8" tabindex="-1"></a><span class="do">### &gt; 19 disp   351 q080</span></span>
-<span id="cb57-9"><a href="#cb57-9" tabindex="-1"></a><span class="do">### &gt; 20 disp   472 q100</span></span>
-<span id="cb57-10"><a href="#cb57-10" tabindex="-1"></a><span class="do">### &gt; 21 disp    NA   NA</span></span>
-<span id="cb57-11"><a href="#cb57-11" tabindex="-1"></a></span>
-<span id="cb57-12"><a href="#cb57-12" tabindex="-1"></a><span class="co"># for &quot;mpg&quot;, add numerical range labels based on &quot;pretty&quot; cuts</span></span>
-<span id="cb57-13"><a href="#cb57-13" tabindex="-1"></a><span class="co"># bound bins using range of &quot;mpg&quot; vals</span></span>
-<span id="cb57-14"><a href="#cb57-14" tabindex="-1"></a>mpg_bins <span class="ot">&lt;-</span> <span class="fu">pretty</span>(<span class="fu">range</span>(mt2<span class="sc">$</span>mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb57-15"><a href="#cb57-15" tabindex="-1"></a>mpg_bins</span>
-<span id="cb57-16"><a href="#cb57-16" tabindex="-1"></a><span class="do">### &gt; [1] 10 15 20 25 30 35</span></span>
-<span id="cb57-17"><a href="#cb57-17" tabindex="-1"></a></span>
-<span id="cb57-18"><a href="#cb57-18" tabindex="-1"></a></span>
-<span id="cb57-19"><a href="#cb57-19" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(</span>
-<span id="cb57-20"><a href="#cb57-20" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
-<span id="cb57-21"><a href="#cb57-21" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;mpg&quot;</span>,</span>
-<span id="cb57-22"><a href="#cb57-22" tabindex="-1"></a>  <span class="at">vals =</span> mpg_bins</span>
-<span id="cb57-23"><a href="#cb57-23" tabindex="-1"></a>) <span class="co"># assign labels using our &quot;pretty&quot; thresholds</span></span>
-<span id="cb57-24"><a href="#cb57-24" tabindex="-1"></a><span class="do">### &gt; Warning in add_quant_labs(data = mt2, vars = &quot;mpg&quot;, vals = mpg_bins): </span></span>
-<span id="cb57-25"><a href="#cb57-25" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb57-26"><a href="#cb57-26" tabindex="-1"></a><span class="do">### &gt; Some of the supplied vals argument values are outside</span></span>
-<span id="cb57-27"><a href="#cb57-27" tabindex="-1"></a><span class="do">### &gt; the observed range of var --mpg-- values</span></span>
-<span id="cb57-28"><a href="#cb57-28" tabindex="-1"></a><span class="do">### &gt; Labeling variable --mpg--:</span></span>
-<span id="cb57-29"><a href="#cb57-29" tabindex="-1"></a><span class="do">### &gt;    var vals labs</span></span>
-<span id="cb57-30"><a href="#cb57-30" tabindex="-1"></a><span class="do">### &gt; 22 mpg   10 &lt;=10</span></span>
-<span id="cb57-31"><a href="#cb57-31" tabindex="-1"></a><span class="do">### &gt; 23 mpg   15 &lt;=15</span></span>
-<span id="cb57-32"><a href="#cb57-32" tabindex="-1"></a><span class="do">### &gt; 24 mpg   20 &lt;=20</span></span>
-<span id="cb57-33"><a href="#cb57-33" tabindex="-1"></a><span class="do">### &gt; 25 mpg   25 &lt;=25</span></span>
-<span id="cb57-34"><a href="#cb57-34" tabindex="-1"></a><span class="do">### &gt; 26 mpg   30 &lt;=30</span></span>
-<span id="cb57-35"><a href="#cb57-35" tabindex="-1"></a><span class="do">### &gt; 27 mpg   35 &lt;=35</span></span>
-<span id="cb57-36"><a href="#cb57-36" tabindex="-1"></a><span class="do">### &gt; 28 mpg   NA   NA</span></span>
-<span id="cb57-37"><a href="#cb57-37" tabindex="-1"></a></span>
-<span id="cb57-38"><a href="#cb57-38" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(mt2), <span class="dv">4</span>)</span>
-<span id="cb57-39"><a href="#cb57-39" tabindex="-1"></a><span class="do">### &gt;                 mpg      cyl disp  hp drat    wt  qsec vs        am gear</span></span>
-<span id="cb57-40"><a href="#cb57-40" tabindex="-1"></a><span class="do">### &gt; Missing Car    &lt;NA&gt;     &lt;NA&gt; &lt;NA&gt;  NA   NA    NA    NA NA      &lt;NA&gt;   NA</span></span>
-<span id="cb57-41"><a href="#cb57-41" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag  &lt;=25  six-cyl q040 110 3.90 2.875 17.02  0    manual    4</span></span>
-<span id="cb57-42"><a href="#cb57-42" tabindex="-1"></a><span class="do">### &gt; Datsun 710     &lt;=25 four-cyl q020  93 3.85 2.320 18.61  1    manual    4</span></span>
-<span id="cb57-43"><a href="#cb57-43" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive &lt;=25  six-cyl q060 110 3.08 3.215 19.44  1 automatic    3</span></span>
-<span id="cb57-44"><a href="#cb57-44" tabindex="-1"></a><span class="do">### &gt;                   carb</span></span>
-<span id="cb57-45"><a href="#cb57-45" tabindex="-1"></a><span class="do">### &gt; Missing Car       &lt;NA&gt;</span></span>
-<span id="cb57-46"><a href="#cb57-46" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag  4-carbs</span></span>
-<span id="cb57-47"><a href="#cb57-47" tabindex="-1"></a><span class="do">### &gt; Datsun 710      1-carb</span></span>
-<span id="cb57-48"><a href="#cb57-48" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive  1-carb</span></span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># for &quot;disp&quot;, add numerical range labels based on quantiles (here, quintiles)</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(<span class="at">data =</span> mt2, <span class="at">vars =</span> <span class="st">&quot;disp&quot;</span>, <span class="at">qtiles =</span> <span class="dv">5</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="do">### &gt; Labeling variable --disp--:</span></span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="do">### &gt;     var  vals labs</span></span>
+<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a><span class="do">### &gt; 15 disp 120.1 q020</span></span>
+<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a><span class="do">### &gt; 16 disp   160 q040</span></span>
+<span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a><span class="do">### &gt; 17 disp 275.8 q060</span></span>
+<span id="cb56-8"><a href="#cb56-8" tabindex="-1"></a><span class="do">### &gt; 18 disp   351 q080</span></span>
+<span id="cb56-9"><a href="#cb56-9" tabindex="-1"></a><span class="do">### &gt; 19 disp   472 q100</span></span>
+<span id="cb56-10"><a href="#cb56-10" tabindex="-1"></a><span class="do">### &gt; 20 disp    NA   NA</span></span>
+<span id="cb56-11"><a href="#cb56-11" tabindex="-1"></a></span>
+<span id="cb56-12"><a href="#cb56-12" tabindex="-1"></a><span class="co"># for &quot;mpg&quot;, add numerical range labels based on &quot;pretty&quot; cuts</span></span>
+<span id="cb56-13"><a href="#cb56-13" tabindex="-1"></a><span class="co"># bound bins using range of &quot;mpg&quot; vals</span></span>
+<span id="cb56-14"><a href="#cb56-14" tabindex="-1"></a>mpg_bins <span class="ot">&lt;-</span> <span class="fu">pretty</span>(<span class="fu">range</span>(mt2<span class="sc">$</span>mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb56-15"><a href="#cb56-15" tabindex="-1"></a>mpg_bins</span>
+<span id="cb56-16"><a href="#cb56-16" tabindex="-1"></a><span class="do">### &gt; [1] 10 15 20 25 30 35</span></span>
+<span id="cb56-17"><a href="#cb56-17" tabindex="-1"></a></span>
+<span id="cb56-18"><a href="#cb56-18" tabindex="-1"></a></span>
+<span id="cb56-19"><a href="#cb56-19" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_quant_labs</span>(</span>
+<span id="cb56-20"><a href="#cb56-20" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
+<span id="cb56-21"><a href="#cb56-21" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;mpg&quot;</span>,</span>
+<span id="cb56-22"><a href="#cb56-22" tabindex="-1"></a>  <span class="at">vals =</span> mpg_bins</span>
+<span id="cb56-23"><a href="#cb56-23" tabindex="-1"></a>) <span class="co"># assign labels using our &quot;pretty&quot; thresholds</span></span>
+<span id="cb56-24"><a href="#cb56-24" tabindex="-1"></a><span class="do">### &gt; Warning in add_quant_labs(data = mt2, vars = &quot;mpg&quot;, vals = mpg_bins): </span></span>
+<span id="cb56-25"><a href="#cb56-25" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb56-26"><a href="#cb56-26" tabindex="-1"></a><span class="do">### &gt; Some of the supplied vals argument values are outside</span></span>
+<span id="cb56-27"><a href="#cb56-27" tabindex="-1"></a><span class="do">### &gt; the observed range of var --mpg-- values</span></span>
+<span id="cb56-28"><a href="#cb56-28" tabindex="-1"></a><span class="do">### &gt; Labeling variable --mpg--:</span></span>
+<span id="cb56-29"><a href="#cb56-29" tabindex="-1"></a><span class="do">### &gt;    var vals labs</span></span>
+<span id="cb56-30"><a href="#cb56-30" tabindex="-1"></a><span class="do">### &gt; 21 mpg   10 &lt;=10</span></span>
+<span id="cb56-31"><a href="#cb56-31" tabindex="-1"></a><span class="do">### &gt; 22 mpg   15 &lt;=15</span></span>
+<span id="cb56-32"><a href="#cb56-32" tabindex="-1"></a><span class="do">### &gt; 23 mpg   20 &lt;=20</span></span>
+<span id="cb56-33"><a href="#cb56-33" tabindex="-1"></a><span class="do">### &gt; 24 mpg   25 &lt;=25</span></span>
+<span id="cb56-34"><a href="#cb56-34" tabindex="-1"></a><span class="do">### &gt; 25 mpg   30 &lt;=30</span></span>
+<span id="cb56-35"><a href="#cb56-35" tabindex="-1"></a><span class="do">### &gt; 26 mpg   35 &lt;=35</span></span>
+<span id="cb56-36"><a href="#cb56-36" tabindex="-1"></a><span class="do">### &gt; 27 mpg   NA   NA</span></span>
+<span id="cb56-37"><a href="#cb56-37" tabindex="-1"></a></span>
+<span id="cb56-38"><a href="#cb56-38" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">use_val_labs</span>(mt2), <span class="dv">4</span>)</span>
+<span id="cb56-39"><a href="#cb56-39" tabindex="-1"></a><span class="do">### &gt;                 mpg      cyl disp  hp drat    wt  qsec vs        am gear</span></span>
+<span id="cb56-40"><a href="#cb56-40" tabindex="-1"></a><span class="do">### &gt; Missing Car    &lt;NA&gt;     &lt;NA&gt; &lt;NA&gt;  NA   NA    NA    NA NA      &lt;NA&gt;   NA</span></span>
+<span id="cb56-41"><a href="#cb56-41" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag  &lt;=25  six-cyl q040 110 3.90 2.875 17.02  0    manual    4</span></span>
+<span id="cb56-42"><a href="#cb56-42" tabindex="-1"></a><span class="do">### &gt; Datsun 710     &lt;=25 four-cyl q020  93 3.85 2.320 18.61  1    manual    4</span></span>
+<span id="cb56-43"><a href="#cb56-43" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive &lt;=25  six-cyl q060 110 3.08 3.215 19.44  1 automatic    3</span></span>
+<span id="cb56-44"><a href="#cb56-44" tabindex="-1"></a><span class="do">### &gt;                   carb</span></span>
+<span id="cb56-45"><a href="#cb56-45" tabindex="-1"></a><span class="do">### &gt; Missing Car       &lt;NA&gt;</span></span>
+<span id="cb56-46"><a href="#cb56-46" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag  4-carbs</span></span>
+<span id="cb56-47"><a href="#cb56-47" tabindex="-1"></a><span class="do">### &gt; Datsun 710      1-carb</span></span>
+<span id="cb56-48"><a href="#cb56-48" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive  1-carb</span></span></code></pre></div>
 </div>
 <div id="add-many-to-one-value-labels" class="section level3">
 <h3>Add MANY-TO-ONE VALUE Labels</h3>
 <p>Let’s demonstrate “m1” (“many to one”) value labels with the “gear”
 variable.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(</span>
-<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
-<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;gear&quot;</span>,</span>
-<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a>  <span class="at">vals =</span> <span class="dv">3</span>,</span>
-<span id="cb58-5"><a href="#cb58-5" tabindex="-1"></a>  <span class="at">lab =</span> <span class="st">&quot;3&quot;</span></span>
-<span id="cb58-6"><a href="#cb58-6" tabindex="-1"></a>)</span>
-<span id="cb58-7"><a href="#cb58-7" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
-<span id="cb58-8"><a href="#cb58-8" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
-<span id="cb58-9"><a href="#cb58-9" tabindex="-1"></a><span class="do">### &gt; 29 gear    3    3</span></span>
-<span id="cb58-10"><a href="#cb58-10" tabindex="-1"></a><span class="do">### &gt; 30 gear    4    4</span></span>
-<span id="cb58-11"><a href="#cb58-11" tabindex="-1"></a><span class="do">### &gt; 31 gear    5    5</span></span>
-<span id="cb58-12"><a href="#cb58-12" tabindex="-1"></a><span class="do">### &gt; 32 gear   NA   NA</span></span>
-<span id="cb58-13"><a href="#cb58-13" tabindex="-1"></a></span>
-<span id="cb58-14"><a href="#cb58-14" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(</span>
-<span id="cb58-15"><a href="#cb58-15" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
-<span id="cb58-16"><a href="#cb58-16" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;gear&quot;</span>,</span>
-<span id="cb58-17"><a href="#cb58-17" tabindex="-1"></a>  <span class="at">vals =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>,</span>
-<span id="cb58-18"><a href="#cb58-18" tabindex="-1"></a>  <span class="at">lab =</span> <span class="st">&quot;4+&quot;</span></span>
-<span id="cb58-19"><a href="#cb58-19" tabindex="-1"></a>)</span>
-<span id="cb58-20"><a href="#cb58-20" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
-<span id="cb58-21"><a href="#cb58-21" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
-<span id="cb58-22"><a href="#cb58-22" tabindex="-1"></a><span class="do">### &gt; 22 gear    3    3</span></span>
-<span id="cb58-23"><a href="#cb58-23" tabindex="-1"></a><span class="do">### &gt; 23 gear    4   4+</span></span>
-<span id="cb58-24"><a href="#cb58-24" tabindex="-1"></a><span class="do">### &gt; 24 gear    5   4+</span></span>
-<span id="cb58-25"><a href="#cb58-25" tabindex="-1"></a><span class="do">### &gt; 25 gear   NA   NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(</span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
+<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;gear&quot;</span>,</span>
+<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a>  <span class="at">vals =</span> <span class="dv">3</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a>  <span class="at">lab =</span> <span class="st">&quot;3&quot;</span></span>
+<span id="cb57-6"><a href="#cb57-6" tabindex="-1"></a>)</span>
+<span id="cb57-7"><a href="#cb57-7" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
+<span id="cb57-8"><a href="#cb57-8" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
+<span id="cb57-9"><a href="#cb57-9" tabindex="-1"></a><span class="do">### &gt; 28 gear    3    3</span></span>
+<span id="cb57-10"><a href="#cb57-10" tabindex="-1"></a><span class="do">### &gt; 29 gear    4    4</span></span>
+<span id="cb57-11"><a href="#cb57-11" tabindex="-1"></a><span class="do">### &gt; 30 gear    5    5</span></span>
+<span id="cb57-12"><a href="#cb57-12" tabindex="-1"></a><span class="do">### &gt; 31 gear   NA   NA</span></span>
+<span id="cb57-13"><a href="#cb57-13" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="#cb57-14" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_m1_lab</span>(</span>
+<span id="cb57-15"><a href="#cb57-15" tabindex="-1"></a>  <span class="at">data =</span> mt2,</span>
+<span id="cb57-16"><a href="#cb57-16" tabindex="-1"></a>  <span class="at">vars =</span> <span class="st">&quot;gear&quot;</span>,</span>
+<span id="cb57-17"><a href="#cb57-17" tabindex="-1"></a>  <span class="at">vals =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb57-18"><a href="#cb57-18" tabindex="-1"></a>  <span class="at">lab =</span> <span class="st">&quot;4+&quot;</span></span>
+<span id="cb57-19"><a href="#cb57-19" tabindex="-1"></a>)</span>
+<span id="cb57-20"><a href="#cb57-20" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
+<span id="cb57-21"><a href="#cb57-21" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
+<span id="cb57-22"><a href="#cb57-22" tabindex="-1"></a><span class="do">### &gt; 21 gear    3    3</span></span>
+<span id="cb57-23"><a href="#cb57-23" tabindex="-1"></a><span class="do">### &gt; 22 gear    4   4+</span></span>
+<span id="cb57-24"><a href="#cb57-24" tabindex="-1"></a><span class="do">### &gt; 23 gear    5   4+</span></span>
+<span id="cb57-25"><a href="#cb57-25" tabindex="-1"></a><span class="do">### &gt; 24 gear   NA   NA</span></span></code></pre></div>
 </div>
 <div id="preserve-and-restore-labels" class="section level3">
 <h3>Preserve and Restore Labels</h3>
 <p>Preserve label attributes.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>zlab.mt2 <span class="ot">&lt;-</span> <span class="fu">get_all_lab_atts</span>(mt2)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>zlab.mt2 <span class="ot">&lt;-</span> <span class="fu">get_all_lab_atts</span>(mt2)</span></code></pre></div>
 <p>Now, remove them.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">strip_labs</span>(mt2)</span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(mt2)</span>
-<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a><span class="do">### &gt; named list()</span></span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">strip_labs</span>(mt2)</span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(mt2)</span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a><span class="do">### &gt; named list()</span></span></code></pre></div>
 <p>Now, restore them.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_lab_atts</span>(mt2, zlab.mt2)</span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(mt2)</span>
-<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="do">### &gt; $frame.lab</span></span>
-<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a><span class="do">### &gt; [1] &quot;Data extracted from the 1974 MotorTrend US magazine, comprising fuel consumption and 10 aspects of automobiledesign and performance for 32 automobiles (1973–74 models). Source: Hendersonand Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411.&quot;</span></span>
-<span id="cb61-5"><a href="#cb61-5" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-6"><a href="#cb61-6" tabindex="-1"></a><span class="do">### &gt; $name.labs</span></span>
-<span id="cb61-7"><a href="#cb61-7" tabindex="-1"></a><span class="do">### &gt;                                        mpg </span></span>
-<span id="cb61-8"><a href="#cb61-8" tabindex="-1"></a><span class="do">### &gt;                        &quot;Miles/(US) gallon&quot; </span></span>
-<span id="cb61-9"><a href="#cb61-9" tabindex="-1"></a><span class="do">### &gt;                                        cyl </span></span>
-<span id="cb61-10"><a href="#cb61-10" tabindex="-1"></a><span class="do">### &gt;                      &quot;Number of cylinders&quot; </span></span>
-<span id="cb61-11"><a href="#cb61-11" tabindex="-1"></a><span class="do">### &gt;                                       disp </span></span>
-<span id="cb61-12"><a href="#cb61-12" tabindex="-1"></a><span class="do">### &gt;                    &quot;Displacement (cu.in.)&quot; </span></span>
-<span id="cb61-13"><a href="#cb61-13" tabindex="-1"></a><span class="do">### &gt;                                         hp </span></span>
-<span id="cb61-14"><a href="#cb61-14" tabindex="-1"></a><span class="do">### &gt;                         &quot;Gross horsepower&quot; </span></span>
-<span id="cb61-15"><a href="#cb61-15" tabindex="-1"></a><span class="do">### &gt;                                       drat </span></span>
-<span id="cb61-16"><a href="#cb61-16" tabindex="-1"></a><span class="do">### &gt;                          &quot;Rear axle ratio&quot; </span></span>
-<span id="cb61-17"><a href="#cb61-17" tabindex="-1"></a><span class="do">### &gt;                                         wt </span></span>
-<span id="cb61-18"><a href="#cb61-18" tabindex="-1"></a><span class="do">### &gt;                        &quot;Weight (1000 lbs)&quot; </span></span>
-<span id="cb61-19"><a href="#cb61-19" tabindex="-1"></a><span class="do">### &gt;                                       qsec </span></span>
-<span id="cb61-20"><a href="#cb61-20" tabindex="-1"></a><span class="do">### &gt;                            &quot;1/4 mile time&quot; </span></span>
-<span id="cb61-21"><a href="#cb61-21" tabindex="-1"></a><span class="do">### &gt;                                         vs </span></span>
-<span id="cb61-22"><a href="#cb61-22" tabindex="-1"></a><span class="do">### &gt;      &quot;Engine (0 = V-shaped, 1 = straight)&quot; </span></span>
-<span id="cb61-23"><a href="#cb61-23" tabindex="-1"></a><span class="do">### &gt;                                         am </span></span>
-<span id="cb61-24"><a href="#cb61-24" tabindex="-1"></a><span class="do">### &gt; &quot;Transmission (0 = automatic, 1 = manual)&quot; </span></span>
-<span id="cb61-25"><a href="#cb61-25" tabindex="-1"></a><span class="do">### &gt;                                       gear </span></span>
-<span id="cb61-26"><a href="#cb61-26" tabindex="-1"></a><span class="do">### &gt;                  &quot;Number of forward gears&quot; </span></span>
-<span id="cb61-27"><a href="#cb61-27" tabindex="-1"></a><span class="do">### &gt;                                       carb </span></span>
-<span id="cb61-28"><a href="#cb61-28" tabindex="-1"></a><span class="do">### &gt;                    &quot;Number of carburetors&quot; </span></span>
-<span id="cb61-29"><a href="#cb61-29" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-30"><a href="#cb61-30" tabindex="-1"></a><span class="do">### &gt; $val.labs.mpg</span></span>
-<span id="cb61-31"><a href="#cb61-31" tabindex="-1"></a><span class="do">### &gt;     10     15     20     25     30     35     NA </span></span>
-<span id="cb61-32"><a href="#cb61-32" tabindex="-1"></a><span class="do">### &gt; &quot;&lt;=10&quot; &quot;&lt;=15&quot; &quot;&lt;=20&quot; &quot;&lt;=25&quot; &quot;&lt;=30&quot; &quot;&lt;=35&quot;   &quot;NA&quot; </span></span>
-<span id="cb61-33"><a href="#cb61-33" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-34"><a href="#cb61-34" tabindex="-1"></a><span class="do">### &gt; $val.labs.cyl</span></span>
-<span id="cb61-35"><a href="#cb61-35" tabindex="-1"></a><span class="do">### &gt;           4           6           8          NA </span></span>
-<span id="cb61-36"><a href="#cb61-36" tabindex="-1"></a><span class="do">### &gt;  &quot;four-cyl&quot;   &quot;six-cyl&quot; &quot;eight-cyl&quot;        &quot;NA&quot; </span></span>
-<span id="cb61-37"><a href="#cb61-37" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-38"><a href="#cb61-38" tabindex="-1"></a><span class="do">### &gt; $val.labs.disp</span></span>
-<span id="cb61-39"><a href="#cb61-39" tabindex="-1"></a><span class="do">### &gt;  120.1    160  275.8    351    472     NA </span></span>
-<span id="cb61-40"><a href="#cb61-40" tabindex="-1"></a><span class="do">### &gt; &quot;q020&quot; &quot;q040&quot; &quot;q060&quot; &quot;q080&quot; &quot;q100&quot;   &quot;NA&quot; </span></span>
-<span id="cb61-41"><a href="#cb61-41" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-42"><a href="#cb61-42" tabindex="-1"></a><span class="do">### &gt; $val.labs.am</span></span>
-<span id="cb61-43"><a href="#cb61-43" tabindex="-1"></a><span class="do">### &gt;           0           1          99          NA </span></span>
-<span id="cb61-44"><a href="#cb61-44" tabindex="-1"></a><span class="do">### &gt; &quot;automatic&quot;    &quot;manual&quot;    &quot;friend&quot;        &quot;NA&quot; </span></span>
-<span id="cb61-45"><a href="#cb61-45" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-46"><a href="#cb61-46" tabindex="-1"></a><span class="do">### &gt; $val.labs.gear</span></span>
-<span id="cb61-47"><a href="#cb61-47" tabindex="-1"></a><span class="do">### &gt;    3    4    5   NA </span></span>
-<span id="cb61-48"><a href="#cb61-48" tabindex="-1"></a><span class="do">### &gt;  &quot;3&quot; &quot;4+&quot; &quot;4+&quot; &quot;NA&quot; </span></span>
-<span id="cb61-49"><a href="#cb61-49" tabindex="-1"></a><span class="do">### &gt; </span></span>
-<span id="cb61-50"><a href="#cb61-50" tabindex="-1"></a><span class="do">### &gt; $val.labs.carb</span></span>
-<span id="cb61-51"><a href="#cb61-51" tabindex="-1"></a><span class="do">### &gt;         1         2         3         4         6         8        NA </span></span>
-<span id="cb61-52"><a href="#cb61-52" tabindex="-1"></a><span class="do">### &gt;  &quot;1-carb&quot; &quot;2-carbs&quot; &quot;3-carbs&quot; &quot;4-carbs&quot; &quot;6-carbs&quot; &quot;8-carbs&quot;      &quot;NA&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a>mt2 <span class="ot">&lt;-</span> <span class="fu">add_lab_atts</span>(mt2, zlab.mt2)</span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a><span class="fu">get_all_lab_atts</span>(mt2)</span>
+<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a><span class="do">### &gt; $frame.lab</span></span>
+<span id="cb60-4"><a href="#cb60-4" tabindex="-1"></a><span class="do">### &gt; [1] &quot;Data extracted from the 1974 MotorTrend US magazine, comprising fuel consumption and 10 aspects of automobiledesign and performance for 32 automobiles (1973–74 models). Source: Hendersonand Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411.&quot;</span></span>
+<span id="cb60-5"><a href="#cb60-5" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-6"><a href="#cb60-6" tabindex="-1"></a><span class="do">### &gt; $name.labs</span></span>
+<span id="cb60-7"><a href="#cb60-7" tabindex="-1"></a><span class="do">### &gt;                                        mpg </span></span>
+<span id="cb60-8"><a href="#cb60-8" tabindex="-1"></a><span class="do">### &gt;                        &quot;Miles/(US) gallon&quot; </span></span>
+<span id="cb60-9"><a href="#cb60-9" tabindex="-1"></a><span class="do">### &gt;                                        cyl </span></span>
+<span id="cb60-10"><a href="#cb60-10" tabindex="-1"></a><span class="do">### &gt;                      &quot;Number of cylinders&quot; </span></span>
+<span id="cb60-11"><a href="#cb60-11" tabindex="-1"></a><span class="do">### &gt;                                       disp </span></span>
+<span id="cb60-12"><a href="#cb60-12" tabindex="-1"></a><span class="do">### &gt;                    &quot;Displacement (cu.in.)&quot; </span></span>
+<span id="cb60-13"><a href="#cb60-13" tabindex="-1"></a><span class="do">### &gt;                                         hp </span></span>
+<span id="cb60-14"><a href="#cb60-14" tabindex="-1"></a><span class="do">### &gt;                         &quot;Gross horsepower&quot; </span></span>
+<span id="cb60-15"><a href="#cb60-15" tabindex="-1"></a><span class="do">### &gt;                                       drat </span></span>
+<span id="cb60-16"><a href="#cb60-16" tabindex="-1"></a><span class="do">### &gt;                          &quot;Rear axle ratio&quot; </span></span>
+<span id="cb60-17"><a href="#cb60-17" tabindex="-1"></a><span class="do">### &gt;                                         wt </span></span>
+<span id="cb60-18"><a href="#cb60-18" tabindex="-1"></a><span class="do">### &gt;                        &quot;Weight (1000 lbs)&quot; </span></span>
+<span id="cb60-19"><a href="#cb60-19" tabindex="-1"></a><span class="do">### &gt;                                       qsec </span></span>
+<span id="cb60-20"><a href="#cb60-20" tabindex="-1"></a><span class="do">### &gt;                            &quot;1/4 mile time&quot; </span></span>
+<span id="cb60-21"><a href="#cb60-21" tabindex="-1"></a><span class="do">### &gt;                                         vs </span></span>
+<span id="cb60-22"><a href="#cb60-22" tabindex="-1"></a><span class="do">### &gt;      &quot;Engine (0 = V-shaped, 1 = straight)&quot; </span></span>
+<span id="cb60-23"><a href="#cb60-23" tabindex="-1"></a><span class="do">### &gt;                                         am </span></span>
+<span id="cb60-24"><a href="#cb60-24" tabindex="-1"></a><span class="do">### &gt; &quot;Transmission (0 = automatic, 1 = manual)&quot; </span></span>
+<span id="cb60-25"><a href="#cb60-25" tabindex="-1"></a><span class="do">### &gt;                                       gear </span></span>
+<span id="cb60-26"><a href="#cb60-26" tabindex="-1"></a><span class="do">### &gt;                  &quot;Number of forward gears&quot; </span></span>
+<span id="cb60-27"><a href="#cb60-27" tabindex="-1"></a><span class="do">### &gt;                                       carb </span></span>
+<span id="cb60-28"><a href="#cb60-28" tabindex="-1"></a><span class="do">### &gt;                    &quot;Number of carburetors&quot; </span></span>
+<span id="cb60-29"><a href="#cb60-29" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-30"><a href="#cb60-30" tabindex="-1"></a><span class="do">### &gt; $val.labs.mpg</span></span>
+<span id="cb60-31"><a href="#cb60-31" tabindex="-1"></a><span class="do">### &gt;     10     15     20     25     30     35     NA </span></span>
+<span id="cb60-32"><a href="#cb60-32" tabindex="-1"></a><span class="do">### &gt; &quot;&lt;=10&quot; &quot;&lt;=15&quot; &quot;&lt;=20&quot; &quot;&lt;=25&quot; &quot;&lt;=30&quot; &quot;&lt;=35&quot;   &quot;NA&quot; </span></span>
+<span id="cb60-33"><a href="#cb60-33" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-34"><a href="#cb60-34" tabindex="-1"></a><span class="do">### &gt; $val.labs.cyl</span></span>
+<span id="cb60-35"><a href="#cb60-35" tabindex="-1"></a><span class="do">### &gt;           4           6           8          NA </span></span>
+<span id="cb60-36"><a href="#cb60-36" tabindex="-1"></a><span class="do">### &gt;  &quot;four-cyl&quot;   &quot;six-cyl&quot; &quot;eight-cyl&quot;        &quot;NA&quot; </span></span>
+<span id="cb60-37"><a href="#cb60-37" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-38"><a href="#cb60-38" tabindex="-1"></a><span class="do">### &gt; $val.labs.disp</span></span>
+<span id="cb60-39"><a href="#cb60-39" tabindex="-1"></a><span class="do">### &gt;  120.1    160  275.8    351    472     NA </span></span>
+<span id="cb60-40"><a href="#cb60-40" tabindex="-1"></a><span class="do">### &gt; &quot;q020&quot; &quot;q040&quot; &quot;q060&quot; &quot;q080&quot; &quot;q100&quot;   &quot;NA&quot; </span></span>
+<span id="cb60-41"><a href="#cb60-41" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-42"><a href="#cb60-42" tabindex="-1"></a><span class="do">### &gt; $val.labs.am</span></span>
+<span id="cb60-43"><a href="#cb60-43" tabindex="-1"></a><span class="do">### &gt;           0           1          NA </span></span>
+<span id="cb60-44"><a href="#cb60-44" tabindex="-1"></a><span class="do">### &gt; &quot;automatic&quot;    &quot;manual&quot;        &quot;NA&quot; </span></span>
+<span id="cb60-45"><a href="#cb60-45" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-46"><a href="#cb60-46" tabindex="-1"></a><span class="do">### &gt; $val.labs.gear</span></span>
+<span id="cb60-47"><a href="#cb60-47" tabindex="-1"></a><span class="do">### &gt;    3    4    5   NA </span></span>
+<span id="cb60-48"><a href="#cb60-48" tabindex="-1"></a><span class="do">### &gt;  &quot;3&quot; &quot;4+&quot; &quot;4+&quot; &quot;NA&quot; </span></span>
+<span id="cb60-49"><a href="#cb60-49" tabindex="-1"></a><span class="do">### &gt; </span></span>
+<span id="cb60-50"><a href="#cb60-50" tabindex="-1"></a><span class="do">### &gt; $val.labs.carb</span></span>
+<span id="cb60-51"><a href="#cb60-51" tabindex="-1"></a><span class="do">### &gt;         1         2         3         4         6         8        NA </span></span>
+<span id="cb60-52"><a href="#cb60-52" tabindex="-1"></a><span class="do">### &gt;  &quot;1-carb&quot; &quot;2-carbs&quot; &quot;3-carbs&quot; &quot;4-carbs&quot; &quot;6-carbs&quot; &quot;8-carbs&quot;      &quot;NA&quot;</span></span></code></pre></div>
 </div>
 <div id="add-value-labels-with-a-pipe-based-workflow" class="section level3">
 <h3>Add value labels with a |&gt; pipe-based workflow</h3>
 <p>Let’s try a pipe-based, value-labeling flow with
 <code>add_val1()</code></p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a>mt_pipe <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span></span>
-<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>  <span class="fu">add_val1</span>(am,</span>
-<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;automatic&quot;</span>, <span class="st">&quot;manual&quot;</span>)</span>
-<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a>  <span class="fu">add_val1</span>(cyl,</span>
-<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>),</span>
-<span id="cb62-8"><a href="#cb62-8" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;four-cyl&quot;</span>, <span class="st">&quot;six-cyl&quot;</span>, <span class="st">&quot;eight-cyl&quot;</span>)</span>
-<span id="cb62-9"><a href="#cb62-9" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb62-10"><a href="#cb62-10" tabindex="-1"></a>  <span class="fu">add1m1</span>(gear,</span>
-<span id="cb62-11"><a href="#cb62-11" tabindex="-1"></a>    <span class="at">vals =</span> <span class="dv">3</span>,</span>
-<span id="cb62-12"><a href="#cb62-12" tabindex="-1"></a>    <span class="at">lab =</span> <span class="st">&quot;3&quot;</span></span>
-<span id="cb62-13"><a href="#cb62-13" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb62-14"><a href="#cb62-14" tabindex="-1"></a>  <span class="fu">add1m1</span>(gear,</span>
-<span id="cb62-15"><a href="#cb62-15" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>),</span>
-<span id="cb62-16"><a href="#cb62-16" tabindex="-1"></a>    <span class="at">lab =</span> <span class="fu">c</span>(<span class="st">&quot;4+&quot;</span>)</span>
-<span id="cb62-17"><a href="#cb62-17" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb62-18"><a href="#cb62-18" tabindex="-1"></a>  <span class="fu">add_val1</span>(carb,</span>
-<span id="cb62-19"><a href="#cb62-19" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>),</span>
-<span id="cb62-20"><a href="#cb62-20" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(</span>
-<span id="cb62-21"><a href="#cb62-21" tabindex="-1"></a>      <span class="st">&quot;1-carb&quot;</span>, <span class="st">&quot;2-carbs&quot;</span>, <span class="st">&quot;3-carbs&quot;</span>,</span>
-<span id="cb62-22"><a href="#cb62-22" tabindex="-1"></a>      <span class="st">&quot;4-carbs&quot;</span>, <span class="st">&quot;6-carbs&quot;</span>, <span class="st">&quot;8-carbs&quot;</span></span>
-<span id="cb62-23"><a href="#cb62-23" tabindex="-1"></a>    )</span>
-<span id="cb62-24"><a href="#cb62-24" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb62-25"><a href="#cb62-25" tabindex="-1"></a>  <span class="fu">add_quant1</span>(mpg,</span>
-<span id="cb62-26"><a href="#cb62-26" tabindex="-1"></a>    <span class="at">qtiles =</span> <span class="dv">4</span></span>
-<span id="cb62-27"><a href="#cb62-27" tabindex="-1"></a>  )</span>
-<span id="cb62-28"><a href="#cb62-28" tabindex="-1"></a><span class="do">### &gt; Labeling variable --am--:</span></span>
-<span id="cb62-29"><a href="#cb62-29" tabindex="-1"></a><span class="do">### &gt;   var vals      labs</span></span>
-<span id="cb62-30"><a href="#cb62-30" tabindex="-1"></a><span class="do">### &gt; 1  am    0 automatic</span></span>
-<span id="cb62-31"><a href="#cb62-31" tabindex="-1"></a><span class="do">### &gt; 2  am    1    manual</span></span>
-<span id="cb62-32"><a href="#cb62-32" tabindex="-1"></a><span class="do">### &gt; 3  am   NA        NA</span></span>
-<span id="cb62-33"><a href="#cb62-33" tabindex="-1"></a><span class="do">### &gt; Labeling variable --cyl--:</span></span>
-<span id="cb62-34"><a href="#cb62-34" tabindex="-1"></a><span class="do">### &gt;   var vals      labs</span></span>
-<span id="cb62-35"><a href="#cb62-35" tabindex="-1"></a><span class="do">### &gt; 4 cyl    4  four-cyl</span></span>
-<span id="cb62-36"><a href="#cb62-36" tabindex="-1"></a><span class="do">### &gt; 5 cyl    6   six-cyl</span></span>
-<span id="cb62-37"><a href="#cb62-37" tabindex="-1"></a><span class="do">### &gt; 6 cyl    8 eight-cyl</span></span>
-<span id="cb62-38"><a href="#cb62-38" tabindex="-1"></a><span class="do">### &gt; 7 cyl   NA        NA</span></span>
-<span id="cb62-39"><a href="#cb62-39" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
-<span id="cb62-40"><a href="#cb62-40" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
-<span id="cb62-41"><a href="#cb62-41" tabindex="-1"></a><span class="do">### &gt; 8  gear    3    3</span></span>
-<span id="cb62-42"><a href="#cb62-42" tabindex="-1"></a><span class="do">### &gt; 9  gear    4    4</span></span>
-<span id="cb62-43"><a href="#cb62-43" tabindex="-1"></a><span class="do">### &gt; 10 gear    5    5</span></span>
-<span id="cb62-44"><a href="#cb62-44" tabindex="-1"></a><span class="do">### &gt; 11 gear   NA   NA</span></span>
-<span id="cb62-45"><a href="#cb62-45" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
-<span id="cb62-46"><a href="#cb62-46" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
-<span id="cb62-47"><a href="#cb62-47" tabindex="-1"></a><span class="do">### &gt; 8  gear    3    3</span></span>
-<span id="cb62-48"><a href="#cb62-48" tabindex="-1"></a><span class="do">### &gt; 9  gear    4   4+</span></span>
-<span id="cb62-49"><a href="#cb62-49" tabindex="-1"></a><span class="do">### &gt; 10 gear    5   4+</span></span>
-<span id="cb62-50"><a href="#cb62-50" tabindex="-1"></a><span class="do">### &gt; 11 gear   NA   NA</span></span>
-<span id="cb62-51"><a href="#cb62-51" tabindex="-1"></a><span class="do">### &gt; Labeling variable --carb--:</span></span>
-<span id="cb62-52"><a href="#cb62-52" tabindex="-1"></a><span class="do">### &gt;     var vals    labs</span></span>
-<span id="cb62-53"><a href="#cb62-53" tabindex="-1"></a><span class="do">### &gt; 12 carb    1  1-carb</span></span>
-<span id="cb62-54"><a href="#cb62-54" tabindex="-1"></a><span class="do">### &gt; 13 carb    2 2-carbs</span></span>
-<span id="cb62-55"><a href="#cb62-55" tabindex="-1"></a><span class="do">### &gt; 14 carb    3 3-carbs</span></span>
-<span id="cb62-56"><a href="#cb62-56" tabindex="-1"></a><span class="do">### &gt; 15 carb    4 4-carbs</span></span>
-<span id="cb62-57"><a href="#cb62-57" tabindex="-1"></a><span class="do">### &gt; 16 carb    6 6-carbs</span></span>
-<span id="cb62-58"><a href="#cb62-58" tabindex="-1"></a><span class="do">### &gt; 17 carb    8 8-carbs</span></span>
-<span id="cb62-59"><a href="#cb62-59" tabindex="-1"></a><span class="do">### &gt; 18 carb   NA      NA</span></span>
-<span id="cb62-60"><a href="#cb62-60" tabindex="-1"></a><span class="do">### &gt; Labeling variable --mpg--:</span></span>
-<span id="cb62-61"><a href="#cb62-61" tabindex="-1"></a><span class="do">### &gt;    var   vals labs</span></span>
-<span id="cb62-62"><a href="#cb62-62" tabindex="-1"></a><span class="do">### &gt; 19 mpg 15.425 q025</span></span>
-<span id="cb62-63"><a href="#cb62-63" tabindex="-1"></a><span class="do">### &gt; 20 mpg   19.2 q050</span></span>
-<span id="cb62-64"><a href="#cb62-64" tabindex="-1"></a><span class="do">### &gt; 21 mpg   22.8 q075</span></span>
-<span id="cb62-65"><a href="#cb62-65" tabindex="-1"></a><span class="do">### &gt; 22 mpg   33.9 q100</span></span>
-<span id="cb62-66"><a href="#cb62-66" tabindex="-1"></a><span class="do">### &gt; 23 mpg     NA   NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>mt_pipe <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>  <span class="fu">add_val1</span>(am,</span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;automatic&quot;</span>, <span class="st">&quot;manual&quot;</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-6"><a href="#cb61-6" tabindex="-1"></a>  <span class="fu">add_val1</span>(cyl,</span>
+<span id="cb61-7"><a href="#cb61-7" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>),</span>
+<span id="cb61-8"><a href="#cb61-8" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(<span class="st">&quot;four-cyl&quot;</span>, <span class="st">&quot;six-cyl&quot;</span>, <span class="st">&quot;eight-cyl&quot;</span>)</span>
+<span id="cb61-9"><a href="#cb61-9" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-10"><a href="#cb61-10" tabindex="-1"></a>  <span class="fu">add1m1</span>(gear,</span>
+<span id="cb61-11"><a href="#cb61-11" tabindex="-1"></a>    <span class="at">vals =</span> <span class="dv">3</span>,</span>
+<span id="cb61-12"><a href="#cb61-12" tabindex="-1"></a>    <span class="at">lab =</span> <span class="st">&quot;3&quot;</span></span>
+<span id="cb61-13"><a href="#cb61-13" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-14"><a href="#cb61-14" tabindex="-1"></a>  <span class="fu">add1m1</span>(gear,</span>
+<span id="cb61-15"><a href="#cb61-15" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>),</span>
+<span id="cb61-16"><a href="#cb61-16" tabindex="-1"></a>    <span class="at">lab =</span> <span class="fu">c</span>(<span class="st">&quot;4+&quot;</span>)</span>
+<span id="cb61-17"><a href="#cb61-17" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-18"><a href="#cb61-18" tabindex="-1"></a>  <span class="fu">add_val1</span>(carb,</span>
+<span id="cb61-19"><a href="#cb61-19" tabindex="-1"></a>    <span class="at">vals =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>),</span>
+<span id="cb61-20"><a href="#cb61-20" tabindex="-1"></a>    <span class="at">labs =</span> <span class="fu">c</span>(</span>
+<span id="cb61-21"><a href="#cb61-21" tabindex="-1"></a>      <span class="st">&quot;1-carb&quot;</span>, <span class="st">&quot;2-carbs&quot;</span>, <span class="st">&quot;3-carbs&quot;</span>,</span>
+<span id="cb61-22"><a href="#cb61-22" tabindex="-1"></a>      <span class="st">&quot;4-carbs&quot;</span>, <span class="st">&quot;6-carbs&quot;</span>, <span class="st">&quot;8-carbs&quot;</span></span>
+<span id="cb61-23"><a href="#cb61-23" tabindex="-1"></a>    )</span>
+<span id="cb61-24"><a href="#cb61-24" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-25"><a href="#cb61-25" tabindex="-1"></a>  <span class="fu">add_quant1</span>(mpg,</span>
+<span id="cb61-26"><a href="#cb61-26" tabindex="-1"></a>    <span class="at">qtiles =</span> <span class="dv">4</span></span>
+<span id="cb61-27"><a href="#cb61-27" tabindex="-1"></a>  )</span>
+<span id="cb61-28"><a href="#cb61-28" tabindex="-1"></a><span class="do">### &gt; Labeling variable --am--:</span></span>
+<span id="cb61-29"><a href="#cb61-29" tabindex="-1"></a><span class="do">### &gt;   var vals      labs</span></span>
+<span id="cb61-30"><a href="#cb61-30" tabindex="-1"></a><span class="do">### &gt; 1  am    0 automatic</span></span>
+<span id="cb61-31"><a href="#cb61-31" tabindex="-1"></a><span class="do">### &gt; 2  am    1    manual</span></span>
+<span id="cb61-32"><a href="#cb61-32" tabindex="-1"></a><span class="do">### &gt; 3  am   NA        NA</span></span>
+<span id="cb61-33"><a href="#cb61-33" tabindex="-1"></a><span class="do">### &gt; Labeling variable --cyl--:</span></span>
+<span id="cb61-34"><a href="#cb61-34" tabindex="-1"></a><span class="do">### &gt;   var vals      labs</span></span>
+<span id="cb61-35"><a href="#cb61-35" tabindex="-1"></a><span class="do">### &gt; 4 cyl    4  four-cyl</span></span>
+<span id="cb61-36"><a href="#cb61-36" tabindex="-1"></a><span class="do">### &gt; 5 cyl    6   six-cyl</span></span>
+<span id="cb61-37"><a href="#cb61-37" tabindex="-1"></a><span class="do">### &gt; 6 cyl    8 eight-cyl</span></span>
+<span id="cb61-38"><a href="#cb61-38" tabindex="-1"></a><span class="do">### &gt; 7 cyl   NA        NA</span></span>
+<span id="cb61-39"><a href="#cb61-39" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
+<span id="cb61-40"><a href="#cb61-40" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
+<span id="cb61-41"><a href="#cb61-41" tabindex="-1"></a><span class="do">### &gt; 8  gear    3    3</span></span>
+<span id="cb61-42"><a href="#cb61-42" tabindex="-1"></a><span class="do">### &gt; 9  gear    4    4</span></span>
+<span id="cb61-43"><a href="#cb61-43" tabindex="-1"></a><span class="do">### &gt; 10 gear    5    5</span></span>
+<span id="cb61-44"><a href="#cb61-44" tabindex="-1"></a><span class="do">### &gt; 11 gear   NA   NA</span></span>
+<span id="cb61-45"><a href="#cb61-45" tabindex="-1"></a><span class="do">### &gt; Labeling variable --gear--:</span></span>
+<span id="cb61-46"><a href="#cb61-46" tabindex="-1"></a><span class="do">### &gt;     var vals labs</span></span>
+<span id="cb61-47"><a href="#cb61-47" tabindex="-1"></a><span class="do">### &gt; 8  gear    3    3</span></span>
+<span id="cb61-48"><a href="#cb61-48" tabindex="-1"></a><span class="do">### &gt; 9  gear    4   4+</span></span>
+<span id="cb61-49"><a href="#cb61-49" tabindex="-1"></a><span class="do">### &gt; 10 gear    5   4+</span></span>
+<span id="cb61-50"><a href="#cb61-50" tabindex="-1"></a><span class="do">### &gt; 11 gear   NA   NA</span></span>
+<span id="cb61-51"><a href="#cb61-51" tabindex="-1"></a><span class="do">### &gt; Labeling variable --carb--:</span></span>
+<span id="cb61-52"><a href="#cb61-52" tabindex="-1"></a><span class="do">### &gt;     var vals    labs</span></span>
+<span id="cb61-53"><a href="#cb61-53" tabindex="-1"></a><span class="do">### &gt; 12 carb    1  1-carb</span></span>
+<span id="cb61-54"><a href="#cb61-54" tabindex="-1"></a><span class="do">### &gt; 13 carb    2 2-carbs</span></span>
+<span id="cb61-55"><a href="#cb61-55" tabindex="-1"></a><span class="do">### &gt; 14 carb    3 3-carbs</span></span>
+<span id="cb61-56"><a href="#cb61-56" tabindex="-1"></a><span class="do">### &gt; 15 carb    4 4-carbs</span></span>
+<span id="cb61-57"><a href="#cb61-57" tabindex="-1"></a><span class="do">### &gt; 16 carb    6 6-carbs</span></span>
+<span id="cb61-58"><a href="#cb61-58" tabindex="-1"></a><span class="do">### &gt; 17 carb    8 8-carbs</span></span>
+<span id="cb61-59"><a href="#cb61-59" tabindex="-1"></a><span class="do">### &gt; 18 carb   NA      NA</span></span>
+<span id="cb61-60"><a href="#cb61-60" tabindex="-1"></a><span class="do">### &gt; Labeling variable --mpg--:</span></span>
+<span id="cb61-61"><a href="#cb61-61" tabindex="-1"></a><span class="do">### &gt;    var   vals labs</span></span>
+<span id="cb61-62"><a href="#cb61-62" tabindex="-1"></a><span class="do">### &gt; 19 mpg 15.425 q025</span></span>
+<span id="cb61-63"><a href="#cb61-63" tabindex="-1"></a><span class="do">### &gt; 20 mpg   19.2 q050</span></span>
+<span id="cb61-64"><a href="#cb61-64" tabindex="-1"></a><span class="do">### &gt; 21 mpg   22.8 q075</span></span>
+<span id="cb61-65"><a href="#cb61-65" tabindex="-1"></a><span class="do">### &gt; 22 mpg   33.9 q100</span></span>
+<span id="cb61-66"><a href="#cb61-66" tabindex="-1"></a><span class="do">### &gt; 23 mpg     NA   NA</span></span></code></pre></div>
 <p>Note, we could’ve used <code>add_val_labs()</code> (instead of
 <code>add_val1()</code>), <code>add_m1_lab()</code> (instead of
 <code>add1m1()</code>), and <code>add_quant_labs()</code> (instead of
@@ -1881,65 +1836,65 @@ have had to quote the variables names in the calls.</p>
 </div>
 <div id="show-select-rows" class="section level3">
 <h3>Show Select Rows</h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">head</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># Base R function utils::head()</span></span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="do">### &gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
-<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span></span>
-<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span></span>
-<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a><span class="do">### &gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1</span></span>
-<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
-<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
-<span id="cb63-8"><a href="#cb63-8" tabindex="-1"></a></span>
-<span id="cb63-9"><a href="#cb63-9" tabindex="-1"></a><span class="fu">headl</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># labelr function headl() (note the &quot;l&quot;)</span></span>
-<span id="cb63-10"><a href="#cb63-10" tabindex="-1"></a><span class="do">### &gt;                    mpg       cyl disp  hp drat    wt  qsec vs        am gear</span></span>
-<span id="cb63-11"><a href="#cb63-11" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         q075   six-cyl  160 110 3.90 2.620 16.46  0    manual   4+</span></span>
-<span id="cb63-12"><a href="#cb63-12" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     q075   six-cyl  160 110 3.90 2.875 17.02  0    manual   4+</span></span>
-<span id="cb63-13"><a href="#cb63-13" tabindex="-1"></a><span class="do">### &gt; Datsun 710        q075  four-cyl  108  93 3.85 2.320 18.61  1    manual   4+</span></span>
-<span id="cb63-14"><a href="#cb63-14" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive    q075   six-cyl  258 110 3.08 3.215 19.44  1 automatic    3</span></span>
-<span id="cb63-15"><a href="#cb63-15" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout q050 eight-cyl  360 175 3.15 3.440 17.02  0 automatic    3</span></span>
-<span id="cb63-16"><a href="#cb63-16" tabindex="-1"></a><span class="do">### &gt;                      carb</span></span>
-<span id="cb63-17"><a href="#cb63-17" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         4-carbs</span></span>
-<span id="cb63-18"><a href="#cb63-18" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     4-carbs</span></span>
-<span id="cb63-19"><a href="#cb63-19" tabindex="-1"></a><span class="do">### &gt; Datsun 710         1-carb</span></span>
-<span id="cb63-20"><a href="#cb63-20" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive     1-carb</span></span>
-<span id="cb63-21"><a href="#cb63-21" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 2-carbs</span></span>
-<span id="cb63-22"><a href="#cb63-22" tabindex="-1"></a></span>
-<span id="cb63-23"><a href="#cb63-23" tabindex="-1"></a><span class="fu">tail</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># Base R function utils::tail()</span></span>
-<span id="cb63-24"><a href="#cb63-24" tabindex="-1"></a><span class="do">### &gt;                 mpg cyl  disp  hp drat    wt qsec vs am gear carb</span></span>
-<span id="cb63-25"><a href="#cb63-25" tabindex="-1"></a><span class="do">### &gt; Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2</span></span>
-<span id="cb63-26"><a href="#cb63-26" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4</span></span>
-<span id="cb63-27"><a href="#cb63-27" tabindex="-1"></a><span class="do">### &gt; Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6</span></span>
-<span id="cb63-28"><a href="#cb63-28" tabindex="-1"></a><span class="do">### &gt; Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.6  0  1    5    8</span></span>
-<span id="cb63-29"><a href="#cb63-29" tabindex="-1"></a><span class="do">### &gt; Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.6  1  1    4    2</span></span>
-<span id="cb63-30"><a href="#cb63-30" tabindex="-1"></a></span>
-<span id="cb63-31"><a href="#cb63-31" tabindex="-1"></a><span class="fu">taill</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># labelr function taill() (note the &quot;l&quot;)</span></span>
-<span id="cb63-32"><a href="#cb63-32" tabindex="-1"></a><span class="do">### &gt;                 mpg       cyl  disp  hp drat    wt qsec vs     am gear    carb</span></span>
-<span id="cb63-33"><a href="#cb63-33" tabindex="-1"></a><span class="do">### &gt; Lotus Europa   q100  four-cyl  95.1 113 3.77 1.513 16.9  1 manual   4+ 2-carbs</span></span>
-<span id="cb63-34"><a href="#cb63-34" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L q050 eight-cyl 351.0 264 4.22 3.170 14.5  0 manual   4+ 4-carbs</span></span>
-<span id="cb63-35"><a href="#cb63-35" tabindex="-1"></a><span class="do">### &gt; Ferrari Dino   q075   six-cyl 145.0 175 3.62 2.770 15.5  0 manual   4+ 6-carbs</span></span>
-<span id="cb63-36"><a href="#cb63-36" tabindex="-1"></a><span class="do">### &gt; Maserati Bora  q025 eight-cyl 301.0 335 3.54 3.570 14.6  0 manual   4+ 8-carbs</span></span>
-<span id="cb63-37"><a href="#cb63-37" tabindex="-1"></a><span class="do">### &gt; Volvo 142E     q075  four-cyl 121.0 109 4.11 2.780 18.6  1 manual   4+ 2-carbs</span></span>
-<span id="cb63-38"><a href="#cb63-38" tabindex="-1"></a></span>
-<span id="cb63-39"><a href="#cb63-39" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">some</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># car package function car::some()</span></span>
-<span id="cb63-40"><a href="#cb63-40" tabindex="-1"></a><span class="do">### &gt;                    mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span></span>
-<span id="cb63-41"><a href="#cb63-41" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2</span></span>
-<span id="cb63-42"><a href="#cb63-42" tabindex="-1"></a><span class="do">### &gt; Merc 280          19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4</span></span>
-<span id="cb63-43"><a href="#cb63-43" tabindex="-1"></a><span class="do">### &gt; Merc 450SE        16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3</span></span>
-<span id="cb63-44"><a href="#cb63-44" tabindex="-1"></a><span class="do">### &gt; AMC Javelin       15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2</span></span>
-<span id="cb63-45"><a href="#cb63-45" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9         27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1</span></span>
-<span id="cb63-46"><a href="#cb63-46" tabindex="-1"></a></span>
-<span id="cb63-47"><a href="#cb63-47" tabindex="-1"></a><span class="fu">somel</span>(mt_pipe, <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">1837</span>) <span class="co"># labelr function somel() (note the &quot;l&quot;)</span></span>
-<span id="cb63-48"><a href="#cb63-48" tabindex="-1"></a><span class="do">### &gt;                 mpg       cyl  disp  hp drat    wt  qsec vs        am gear</span></span>
-<span id="cb63-49"><a href="#cb63-49" tabindex="-1"></a><span class="do">### &gt; AMC Javelin    q025 eight-cyl 304.0 150 3.15 3.435 17.30  0 automatic    3</span></span>
-<span id="cb63-50"><a href="#cb63-50" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9      q100  four-cyl  79.0  66 4.08 1.935 18.90  1    manual   4+</span></span>
-<span id="cb63-51"><a href="#cb63-51" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L q050 eight-cyl 351.0 264 4.22 3.170 14.50  0    manual   4+</span></span>
-<span id="cb63-52"><a href="#cb63-52" tabindex="-1"></a><span class="do">### &gt; Merc 230       q075  four-cyl 140.8  95 3.92 3.150 22.90  1 automatic   4+</span></span>
-<span id="cb63-53"><a href="#cb63-53" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive q075   six-cyl 258.0 110 3.08 3.215 19.44  1 automatic    3</span></span>
-<span id="cb63-54"><a href="#cb63-54" tabindex="-1"></a><span class="do">### &gt;                   carb</span></span>
-<span id="cb63-55"><a href="#cb63-55" tabindex="-1"></a><span class="do">### &gt; AMC Javelin    2-carbs</span></span>
-<span id="cb63-56"><a href="#cb63-56" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9       1-carb</span></span>
-<span id="cb63-57"><a href="#cb63-57" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L 4-carbs</span></span>
-<span id="cb63-58"><a href="#cb63-58" tabindex="-1"></a><span class="do">### &gt; Merc 230       2-carbs</span></span>
-<span id="cb63-59"><a href="#cb63-59" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive  1-carb</span></span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">head</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># Base R function utils::head()</span></span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="do">### &gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span></span>
+<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span></span>
+<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a><span class="do">### &gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1</span></span>
+<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
+<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
+<span id="cb62-8"><a href="#cb62-8" tabindex="-1"></a></span>
+<span id="cb62-9"><a href="#cb62-9" tabindex="-1"></a><span class="fu">headl</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># labelr function headl() (note the &quot;l&quot;)</span></span>
+<span id="cb62-10"><a href="#cb62-10" tabindex="-1"></a><span class="do">### &gt;                    mpg       cyl disp  hp drat    wt  qsec vs        am gear</span></span>
+<span id="cb62-11"><a href="#cb62-11" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         q075   six-cyl  160 110 3.90 2.620 16.46  0    manual   4+</span></span>
+<span id="cb62-12"><a href="#cb62-12" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     q075   six-cyl  160 110 3.90 2.875 17.02  0    manual   4+</span></span>
+<span id="cb62-13"><a href="#cb62-13" tabindex="-1"></a><span class="do">### &gt; Datsun 710        q075  four-cyl  108  93 3.85 2.320 18.61  1    manual   4+</span></span>
+<span id="cb62-14"><a href="#cb62-14" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive    q075   six-cyl  258 110 3.08 3.215 19.44  1 automatic    3</span></span>
+<span id="cb62-15"><a href="#cb62-15" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout q050 eight-cyl  360 175 3.15 3.440 17.02  0 automatic    3</span></span>
+<span id="cb62-16"><a href="#cb62-16" tabindex="-1"></a><span class="do">### &gt;                      carb</span></span>
+<span id="cb62-17"><a href="#cb62-17" tabindex="-1"></a><span class="do">### &gt; Mazda RX4         4-carbs</span></span>
+<span id="cb62-18"><a href="#cb62-18" tabindex="-1"></a><span class="do">### &gt; Mazda RX4 Wag     4-carbs</span></span>
+<span id="cb62-19"><a href="#cb62-19" tabindex="-1"></a><span class="do">### &gt; Datsun 710         1-carb</span></span>
+<span id="cb62-20"><a href="#cb62-20" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive     1-carb</span></span>
+<span id="cb62-21"><a href="#cb62-21" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 2-carbs</span></span>
+<span id="cb62-22"><a href="#cb62-22" tabindex="-1"></a></span>
+<span id="cb62-23"><a href="#cb62-23" tabindex="-1"></a><span class="fu">tail</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># Base R function utils::tail()</span></span>
+<span id="cb62-24"><a href="#cb62-24" tabindex="-1"></a><span class="do">### &gt;                 mpg cyl  disp  hp drat    wt qsec vs am gear carb</span></span>
+<span id="cb62-25"><a href="#cb62-25" tabindex="-1"></a><span class="do">### &gt; Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2</span></span>
+<span id="cb62-26"><a href="#cb62-26" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4</span></span>
+<span id="cb62-27"><a href="#cb62-27" tabindex="-1"></a><span class="do">### &gt; Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6</span></span>
+<span id="cb62-28"><a href="#cb62-28" tabindex="-1"></a><span class="do">### &gt; Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.6  0  1    5    8</span></span>
+<span id="cb62-29"><a href="#cb62-29" tabindex="-1"></a><span class="do">### &gt; Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.6  1  1    4    2</span></span>
+<span id="cb62-30"><a href="#cb62-30" tabindex="-1"></a></span>
+<span id="cb62-31"><a href="#cb62-31" tabindex="-1"></a><span class="fu">taill</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># labelr function taill() (note the &quot;l&quot;)</span></span>
+<span id="cb62-32"><a href="#cb62-32" tabindex="-1"></a><span class="do">### &gt;                 mpg       cyl  disp  hp drat    wt qsec vs     am gear    carb</span></span>
+<span id="cb62-33"><a href="#cb62-33" tabindex="-1"></a><span class="do">### &gt; Lotus Europa   q100  four-cyl  95.1 113 3.77 1.513 16.9  1 manual   4+ 2-carbs</span></span>
+<span id="cb62-34"><a href="#cb62-34" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L q050 eight-cyl 351.0 264 4.22 3.170 14.5  0 manual   4+ 4-carbs</span></span>
+<span id="cb62-35"><a href="#cb62-35" tabindex="-1"></a><span class="do">### &gt; Ferrari Dino   q075   six-cyl 145.0 175 3.62 2.770 15.5  0 manual   4+ 6-carbs</span></span>
+<span id="cb62-36"><a href="#cb62-36" tabindex="-1"></a><span class="do">### &gt; Maserati Bora  q025 eight-cyl 301.0 335 3.54 3.570 14.6  0 manual   4+ 8-carbs</span></span>
+<span id="cb62-37"><a href="#cb62-37" tabindex="-1"></a><span class="do">### &gt; Volvo 142E     q075  four-cyl 121.0 109 4.11 2.780 18.6  1 manual   4+ 2-carbs</span></span>
+<span id="cb62-38"><a href="#cb62-38" tabindex="-1"></a></span>
+<span id="cb62-39"><a href="#cb62-39" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">some</span>(mt_pipe, <span class="dv">5</span>) <span class="co"># car package function car::some()</span></span>
+<span id="cb62-40"><a href="#cb62-40" tabindex="-1"></a><span class="do">### &gt;                    mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span></span>
+<span id="cb62-41"><a href="#cb62-41" tabindex="-1"></a><span class="do">### &gt; Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2</span></span>
+<span id="cb62-42"><a href="#cb62-42" tabindex="-1"></a><span class="do">### &gt; Merc 280          19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4</span></span>
+<span id="cb62-43"><a href="#cb62-43" tabindex="-1"></a><span class="do">### &gt; Merc 450SE        16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3</span></span>
+<span id="cb62-44"><a href="#cb62-44" tabindex="-1"></a><span class="do">### &gt; AMC Javelin       15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2</span></span>
+<span id="cb62-45"><a href="#cb62-45" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9         27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1</span></span>
+<span id="cb62-46"><a href="#cb62-46" tabindex="-1"></a></span>
+<span id="cb62-47"><a href="#cb62-47" tabindex="-1"></a><span class="fu">somel</span>(mt_pipe, <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">1837</span>) <span class="co"># labelr function somel() (note the &quot;l&quot;)</span></span>
+<span id="cb62-48"><a href="#cb62-48" tabindex="-1"></a><span class="do">### &gt;                 mpg       cyl  disp  hp drat    wt  qsec vs        am gear</span></span>
+<span id="cb62-49"><a href="#cb62-49" tabindex="-1"></a><span class="do">### &gt; AMC Javelin    q025 eight-cyl 304.0 150 3.15 3.435 17.30  0 automatic    3</span></span>
+<span id="cb62-50"><a href="#cb62-50" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9      q100  four-cyl  79.0  66 4.08 1.935 18.90  1    manual   4+</span></span>
+<span id="cb62-51"><a href="#cb62-51" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L q050 eight-cyl 351.0 264 4.22 3.170 14.50  0    manual   4+</span></span>
+<span id="cb62-52"><a href="#cb62-52" tabindex="-1"></a><span class="do">### &gt; Merc 230       q075  four-cyl 140.8  95 3.92 3.150 22.90  1 automatic   4+</span></span>
+<span id="cb62-53"><a href="#cb62-53" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive q075   six-cyl 258.0 110 3.08 3.215 19.44  1 automatic    3</span></span>
+<span id="cb62-54"><a href="#cb62-54" tabindex="-1"></a><span class="do">### &gt;                   carb</span></span>
+<span id="cb62-55"><a href="#cb62-55" tabindex="-1"></a><span class="do">### &gt; AMC Javelin    2-carbs</span></span>
+<span id="cb62-56"><a href="#cb62-56" tabindex="-1"></a><span class="do">### &gt; Fiat X1-9       1-carb</span></span>
+<span id="cb62-57"><a href="#cb62-57" tabindex="-1"></a><span class="do">### &gt; Ford Pantera L 4-carbs</span></span>
+<span id="cb62-58"><a href="#cb62-58" tabindex="-1"></a><span class="do">### &gt; Merc 230       2-carbs</span></span>
+<span id="cb62-59"><a href="#cb62-59" tabindex="-1"></a><span class="do">### &gt; Hornet 4 Drive  1-carb</span></span></code></pre></div>
 <p>Note that <code>some()</code> and <code>somel()</code> will not
 return the same random rows.</p>
 </div>

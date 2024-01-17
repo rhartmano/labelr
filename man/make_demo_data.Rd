@@ -6,7 +6,6 @@
 \usage{
 make_demo_data(
   n = 1000,
-  seed = 123,
   age.mean = 43,
   age.sd = 15,
   gend.prob = c(0.475, 0.475, 0.05),
@@ -16,9 +15,7 @@ make_demo_data(
 )
 }
 \arguments{
-\item{n}{number of observations (\code{nrow}) of hypothetical data set to create.}
-
-\item{seed}{random number seed to pass to \code{set.seed} for reproducibility.}
+\item{n}{number of observations (rows) of hypothetical data set to create.}
 
 \item{age.mean}{mean value of (fictional) age variable (assuming a normal
 distribution) recorded in a hypothetical data set.}
@@ -49,7 +46,8 @@ represent the frequencies or relationships among demographic variables.
 }
 \examples{
 # make toy demographic (gender, race, etc.) data set
-df <- make_demo_data(n = 1000, seed = 555)
+set.seed(555)
+df <- make_demo_data(n = 1000)
 
 # val labels are "variable value labels"
 # each value label can apply to only one distinct value

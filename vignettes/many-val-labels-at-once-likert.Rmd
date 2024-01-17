@@ -30,7 +30,8 @@ library(labelr)
 `make_likert_data` is another labelr-provided function. Let's make some fake data.
 
 ```{r}
-dflik <- make_likert_data(scale = 1:7, seed = 272)
+set.seed(272)
+dflik <- make_likert_data(scale = 1:7)
 head(dflik)
 ```
 ### Get Set up to Add Value Labels
@@ -131,7 +132,8 @@ may still be helpful here, thanks to an assist from `use_val_labs()`.
 `make_likert_data()` gives us integer values.
 
 ```{r}
-df_int <- make_likert_data(scale = 1:7, seed = 272)
+set.seed(272)
+df_int <- make_likert_data(scale = 1:7)
 head(df_int)
 ```
 

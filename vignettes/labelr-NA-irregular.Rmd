@@ -104,13 +104,11 @@ Streamline the data.frame, while preserving labels.
 ```{r}
 mtless <- sselect(mtlabs, mpg, cyl, am, gear, carb, grade)
 
-head(mtless, 5)
-
 head(mtless, 5) # note that the irregular values are still here
 ```
 
-Note how all irregular values are coerced to "NA" when we substitute labels
-for values with `use_val_labs()`.
+Note how all irregular values are coerced to NA when we substitute labels for 
+values with `use_val_labs()`.
 
 ```{r}
 head(use_val_labs(mtless), 5) # but they all go to NA if we `use_val_labs`

@@ -1,7 +1,7 @@
 #' Get Factor Attributes from a Labeled Data Frame
 #'
 #' @description
-#' `get_factor_atts` searches a labelr labelled data.frame for factors. If any
+#' `get_factor_atts` searches a labelr labeled data.frame for factors. If any
 #' are found, a list of character vectors of factor levels is returned, with
 #' each character vector being the set of unique levels for a factor variable,
 #' and with each character vector named according to the convention "factor." +
@@ -9,7 +9,7 @@
 #' other labelr functions to get information about factors in labeled
 #' data.frames.
 #'
-#' @param data the labelr labelled data.frame you are checking for factor
+#' @param data the labelr labeled data.frame you are checking for factor
 #' variables.
 #' @return A list of character vectors, each named according to the convention
 #' "factor." + variable name (e.g.,"factor.Species" for iris$Species). If the
@@ -30,8 +30,8 @@
 #' )
 #' get_val_labs(ir2)
 #' head(use_val_labs(ir2))
-#' get_factor_atts(iris) # no such info: iris is not labelr labelled
-#' get_factor_atts(ir2) # this one has info: it's labelr labelled
+#' get_factor_atts(iris) # no such info: iris is not labelr labeled
+#' get_factor_atts(ir2) # this one has info: it's labelr labeled
 get_factor_atts <- function(data) {
   atts_data <- attributes(data)
   all_names <- names(atts_data)

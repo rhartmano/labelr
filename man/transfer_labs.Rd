@@ -25,7 +25,7 @@ Note: \code{transfer_labs} searches a data.frame's name.labs and val.labs
 attributes and transfers the labels associated with one variable name to
 another, so that the first variable no longer has name or value labels
 associated with it, and so that whatever name or value labels previously were
-associated with it are now associate with the second variable.
+associated with it are now associated with the second variable.
 }
 \details{
 Certain non-labelr data management functions will preserve the labelr labels
@@ -40,7 +40,8 @@ name (here, "satisfaction").
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set
-df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+set.seed(555)
+df <- make_demo_data(n = 1000) # another labelr:: function
 
 # let's add variable VALUE labels for variable "raceth"
 df <- add_val_labs(df,

@@ -348,6 +348,7 @@ mtbad2 <- add_quant_labs(
 ) # assign labels using our "pretty" thresholds
 
 # see what these approaches get us
+set.seed(7071)
 somel(mtbad2, 8)[c("mpg", "mpg4", "mpg5")]
 
 # remove mtbad2

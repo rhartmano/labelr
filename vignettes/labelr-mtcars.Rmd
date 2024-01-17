@@ -176,9 +176,9 @@ nominal (categorical / multinomial), or ordinal variables with limited numbers o
 distinct values (the default is 10 distinct values for a to-be-value-labeled 
 variable, but this can be bumped up using the max.unique.vals option). 
 
-For a given variable, each distinct  value label must have a one-to-one mapping 
-with a distinct value of the variable (i.e., no two values can share the same 
-label, and no two labels can be applied to the same value). We'll relax this 
+When using `add_val_labs`, each distinct value label must have a one-to-one 
+mapping with a distinct value of the variable (i.e., no two values can share the 
+same label, and no two labels can be applied to the same value). We'll relax this 
 constraint in a moment.
 
 ```{r}
@@ -217,21 +217,6 @@ mt2 <- add_val1(
     "eight-cyl"
   )
 )
-```
-
-There's no law against adding not-yet-needed value labels
-
-```{r}
-mt2 <- add_val_labs(
-  data = mt2,
-  vars = "am",
-  vals = c(99),
-  labs = c("friend")
-)
-
-get_name_labs(mt2)
-
-get_val_labs(mt2)
 ```
 
 ## Add NUMERICAL RANGE labels
@@ -360,12 +345,16 @@ tail(mt_pipe, 5) # Base R function utils::tail()
 
 taill(mt_pipe, 5) # labelr function taill() (note the "l")
 
+set.seed(4938)
 car::some(mt_pipe, 5) # car package function car::some()
 
-somel(mt_pipe, 5, seed = 1837) # labelr function somel() (note the "l")
+set.seed(4938)
+somel(mt_pipe, 5) # labelr function somel() (note the "l")
 ```
 
-Note that `some()` and `somel()` will not return the same random rows.
+Note that `some()` and `somel()` will not return the same random rows, even with 
+the same seed.
+
 
 ## Add Value Label Columns
 ```{r}

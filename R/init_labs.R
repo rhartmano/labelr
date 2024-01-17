@@ -22,7 +22,8 @@
 #'
 #' @examples
 #' # make toy demographic (gender, race, etc.) data set
-#' df <- make_demo_data(n = 1000, seed = 555) # another labelr:: function
+#' set.seed(555)
+#' df <- make_demo_data(n = 1000) # another labelr:: function
 #' df2 <- init_labs(df) # df2 is not df
 #' get_all_lab_atts(df) # this is df; is not df2
 #' get_all_lab_atts(df2) # this is df2

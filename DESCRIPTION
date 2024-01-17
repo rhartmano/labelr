@@ -1,9 +1,9 @@
 Package: labelr
-Title: Tools for Working with Data Frame, Variable, and Value Labels
-Version: 1.0.0 
+Title: Label Data Frames, Variables, and Values
+Version: 0.1.0 
 Authors@R: c(person("Robert", "Hartman", "", email = "rohartman@gmail.com", role = c("aut", "cre")), person("The MITRE Corporation", role = "cph"))
 Maintainer: Robert Hartman <rohartman@gmail.com>
-Description: Lightweight tools to create and use different types of data.frame labels.
+Description: Tools to create and work with different types of data frame labels.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

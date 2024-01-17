@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "### >"
 )
 ```
-## What Are Labels For?
+## What Are Labels for?
 labelr allows you to label Base R data.frames and then use those labels in a few
 different ways, according to your needs. These include: producing basic label 
 look-up tables, replacing a variable's values with its corresponding value labels 
@@ -28,7 +28,7 @@ labelr functions demonstrated below (see vignette **Aliases for Common labelr
 Functions**). A complete listing of alias functions is presented at the end of 
 this vignette.
 
-## First things first - Let's Label Our Data Frame
+## First Things First - Let's Label Our Data Frame
 We'll use the popular Motor Trend Cars (mtcars) data.frame. We'll start by loading
 labelr, copying mtcars to new data.frame called df, adding variable name labels, 
 then adding variable value labels. Then we'll show a few ways to use labels (mostly
@@ -92,7 +92,6 @@ df <- add_name_labs(df,
 Note: A shorter alias for `add_name_labs` is `anl`.
 
 ## Assign VALUE Labels
-
 Now, we will assign **VALUE** labels to select variables.
 
 ```{r}
@@ -268,3 +267,5 @@ By way of preview, the available alias functions are as follows:
 * the alias for `add_frame_lab` is `afl`
 
 * the alias for `get_frame_lab` is `gfl`
+
+* the alias for `drop_frame_lab` is `dfl`
