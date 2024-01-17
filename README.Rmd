@@ -1,0 +1,195 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# labelr <img src="man/figures/logo.png" align="right" height="138" alt="" />
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The labelr package supports creation and use of three classes of data.frame 
+labels, the last of which comes in three flavors.
+
+1. **Frame labels** - Each data.frame may be given a single "frame label" of 500 
+  characters or fewer, which may describe key general features or characteristics
+  of the data set (e.g., source, date produced or published, high-level 
+  contents). 
+  
+2. **Name labels** - Each variable may be given exactly one name label, which is 
+  an extended variable name or brief description of the variable. For example, 
+  if a variable called "st_b" refers to a survey respondent's state of birth, 
+  then a sensible and useful name label might be "State of Birth". Or, if a 
+  variable called "trust1" consisted of responses to the consumer survey 
+  question, "How much do you trust BBC news to give you unbiased information?," 
+  a sensible name label might be "BBC Trust." As such, name labels are 
+  comparable to what Stata and SAS call "variable labels."
+
+3. **Value labels** - labelr offers three kinds of value labels. 
+    * *One-to-one labels* - The canonical value-labeling use case entails mapping 
+     distinct values of a variable to distinct labels in a one-to-one fashion, so
+     that each value label uniquely identifies a substantive value. For instance, 
+     an administrative data set might assign the integers 1-7 to seven distinct 
+     racial/ethnic groups, and value labels would be critical in mapping those 
+     numbers to socially substantive racial/ethnic category concepts (e.g., 
+     Which number corresponds to the category "Asian American?"). 
+    
+    * *Many-to-one labels* - In an alternative use case, value labels may serve to
+     distill or "bucket" distinct variable values in a way that deliberately 
+     "throws away" information for purposes of simplification. For example, one 
+     may wish to give the single label "Agree" to the responses "Very Strongly 
+     Agree," "Strongly Agree," and "Agree." Or one may wish to differentiate 
+     self-identified "White" respondents from "People of Color," applying the 
+     latter value label to all categories other than "White."
+    
+    * *Numerical range labels* - Finally, one may wish to carve a numerical 
+     variable into an ordinal or qualitative range, such as dichotomizing a 
+     variable or dividing it into quantiles. Numerical range labels support 
+     one-to-many assignment of a single value label to a range of numerical 
+     values for a given variable.
+
+
+## Installation
+
+You can install labelr from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("rhartmano/labelr")
+```
+
+## Usage
+
+Assign labels to your data.frame, its variables, and/or specific variable 
+values. Then use those labels in various ways.
+
+```{r, message = FALSE}
+# load the package and assign mtcars to new data.frame mt2
+library(labelr)
+
+mt2 <- mtcars
+
+# assign a data.frame "frame" label
+mt2 <- add_frame_lab(mt2, frame.lab = "Data extracted from the 1974 Motor
+Trend US magazine, comprising fuel consumption and 10 aspects of automobile
+design and performance for 32 automobiles (1973–74 models). Source: Henderson
+and Velleman (1981), Building multiple regression models interactively.
+                     Biometrics, 37, 391–411.")
+
+get_frame_lab(mt2)
+
+# assign variable name labels
+mt2 <- add_name_labs(mt2,
+  name.labs = c(
+    "mpg" = "Miles/(US) gallon",
+    "cyl" = "Number of cylinders",
+    "disp" = "Displacement (cu.in.)",
+    "hp" = "Gross horsepower",
+    "drat" = "Rear axle ratio",
+    "wt" = "Weight (1000 lbs)",
+    "qsec" = "1/4 mile time",
+    "vs" = "Engine (0 = V-shaped, 1 = straight)",
+    "am" = "Transmission (0 = automatic, 1 = manual)",
+    "gear" = "Number of forward gears",
+    "carb" = "Number of carburetors"
+  )
+)
+
+get_name_labs(mt2)
+
+# add 1-to-1 value labels
+mt2 <- add_val_labs(
+  data = mt2,
+  vars = "am",
+  vals = c(0, 1),
+  labs = c("automatic", "manual")
+)
+
+# add many-to-1 value labels
+mt2 <- add_m1_lab(
+  data = mt2,
+  vars = "gear",
+  vals = 4:5,
+  lab = "4+"
+)
+
+# add quartile-based numerical range value labels
+mt2 <- add_quant_labs(
+  data = mt2,
+  vars = "disp",
+  qtiles = 4
+)
+
+# add "pretty" cut-based numerical range value labels
+(mpg_bins <- pretty(range(mt2$mpg, na.rm = TRUE)))
+
+mt2 <- add_quant_labs(data = mt2, vars = "mpg", vals = mpg_bins)
+
+# show or use value labels
+head(use_val_labs(mt2), 4)
+
+# preserve labels and then restore (if lost) or transfer
+lab_backup <- get_all_lab_atts(mt2) # back them up
+
+mt2 <- strip_labs(mt2) # strip them away
+
+check_any_lab_atts(mt2) # verify that they have been stripped away
+
+mt2 <- add_lab_atts(mt2, lab_backup) # now restore them
+
+get_all_lab_atts(mt2) # show that they are back
+
+# add labels-on columns to the data.frame
+mt_plus <- add_lab_cols(mt2)
+
+cols_of_interest <- names(mt_plus)[grepl("am|dis|gear|mpg", names(mt_plus))]
+
+head(mt_plus)[sort(cols_of_interest)]
+
+# show select values with value labels "on"
+utils::head(mt2) # head()
+
+labelr::headl(mt2) # headl
+
+# "flab" - "*F*ilter using value *LAB*els"
+flab(mt2, am == "automatic" & mpg %in% c("<=20"))
+
+# "slab" - "*S*ubset using value *LAB*els"
+slab(mt2, am == "automatic" & gear == "4+", am, gear)
+
+# "tabl" - Produce label-friendly tables
+tabl(mt2, vars = c("am", "gear"), labs.on = TRUE) # labels on, sorted by freq
+
+tabl(mt2, vars = c("am", "gear"), labs.on = FALSE) # labels off (default)
+
+# interactively swap in name labels for column names
+# (Note: This is a relatively brittle convenience function that will not support
+# ... exotic syntax or pointers to objects that exist outside the labeled
+# ... data.frame)
+with_name_labs(mt2, t.test(mpg ~ am))
+
+# wnl() is a more compact alias for with_name_labs()
+wnl(mt2, lm(mpg ~ am * gear))
+
+# wnl(mt2, hist(mpg)) #not shown, but works
+# wnl(mt2, plot(mpg, carb)) #not shown, but works
+
+# interactively swap in both name and value labels
+# ...note that "mpg" and "disp" would not work in these calls unless we
+# ...first dropped their value labels, since swapping out labels for values
+# ...amounts to coercing these to be character variables
+
+wbl(mt2, t.test(qsec ~ am)) # wbl() is alias for with_both_labs()
+
+wbl(mt2, lm(qsec ~ am + gear + wt * drat))
+```

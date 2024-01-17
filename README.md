@@ -21,8 +21,8 @@ data.frame labels, the last of which comes in three flavors.
     label might be “State of Birth”. Or, if a variable called “trust1”
     consisted of responses to the consumer survey question, “How much do
     you trust BBC news to give you unbiased information?,” a sensible
-    name label might be “BBC Trust.” Name labels are comparable to what
-    Stata and SAS call “variable labels.”
+    name label might be “BBC Trust.” As such, name labels are comparable
+    to what Stata and SAS call “variable labels.”
 
 3.  **Value labels** - labelr offers three kinds of value labels.
 
@@ -53,13 +53,12 @@ data.frame labels, the last of which comes in three flavors.
 
 ## Installation
 
-Assuming devtools is installed, labelr can be installed by calling: The
-labelr package can be installed from GitHub using the devtools package.
+You can install labelr from [GitHub](https://github.com/) with:
 
-<!-- ``` r -->
-<!-- install.packages("devtools")``` -->
-<!-- devtools::install_github("rhartmano/labelr")``` -->
-<!-- ``` -->
+``` r
+# install.packages("devtools")
+devtools::install_github("rhartmano/labelr")
+```
 
 ## Usage
 
