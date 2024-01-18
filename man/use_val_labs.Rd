@@ -47,7 +47,7 @@ inspection tasks, while preserving raw data values in returned object, see
 destruction of variable-specific value labels.
 
 \code{use_val_labs} takes a variable value-labeled data.frame and substitutes each
-(labelled) variable's labels for its values, returning a data.frame whose
+(labeled) variable's labels for its values, returning a data.frame whose
 dimensions, names, and members are the same as the inputted data.frame. This
 may be useful if one wishes to inspect the data.frame (using, e.g., head(),
 tail(), View()) or labeled value frequencies (e.g., table()) using the
