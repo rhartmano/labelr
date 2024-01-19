@@ -828,14 +828,16 @@ irlab <- add_val_labs(iris,
 # )
 ```
 
-Note that we could have just as (or even more) easily used `add_val1()`. 
-`add_val_labs()` is useful if we want to value-label many variables at once 
-(according to a common labeling scheme -- think likert responses to a survey),
-but `add_val1()` works for a single variable at a time and allows us to avoid
-quoting our column name, if that matters to us. Let's prove that they're the 
-same.
+Note that we could have just as (or even more) easily used `add_val1()`, which 
+works for a single variable at a time and allows us to avoid quoting our column 
+name, if that matters to us. In contrast, `add_val_labs()` requires us to put 
+our variable name(s) in quotes, but it also gives us the option to apply a 
+common value-label scheme to several variables at once (e.g., Likert-style 
+survey responses). We'll see an example of this type of use case in action in a 
+little bit. 
 
-Let's take a look at irlab -- "Species" in particular.
+For now, though, let's prove that the iris and irlab data.frames are 
+functionally identical.
 
 First, note that irlab looks and acts just like iris in the usual ways that 
 matter
@@ -1004,7 +1006,7 @@ get_val_labs(ir_ord, "qrat_lab") # no labs here; this is just a character var
 It appears that you really can have it all, where "it all" is defined as 
 "factors and labels."
 
-## Labels and Larger Data Frames
+## Larger Data Frames
 labelr is not intended for "large" data.frames, which is a fuzzy concept. To
 give a sense of what labelr **can** handle, let's see it in action with the 
 NYC Flights 2013 data set: a moderate-not-big data.frame of ~340K rows.
@@ -1179,9 +1181,7 @@ the_buzzer <- Sys.time()
 the_buzzer - opening_ding
 ```
 
-## "Bulk" Value Labeling with Partial Variable Name Matching
-One more special topic, before we conclude this vignette. 
-
+## Value-Labeling Many Variables at Once
 As shown earlier, functions for adding value labels (e.g., `add_val_labs`, 
 `add_quant_labs` and `add_m1_lab`) will do partial matching if the partial 
 argument is set to TRUE. Let's use labelr's `make_likert_data()` function 
@@ -1272,5 +1272,53 @@ dfxgone <- drop_val_labs(dflik,
 get_val_labs(dfxgone)
 ```
 
-## Conclusion
-This concludes our whirlwind tour of labelr functionalities. You graduated!
+## Alias Functions and Conclusion
+This concludes our whirlwind tour of labelr functionalities. You've graduated.
+
+Well, almost. Before you go, here is a list of aliases for common functions. 
+Aside from having a different name, each alias function is identical to (i.e., 
+performs the same operations, returning the same result as) the parent function 
+that it aliases. More concise and more cryptic, these alias functions will save 
+you some typing at the console (and some characters in your scripts).
+
+The available aliases are as follows:
+
+* `add_val_labs` alias is `avl`
+
+* `get_val_labs` alias is `gvl` 
+
+* `drop_val_labs` alias is `dvl` 
+
+* `add_val1` alias is `avl1` 
+
+* `drop_val1` alias is `dvl1` 
+
+* `add_quant_labs` alias is `aql` 
+
+* `add_quant1` alias is `aq1` 
+
+* `add_m1_lab` alias is `am1l` 
+
+* `use_val_labs` alias is `uvl`
+
+* `with_val_labs` alias is `wvl`
+
+* `add_name_labs` is  `anl` 
+
+* `get_name_labs` alias is `gnl`
+
+* `drop_name_labs` alias is `dnl` 
+
+* `use_name_labs` alias is `unl` 
+
+* `use_var_names` alias is `uvn` 
+
+* `with_name_labs` alias is `wnl`
+
+* `with_both_labs` alias is `wbl`
+
+* `add_frame_lab` alias is `afl`
+
+* `get_frame_lab` alias is `gfl`
+
+* `drop_frame_lab` alias is `dfl`

@@ -14,14 +14,14 @@ A data.frame, with attributes re-arranged.
 }
 \description{
 Drops name.lab and val.lab attributes associated with columns that are not
-(e.g., no longer, following subsetting) present in a data.frame and re-arranges
+present in the data.frame (i.e., have been dropped) and re-arranges
 data.frame attributes so that they appear in a clean, logical order.
 }
 \details{
 labelr meta-data exist as data.frame attributes, added through interactive
 use in a potentially haphazard order. This function, which is used inside
-other labelr functions, drops labels for variables that are not (i.e., no
-longer) present in the data.frame and re-arranges label and other data.frame
+other labelr functions, drops labels for variables that are not (no longer)
+present in the data.frame and re-arranges label and other data.frame
 attributes to put them in a more, logical, user-readable order when accessed
 via, e.g., \code{attributes()}.
 }

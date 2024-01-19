@@ -2,14 +2,14 @@
 #'
 #' @description
 #' Drops name.lab and val.lab attributes associated with columns that are not
-#' (e.g., no longer, following subsetting) present in a data.frame and re-arranges
+#' present in the data.frame (i.e., have been dropped) and re-arranges
 #' data.frame attributes so that they appear in a clean, logical order.
 #'
 #' @details
 #' labelr meta-data exist as data.frame attributes, added through interactive
 #' use in a potentially haphazard order. This function, which is used inside
-#' other labelr functions, drops labels for variables that are not (i.e., no
-#' longer) present in the data.frame and re-arranges label and other data.frame
+#' other labelr functions, drops labels for variables that are not (no longer)
+#' present in the data.frame and re-arranges label and other data.frame
 #' attributes to put them in a more, logical, user-readable order when accessed
 #' via, e.g., `attributes()`.
 #'
@@ -66,7 +66,9 @@ clean_data_atts <- function(data) {
     names(attributes(data))
   )]
 
-  val_abs_names <- gsub("val.labs.", "", val_labs_to_check)
+  name_labs_names <- names(attributes(data)[["name.labs"]])
+
+  val_labs_names <- gsub("val.labs.", "", val_labs_to_check)
 
   u_fact_to_check <- names(attributes(data))[grepl(
     "u.factor",
@@ -75,7 +77,6 @@ clean_data_atts <- function(data) {
 
   u_fact_names <- gsub("u.factor.", "", u_fact_to_check)
 
-
   o_fact_to_check <- names(attributes(data))[grepl(
     "o.factor",
     names(attributes(data))
@@ -83,14 +84,17 @@ clean_data_atts <- function(data) {
 
   o_fact_names <- gsub("u.factor.", "", u_fact_to_check)
 
-  all_names <- unique(c(val_abs_names, u_fact_names, o_fact_names))
-  all_names <- all_names[!all_names %in% names(data)]
+  all_var_names <- unique(c(
+    name_labs_names, val_labs_names,
+    u_fact_names, o_fact_names
+  ))
 
+  absent_var_names <- all_var_names[!all_var_names %in% names(data)]
 
   # drop unneeded val.labs and factor information
-  if (length(all_names) > 0) {
-    for (i in seq_along(all_names)) {
-      this_var <- all_names[i]
+  if (length(absent_var_names) > 0) {
+    for (i in seq_along(absent_var_names)) {
+      this_var <- absent_var_names[i]
       this_val_lab_name <- paste0("val.labs.", this_var)
       this_u_fact_name <- paste0("u.factor.", this_var)
       this_o_fact_name <- paste0("o.factor.", this_var)
@@ -98,7 +102,7 @@ clean_data_atts <- function(data) {
       attributes(data)[[this_u_fact_name]] <- NULL
       attributes(data)[[this_o_fact_name]] <- NULL
 
-      # if a name.lab exists for this_var, switch its colname to reflect new.name
+      # if a name.lab exists for this_var, remove it
       if (!is.null(attributes(data)[["name.labs"]])) {
         if (!is.null(attributes(data)[["name.labs"]][this_var])) {
           names_lab_att <- attributes(data)[["name.labs"]]

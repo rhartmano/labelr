@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Select a single, value-labeled data.frame column (variable), replace each of
-#' its values with the corresponding value label, and return the result as a
+#' its values with the corresponding value labels, and return the result as a
 #' vector.
 #'
 #' @details
