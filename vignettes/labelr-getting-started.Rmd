@@ -1175,7 +1175,7 @@ head(df_fl[c("carrier", "arr_delay")])
 head(use_val_labs(df_fl)[c("carrier", "arr_delay")])
 ```
 
-How long did this entire NYC Flights session take on a 16GB RAM laptop?
+How long did this entire NYC Flights session take (results will vary)?
 ```{r}
 the_buzzer <- Sys.time()
 the_buzzer - opening_ding
