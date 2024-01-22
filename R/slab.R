@@ -97,11 +97,6 @@
 #' dfsf <- ssubset(df, raceth == 3 & gender == 1, gender, raceth)
 #' head(dfsf, 4)
 slab <- function(data, condition, ...) {
-  message("
-Remember: Any slab() filtering conditions involving value-labeled variables must be expressed
-in terms of the (quoted character) value labels, not the variable values themselves. \n
-To filter using values (not labels) of value-labeled variables, try, e.g., ssubset().")
-
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
 

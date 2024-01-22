@@ -15,6 +15,10 @@ wbl(data, ...)
 \item{...}{an additional expression passed to dots (quotes and dollar signs
 are not needed or permitted).}
 }
+\value{
+the value of the evaluated \code{expr}, with name and value labels
+substituted for variable (column) names and values, respectively.
+}
 \description{
 \code{with_both_labs} instructs R function calls to swap in variable name labels
 for column names AND variable value labels for variable values in the objects

@@ -231,13 +231,6 @@ the end of this vignette.
 df_temp <- add_quant_labs(data = df, vars = "x", qtiles = 5, partial = TRUE)
 ```
 
-As `add_quant_labs` adds those numerical range labels, the console output shows
-the actual quintile value of the supplied variable(s) (here, "x1" and "x2") that 
-corresponds to each quintile (range) label. Any value at or below that value 
-(and above the next-lowest quintile value) is assigned the corresponding 
-quintile label. In this case, the labels were generated automatically, but the 
-user can override this and specify different label text.
-
 **Be careful** with setting partial to TRUE like this: If your data set featured 
 a column called "sex" or that featured the suffix "max," `add_quant_labs()` 
 would attempt to apply the value labeling scheme to that column as well! 
@@ -680,9 +673,7 @@ head(mtbad)
 
 sapply(mtbad, class)
 ```
-Now, let's add value labels to this unruly data.frame. Note that `add_val1` 
-automatically detects and handles irregular values and gives us a lot of 
-visibility into its value-labeling actions.
+Now, let's add value labels to this unruly data.frame. 
 
 ```{r}
 mtlabs <- mtbad |>
@@ -780,7 +771,7 @@ mtbad <- add_val1(
 Again, labelr handles NA and irregular values and resists our efforts to take 
 such matters into our own hands.
 
-## Factors fand Value Labels
+## Factors and Value Labels
 R's concept of a factor variable shares some affinities with the concept of a
 value-labeled variable and can be viewed as one approach to value labeling. 
 However, factors can manifest idiosyncratic and surprising behaviors depending 
@@ -1221,8 +1212,7 @@ dflik <- add_val_labs(
 )
 ```
 
-That's a lot of information! For a more compact sense of things, let's compare 
-dflik with value labels present but "off" to labels "on."
+Let's compare dflik with value labels present but "off" to labels "on."
 
 First, present but "off."
 

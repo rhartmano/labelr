@@ -15,6 +15,10 @@ wnl(data, ...)
 \item{...}{an additional expression passed to dots (quotes and dollar signs
 are not needed or permitted).}
 }
+\value{
+the value of the evaluated \code{expr}, with name labels substituted for
+variable (column) names.
+}
 \description{
 \code{with_name_labs} instructs R function calls to swap in variable name labels
 for column names in the objects they return or side effects they produce.

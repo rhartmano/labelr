@@ -17,6 +17,9 @@
 #' @param data a data.frame with value-labeled columns.
 #' @param ... additional arguments passed to dots, typically an expression
 #' involving a function called on unquoted variable(s) (see examples).
+#'
+#' @return the value of the evaluated `expr`, with value labels
+#' substituted for variable values.
 #' @export
 #'
 #' @examples

@@ -58,7 +58,7 @@ drop_val1 <- function(data, var) {
   data <- as_base_data_frame(data)
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 
@@ -69,14 +69,7 @@ drop_val1 <- function(data, var) {
   var_val_label <- paste0("val.labs.", var)
   any_val_labs <- any(grepl(var_val_label, names(get_all_lab_atts(data))))
 
-  if (any_val_labs) {
-    attributes(data)[[var_val_label]] <- NULL
-    message(sprintf(
-      "\n  Dropping all value labels from variable --%s--.\n", var
-    ))
-  } else {
-    warning("\n \n  No value labels found.\n")
-  }
+  if (any_val_labs) attributes(data)[[var_val_label]] <- NULL
 
   # update and resort attributes
   lab_atts <- get_all_lab_atts(data)

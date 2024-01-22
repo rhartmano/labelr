@@ -146,13 +146,6 @@ sbrac <- function(data, ri = NULL, ci = NULL, partial = FALSE) {
     data <- data
   }
 
-  cat("\n")
-  if (partial) {
-    message(
-      "Remember: You are using partial text substring matching.
-Use more specific character arguments for more restrictive subsetting.\n"
-    )
-  }
   data <- add_lab_atts(data, these_atts, num.convert = FALSE)
   return(data)
 }

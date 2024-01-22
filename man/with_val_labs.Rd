@@ -15,6 +15,10 @@ wvl(data, ...)
 \item{...}{additional arguments passed to dots, typically an expression
 involving a function called on unquoted variable(s) (see examples).}
 }
+\value{
+the value of the evaluated \code{expr}, with value labels
+substituted for variable values.
+}
 \description{
 \code{with_val_labs} wraps a data.frame in \code{use_val_labs} and wraps the resulting
 data.frame in \code{base::with} in support of \code{base::with}-like non-standard

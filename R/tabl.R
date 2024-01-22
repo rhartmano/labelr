@@ -422,7 +422,7 @@ A variable name contains the \"@\" character, which is not permitted.")
     names_to_drop <- names(num_vars_to_drop)[unname(num_vars_to_drop)]
     for (i in seq_along(names_to_drop)) {
       this_name <- names_to_drop[i]
-      message(sprintf("
+      warning(sprintf("
 Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", this_name))
     }
     data <- data[!num_vars_to_drop]
@@ -443,10 +443,6 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
       if (!the_name %in% vars) found_it <- TRUE
     }
   }
-
-  # flag - this counter will be used below to help deliver more
-  # tailored messages
-  flag <- 0
 
   # convert factors to character
   data <- as.data.frame(data)
@@ -500,36 +496,13 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   if (irreg.rm) {
     irreg_rows <- unname(which(apply(data2, 1, function(x) any(x == "NA"))))
 
-    if (length(irreg_rows) != 0) {
-      data2 <- data2[-c(irreg_rows), ]
-
-      message("
-Note: NA or other \"irregular\" values are present in data but
-excluded from output. To include them, set irreg.rm = FALSE.")
-    }
-  } else if (any(apply(data2, 1, function(x) any(x == "NA")))) {
-    if (flag == 0) {
-      message("
-Note: NA table entries are a catch-all for NA and
-other irregular values. To suppress, set irreg.rm = TRUE.")
-    }
+    if (length(irreg_rows) != 0) data2 <- data2[-c(irreg_rows), ]
   }
-
   # remove rows with zero counts, as requested
   if (zero.rm) {
     zero_rows <- unname(which(data2[[last_col_name]] == 0))
 
-    if (length(zero_rows) != 0) {
-      data2 <- data2[-c(zero_rows), ]
-
-      message("
-Note: Zero-frequency tables rows (i.e., un-observed value combinations) exist
-but have been dropped. To include them, set zero.rm = FALSE.")
-    }
-  } else {
-    message("
-Note: To filter zero-frequency rows (i.e., un-observed value combinations)
-set zero.rm = TRUE.")
+    if (length(zero_rows) != 0) data2 <- data2[-c(zero_rows), ]
   }
 
   # sort by frequency counts if that option is TRUE
@@ -553,13 +526,6 @@ set zero.rm = TRUE.")
 
   # use percents (proportions) instead of counts if prop.digits is not NULL
   if (!is.null(prop.digits)) {
-    if (irreg.rm) {
-      flag <- 1
-      message("
-Note: Proportions do not include NAs or other irregular values in the denominator.
-Set irreg.rm to FALSE to include these values.")
-    }
-
     name_x <- names(data2)[ncol(data2)]
     data2[[name_x]] <- data2[[name_x]] / sum(data2[[name_x]])
     data2[[name_x]] <- round(data2[[name_x]], digits = prop.digits)
@@ -596,8 +562,6 @@ Set irreg.rm to FALSE to include these values.")
     data2 <- data2[names(data2)]
     data2 <- as.data.frame(data2)
   }
-
-  cat("\n")
 
   # restore numeric status to any variables for which this makes sense
   data2 <- as_num(data2)

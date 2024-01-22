@@ -116,7 +116,7 @@ add_lab_cols <- function(data,
 
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 

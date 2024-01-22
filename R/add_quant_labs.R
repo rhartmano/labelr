@@ -138,7 +138,7 @@ Taken together, your inputs do not identify any vars to value-label. Possibiliti
   }
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 
@@ -278,29 +278,9 @@ Too many or too few labs supplied.\n")
     # assign value labels as data.frame attribute
     this_var_val_label <- paste0("val.labs", ".", var)
     attributes(data)[[this_var_val_label]] <- final_vals
-
-    # Show user what value label meta-data is being added
-    cat("\n")
-    message(
-      sprintf(
-        "Labeling variable --%s--: \n", var
-      )
-    )
-    print(get_val_labs(data, var))
   }
 
   # end main loop over vars being value-labeled
-  cat("\n")
-
-  # notify user if partial vars arg name matching is being used
-  if (partial) {
-    message(
-      "Remember: This command uses partial vars arg matching.
-Use a more specific vars argument or set partial = FALSE
-...if you want to restrict labeling to fewer/more specific variables.\n"
-    )
-  }
-
   lab_atts <- get_all_lab_atts(data)
 
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)

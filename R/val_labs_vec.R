@@ -69,7 +69,7 @@ var argument must be a single variable name (no more or less).")
   data <- sort_val_labs(data)
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 Note: labelr is not optimized for data.frames this large.")
   }
 

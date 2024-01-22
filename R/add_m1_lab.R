@@ -173,7 +173,7 @@ variable (column) vector classes must be numeric, integer, character, logical, o
     for (i in seq_along(vars_exceed)) {
       this_val <- names(vars_exceed)[i]
 
-      message(sprintf("
+      warning(sprintf("
     \n Var --%s-- exceeds  your max.unique.vals limit and will not be labeled.\n", this_val))
     }
   }
@@ -228,7 +228,7 @@ Taken together, your inputs do not identify any vars to value-label. Possibiliti
   }
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 
@@ -392,27 +392,10 @@ Adjust max.unique.vals arg?", var
     final_vals <- c(final_vals, labs_changed)
     final_vals <- final_vals[sort(names(final_vals))]
     final_vals <- final_vals[unique(names(final_vals))]
-
     attributes(data_unique)[[this_var_val_label]] <- final_vals
-
-    cat("\n")
-    message(
-      sprintf(
-        "Labeling variable --%s--: \n", var
-      )
-    )
-    print(get_val_labs(data_unique, var))
   }
 
   # end main loop
-  cat("\n")
-  if (partial) {
-    message(
-      "Remember: This command uses partial vars arg matching.
-Use a more specific vars argument or set partial = FALSE
-...if you want to restrict labeling to fewer/more specific variables.\n"
-    )
-  }
 
   lab_atts <- get_all_lab_atts(data_unique)
 

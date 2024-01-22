@@ -40,6 +40,10 @@
 #' @param data a data.frame with variable name labels and variable value labels.
 #' @param ... an additional expression passed to dots (quotes and dollar signs
 #' are not needed or permitted).
+#'
+#' @return the value of the evaluated `expr`, with name and value labels
+#' substituted for variable (column) names and values, respectively.
+
 #' @export
 #'
 #' @examples

@@ -88,22 +88,13 @@ drop_val_labs <- function(data, vars = NULL, partial = FALSE,
   data <- as_base_data_frame(data)
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 
   # capture variable names substrings
   if (is.null(vars)) vars <- names(data)
-
-  # capture variable names substrings
-  if (partial) {
-    vars <- gremlr(vars, names(data), vals = TRUE)
-
-    message(
-      "\nRemember: This command uses partial var arg matching.
-Use specific var argument or drop_val1() to restrict this operation to fewer/more specific variables.\n"
-    )
-  }
+  if (partial) vars <- gremlr(vars, names(data), vals = TRUE)
 
   # drop any vars in not.vars
   if (!is.null(not.vars)) {
@@ -126,18 +117,7 @@ Use specific var argument or drop_val1() to restrict this operation to fewer/mor
 
     var_val_label <- paste0("val.labs.", var)
     any_val_labs <- any(grepl(var_val_label, names(get_all_lab_atts(data))))
-
-    if (any_val_labs) {
-      attributes(data)[[var_val_label]] <- NULL
-
-      message(sprintf(
-        "\n  Dropping all value labels from variable --%s--.\n", var
-      ))
-    } else {
-      message(sprintf(
-        "\n  No value labels found for variable --%s--.\n", var
-      ))
-    }
+    if (any_val_labs) attributes(data)[[var_val_label]] <- NULL
   }
 
   # update and resort attributes

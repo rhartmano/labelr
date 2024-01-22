@@ -112,7 +112,7 @@ No variable found that matches the name of your var argument.\n")
   }
 
   if (nrow(data) > 300000) {
-    message("
+    warning("
 \nNote: labelr is not optimized for data.frames this large.")
   }
 
@@ -251,19 +251,9 @@ Too many or too few labs supplied.\n")
     # assign value labels as data.frame attribute
     this_var_val_label <- paste0("val.labs", ".", var)
     attributes(data)[[this_var_val_label]] <- final_vals
-
-    # Show user what value label meta-data is being added
-    cat("\n")
-    message(
-      sprintf(
-        "Labeling variable --%s--: \n", var
-      )
-    )
-    print(get_val_labs(data, var))
   }
 
   # end main loop over vars being value-labeled
-  cat("\n")
 
   lab_atts <- get_all_lab_atts(data)
 

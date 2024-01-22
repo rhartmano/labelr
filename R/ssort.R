@@ -293,7 +293,7 @@ ssort <- function(data, vars, descending = FALSE, na.last =
   # warn user that this function is not for large data.frames
   # (it may still work without crashing, but it will be slow)
   if (nrow(data) > 50000) {
-    message("
+    warning("
 \nNote: ssort() is not optimized for data.frames of this size or larger. This may take awhile.")
   }
 
@@ -315,7 +315,7 @@ ssort <- function(data, vars, descending = FALSE, na.last =
 
   if (length(descending) == 1 && length(vars) > 1) {
     descending <- rep(descending, length(vars))
-    message("Note: Only one descending argument found; it has been applied (recycled) to all vars arguments.")
+    warning("Note: Only one descending argument found; it has been applied (recycled) to all vars arguments.")
   }
 
   if (length(descending) != length(vars)) stop("Number of args to vars and descending do not match.")
