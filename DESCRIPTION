@@ -1,25 +1,19 @@
 Package: labelr
 Title: Label Data Frames, Variables, and Values
-Version: 0.1.0 
+Version: 0.1.1
 Authors@R: c(person("Robert", "Hartman", "", email = "rohartman@gmail.com", role = c("aut", "cre")), person("The MITRE Corporation", role = "cph"))
 Maintainer: Robert Hartman <rohartman@gmail.com>
 Description: Tools to create and work with different types of data frame labels.
-License: GPL (>= 3) + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.0
 Depends: R (>= 4.0.0)
-Imports:
-  stats,
-  utils
-Suggests: 
-    knitr,
-    rmarkdown,
-    car, 
-    nycflights13,
-    collapse,
-    tibble,
-    haven,
-    dplyr,
-    modelr
+Imports: stats, utils
+Suggests: knitr, rmarkdown, car, nycflights13, collapse, tibble, haven,
+        dplyr, modelr
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2024-01-20 21:54:39 UTC; rohar
+Author: Robert Hartman [aut, cre],
+  The MITRE Corporation [cph]
