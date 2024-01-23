@@ -1,4 +1,4 @@
-#' Convert all Suitable Character Variables to Numeric
+#' Convert Augmented Data Frame to Base R Data Frame
 #'
 #' @description
 #' `as_base_data_frame` noisily converts an augmented data.frame to a Base R

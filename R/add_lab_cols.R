@@ -195,7 +195,7 @@ add_lab_cols <- function(data,
     } else if (var_name %in% val.labs$var) {
       var_old <- data[[var_name]]
       var_old <- as.character(var_old)
-      var_old <- irregular2v(var_old, "NA")
+      var_old <- irregular2v(var_old, NA)
       val_labv <- unlist(attributes(data)[val_lab_name])
       names(val_labv) <- gsub(paste0(val_lab_name, "."), "", names(val_labv))
       var_new <- val_labv[var_old]

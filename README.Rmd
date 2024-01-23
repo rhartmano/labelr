@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-labelr is an experimental ("beta") R package that supports creation and use of 
-three classes of data.frame labels, the last of which comes in three flavors.
+labelr is an R package that supports creation and use of three classes of 
+data.frame labels, the last of which comes in three flavors.
 
 1. **Frame labels** - Each data.frame may be given a single "frame label" of 500 
   characters or fewer, which may describe key general features or characteristics
@@ -61,11 +61,13 @@ three classes of data.frame labels, the last of which comes in three flavors.
 
 ## Installation
 
-You can install labelr from [GitHub](https://github.com/) with:
+You can install labelr like so:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("rhartmano/labelr")
+# install.packages("devtools") # Step 1 to get GitHub version
+# devtools::install_github("rhartmano/labelr") #Step 2 to get GitHub version
+
+install.packages("labelr") #CRAN version
 ```
 
 ## Usage

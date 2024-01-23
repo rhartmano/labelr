@@ -16,10 +16,10 @@ knitr::opts_chunk$set(
 ```
 
 ## A Whirlwind Tour
-labelr is an experimental ("beta") R package that supports creation and use of 
-multiple types of labels for data.frames and data.frame variables (columns). 
-This vignette provides an ad hoc introduction to core and ancillary labelr 
-functionalities and uses cases. 
+labelr is an R package that supports creation and use of multiple types of 
+labels for data.frames and data.frame variables (columns). This vignette 
+provides an ad hoc introduction to core and ancillary labelr functionalities and 
+uses cases. 
 
 ## Types of Labels
 labelr supports three core types of data.frame labels, the last of which comes 
@@ -102,8 +102,9 @@ We'll start our exploration of core labelr functions with a fake "demographic"
 data.frame. First, though, let's load the package labelr.
 
 ```{r setup}
-# install.packages("devtools")
-# devtools::install_github("rhartmano/labelr")
+# install.packages("labelr") #CRAN version
+# install.packages("devtools") # Step 1 to get GitHub version
+# devtools::install_github("rhartmano/labelr") #Step 2 to get GitHub version
 library(labelr)
 ```
 
@@ -180,10 +181,6 @@ df <- add_val_labs(df, # data.frame with to-be-value-labeled column
   max.unique.vals = 10 # maximum number of unique values permitted
 )
 ```
-
-Note that the NA label is generated regardless of whether there are any actual 
-NA values, as a way of letting you know that labelr handles NA (and "irregular") 
-value-labeling without your help. We'll illustrate this further later on.
 
 ### Add Value Labels Using `add_val1()`
 Now let's add value labels for variable "gender." Function `add_val1` is a 
@@ -439,9 +436,9 @@ df_labd <- use_val_labs(df)
 head(df_labd) # note, this is utils::head(), not labelr::headl()
 ```
 
-Better still, we do not strictly need to choose between values and labels. We 
-can use `add_lab_cols()` to preserve all existing variables (columns), including 
-the value-labeled ones, while adding to our data.frame an additional 
+Better still, we do not need to choose between values and labels. We can use 
+`add_lab_cols()` to preserve all existing variables (columns), including the 
+value-labeled ones, while adding to our data.frame an additional 
 labels-as-values column for each value-labeled column. 
 
 Easier done than said, perhaps. Take a look:
@@ -630,16 +627,15 @@ labelr is no fan of NA values or other "irregular" values, which are defined as
 infinite values, not-a-number values, and character values that look like them
 (e.g., "NAN", "INF", "inf", "Na"). 
 
-When value-labeling a column / variable, 
-such values are automatically given the catch-all label "NA" (which will be 
-converted to an actual NA in any columns created by `add_lab_cols()` or 
-`use_val_labs()`). You do not need (and should not try) to specify this yourself, 
-and you should not try to over-ride labelr on this. If you want to use labelr 
-AND you present with these sorts of values, your options are to accept the 
-default "NA" label or convert these values to something else before labeling. 
-The reasoning is that value labels are rarely appropriate for the types of 
-variables and scenarios where you absolutely need to preserve the nuances of 
-exotic values like -Inf and NaN. 
+When value-labeling a column / variable, such values are automatically given the 
+catch-all label "NA" (which will be converted to an actual NA in any columns 
+created by `add_lab_cols()` or `use_val_labs()`). You do not need (and should 
+not try) to specify this yourself, and you should not try to over-ride labelr on 
+this. If you want to use labelr AND you present with these sorts of values, your 
+options are to accept the default "NA" label or convert these values to 
+something else before labeling. The reasoning is that value labels are rarely 
+appropriate for the types of variables and scenarios where you absolutely need 
+to preserve the nuances of exotic values like -Inf and NaN. 
 
 With that said, let's see how labelr handles this, with an assist from our old
 friend mtcars (packaged with R's base distribution).
@@ -1135,7 +1131,7 @@ head(df_swapd[c("origin", "dep_time", "dest", "year", "month", "carrier")])
 
 Instead of replacing values (which we can't undo), it might be safer to simply
 add "value-labels-on" character variables to the data.frame. This adds nearly
-675K new cells, but let's throw caution to the wind with `add_lab_cols()`.
+1M new cells, but let's throw caution to the wind with `add_lab_cols()`.
 
 ```{r}
 df_plus <- add_lab_cols(df, vars = c("carrier", "month", "dep_time"))
@@ -1240,7 +1236,7 @@ dfdrop <- drop_val_labs(dflik,
 
 Most of our previously labeled columns remain so; but not "x2" and "y3."
 ```{r}
-get_val_labs(dfdrop, "x2")
+get_val_labs(dfdrop, c("x2", "y3"))
 ```
 
 Compare to values for variable "x1" (we did not drop value labels from this one)

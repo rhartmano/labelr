@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_base_data_frame.R
 \name{as_base_data_frame}
 \alias{as_base_data_frame}
-\title{Convert all Suitable Character Variables to Numeric}
+\title{Convert Augmented Data Frame to Base R Data Frame}
 \usage{
 as_base_data_frame(data)
 }

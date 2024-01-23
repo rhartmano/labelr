@@ -220,7 +220,7 @@ if any, variables have value labels.
         names(val_labv) <- gsub(paste0(val_lab_name, "."), "", names(val_labv))
         var_old <- data[[var_name]]
         var_old <- as.character(var_old)
-        var_old <- irregular2v(var_old, "NA")
+        var_old <- irregular2v(var_old, NA)
         var_new <- val_labv[var_old]
         var_new <- unname(var_new)
         var_new <- as_numv(var_new)

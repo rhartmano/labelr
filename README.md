@@ -6,9 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-labelr is an experimental (“beta”) R package that supports creation and
-use of three classes of data.frame labels, the last of which comes in
-three flavors.
+labelr is an R package that supports creation and use of three classes
+of data.frame labels, the last of which comes in three flavors.
 
 1.  **Frame labels** - Each data.frame may be given a single “frame
     label” of 500 characters or fewer, which may describe key general
@@ -54,11 +53,13 @@ three flavors.
 
 ## Installation
 
-You can install labelr from [GitHub](https://github.com/) with:
+You can install labelr like so:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("rhartmano/labelr")
+# install.packages("devtools") # Step 1 to get GitHub version
+# devtools::install_github("rhartmano/labelr") #Step 2 to get GitHub version
+
+install.packages("labelr") #CRAN version
 ```
 
 ## Usage
@@ -123,11 +124,6 @@ mt2 <- add_val_labs(
   vals = c(0, 1),
   labs = c("automatic", "manual")
 )
-#> 
-#>   var vals      labs
-#> 1  am    0 automatic
-#> 2  am    1    manual
-#> 3  am   NA        NA
 
 # add many-to-1 value labels
 mt2 <- add_m1_lab(
@@ -136,12 +132,6 @@ mt2 <- add_m1_lab(
   vals = 4:5,
   lab = "4+"
 )
-#> 
-#>    var vals labs
-#> 4 gear    3    3
-#> 5 gear    4   4+
-#> 6 gear    5   4+
-#> 7 gear   NA   NA
 
 # add quartile-based numerical range value labels
 mt2 <- add_quant_labs(
@@ -149,13 +139,6 @@ mt2 <- add_quant_labs(
   vars = "disp",
   qtiles = 4
 )
-#> 
-#>     var    vals labs
-#> 8  disp 120.825 q025
-#> 9  disp   196.3 q050
-#> 10 disp     326 q075
-#> 11 disp     472 q100
-#> 12 disp      NA   NA
 
 # add "pretty" cut-based numerical range value labels
 (mpg_bins <- pretty(range(mt2$mpg, na.rm = TRUE)))
@@ -166,15 +149,6 @@ mt2 <- add_quant_labs(data = mt2, vars = "mpg", vals = mpg_bins)
 #> 
 #> Some of the supplied vals argument values are outside
 #> the observed range of var --mpg-- values
-#> 
-#>    var vals labs
-#> 13 mpg   10 <=10
-#> 14 mpg   15 <=15
-#> 15 mpg   20 <=20
-#> 16 mpg   25 <=25
-#> 17 mpg   30 <=30
-#> 18 mpg   35 <=35
-#> 19 mpg   NA   NA
 
 # show or use value labels
 head(use_val_labs(mt2), 4)
@@ -199,28 +173,14 @@ get_all_lab_atts(mt2) # show that they are back
 #> [1] "Data extracted from the 1974 MotorTrend US magazine, comprising fuel consumption and 10 aspects of automobiledesign and performance for 32 automobiles (1973–74 models). Source: Hendersonand Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411."
 #> 
 #> $name.labs
-#>                                        mpg 
-#>                        "Miles/(US) gallon" 
-#>                                        cyl 
-#>                      "Number of cylinders" 
-#>                                       disp 
-#>                    "Displacement (cu.in.)" 
-#>                                         hp 
-#>                         "Gross horsepower" 
-#>                                       drat 
-#>                          "Rear axle ratio" 
-#>                                         wt 
-#>                        "Weight (1000 lbs)" 
-#>                                       qsec 
-#>                            "1/4 mile time" 
-#>                                         vs 
-#>      "Engine (0 = V-shaped, 1 = straight)" 
-#>                                         am 
-#> "Transmission (0 = automatic, 1 = manual)" 
-#>                                       gear 
-#>                  "Number of forward gears" 
-#>                                       carb 
-#>                    "Number of carburetors" 
+#>                                        mpg                                        cyl                                       disp 
+#>                        "Miles/(US) gallon"                      "Number of cylinders"                    "Displacement (cu.in.)" 
+#>                                         hp                                       drat                                         wt 
+#>                         "Gross horsepower"                          "Rear axle ratio"                        "Weight (1000 lbs)" 
+#>                                       qsec                                         vs                                         am 
+#>                            "1/4 mile time"      "Engine (0 = V-shaped, 1 = straight)" "Transmission (0 = automatic, 1 = manual)" 
+#>                                       gear                                       carb 
+#>                  "Number of forward gears"                    "Number of carburetors" 
 #> 
 #> $val.labs.mpg
 #>     10     15     20     25     30     35     NA 
@@ -335,14 +295,10 @@ wnl(mt2, lm(mpg ~ am * gear))
 #>     `Number of forward gears`)
 #> 
 #> Coefficients:
-#>                                                          (Intercept)  
-#>                                                                1.277  
-#>                           `Transmission (0 = automatic, 1 = manual)`  
-#>                                                               44.578  
-#>                                            `Number of forward gears`  
-#>                                                                4.943  
-#> `Transmission (0 = automatic, 1 = manual)`:`Number of forward gears`  
-#>                                                               -9.838
+#>                                                          (Intercept)                            `Transmission (0 = automatic, 1 = manual)`  
+#>                                                                1.277                                                                44.578  
+#>                                            `Number of forward gears`  `Transmission (0 = automatic, 1 = manual)`:`Number of forward gears`  
+#>                                                                4.943                                                                -9.838
 
 # wnl(mt2, hist(mpg)) #not shown, but works
 # wnl(mt2, plot(mpg, carb)) #not shown, but works
@@ -372,16 +328,8 @@ wbl(mt2, lm(qsec ~ am + gear + wt * drat))
 #>     `Number of forward gears` + `Weight (1000 lbs)` * `Rear axle ratio`)
 #> 
 #> Coefficients:
-#>                                      (Intercept)  
-#>                                            7.658  
-#> `Transmission (0 = automatic, 1 = manual)`manual  
-#>                                           -4.419  
-#>                      `Number of forward gears`4+  
-#>                                            3.097  
-#>                              `Weight (1000 lbs)`  
-#>                                            4.419  
-#>                                `Rear axle ratio`  
-#>                                            3.904  
-#>            `Weight (1000 lbs)`:`Rear axle ratio`  
-#>                                           -1.598
+#>                                      (Intercept)  `Transmission (0 = automatic, 1 = manual)`manual                       `Number of forward gears`4+  
+#>                                            7.658                                            -4.419                                             3.097  
+#>                              `Weight (1000 lbs)`                                 `Rear axle ratio`             `Weight (1000 lbs)`:`Rear axle ratio`  
+#>                                            4.419                                             3.904                                            -1.598
 ```
