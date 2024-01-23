@@ -13,6 +13,8 @@ Imports: stats, utils
 Suggests: knitr, rmarkdown, car, nycflights13, collapse, tibble, haven,
         dplyr, modelr
 VignetteBuilder: knitr
+URL: https://github.com/rhartmano/labelr
+BugReports: https://github.com/rhartmano/labelr/issues
 NeedsCompilation: no
 Packaged: 2024-01-20 21:54:39 UTC; rohar
 Author: Robert Hartman [aut, cre],
