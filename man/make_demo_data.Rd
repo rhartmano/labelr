@@ -41,26 +41,13 @@ a data.frame.
 \description{
 \code{make_demo_data} generates a data.frame with select (entirely fictional)
 "demographic" variables purely for the purposes of demonstrating or exploring
-common labelr behaviors and uses and are not designed to accurately emulate or
+common labelr behaviors and uses and is not designed to accurately emulate or
 represent the frequencies or relationships among demographic variables.
 }
 \examples{
 # make toy demographic (gender, race, etc.) data set
 set.seed(555)
 df <- make_demo_data(n = 1000)
-
-# val labels are "variable value labels"
-# each value label can apply to only one distinct value
-# not suitable for numerics with decimals
-# max.unique.vals dictates how many unique values a variable can have to be
-# considered value "label-able"
-
-# NOTE: NA values (and Inf, -Inf, and NaN) are automatically given label "NA",
-# ...and any subsequent use_val_labs() coercion will convert all such values to NA
-# You cannot modify this behavior -- labelr is rigid about NA and other "irregular"
-# ...(i.e., NaN, Inf) values
-#'
-# let's add variable VALUE labels for variable "raceth"
 df <- add_val_labs(df,
   vars = "raceth", vals = c(1:7),
   labs = c("White", "Black", "Hispanic", "Asian", "AIAN", "Multi", "Other"),

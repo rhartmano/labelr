@@ -48,7 +48,7 @@ df <- add_val_labs(df,
 head(df, 3)
 check_labs_att(df, "val.labs.raceth") # "raceth" lab specifically TRUE
 
-dfless <- sdrop(df, id, raceth) # select only the vars id and raceth
+dfless <- sdrop(df, id, raceth) # drop the vars id and raceth
 head(dfless, 3) # selection worked
-check_labs_att(dfless, "val.labs.raceth") # "raceth" value labels preserved
+check_labs_att(dfless, "val.labs.raceth") # "raceth" value labels are gone
 }
