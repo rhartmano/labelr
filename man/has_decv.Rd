@@ -34,9 +34,11 @@ df <- data.frame(x1, x2, x3)
 head(df, 3)
 sapply(df, class)
 class(df$x2)
+
 df <- as_num(df)
-#' head(df,3)
+head(df, 3)
 sapply(df, class)
+
 sapply(mtcars, is.double)
 sapply(mtcars, is.numeric)
 sapply(mtcars, is.integer)
