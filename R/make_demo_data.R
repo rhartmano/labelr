@@ -3,7 +3,7 @@
 #' @description
 #' `make_demo_data` generates a data.frame with select (entirely fictional)
 #' "demographic" variables purely for the purposes of demonstrating or exploring
-#' common labelr behaviors and uses and are not designed to accurately emulate or
+#' common labelr behaviors and uses and is not designed to accurately emulate or
 #' represent the frequencies or relationships among demographic variables.
 #'
 #' @param n number of observations (rows) of hypothetical data set to create.
