@@ -42,8 +42,9 @@ argument set to FALSE.}
 
 \item{prop.digits}{if non-NULL, cell percentages (proportions) will be
 returned instead of counts, and these will be rounded to the digit specified
-(e.g., prop.digits = 3 will result in a cell that accounts for 8 out of 51
-total observations to be represented with a value of 0.157.}
+(e.g., prop.digits = 3 means a value of 0.157 would be returned for a cell
+that accounted for 8 observations if the total number of observations were
+51).}
 
 \item{div.by}{Divide the returned counts by a constant for scaling purposes.
 This may be a number (e.g., div.by = 10 to divide by 10) or a character that

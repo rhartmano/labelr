@@ -31,7 +31,7 @@
 #'   labs = c("M", "F", "O"), max.unique.vals = 50
 #' )
 #'
-#' somel(df) # same, but with value labels in place of values
+#' somel(df) # six random rows with value labels visible
 somel <- function(data, n = 6L) {
   # make this a Base R data.frame
   data <- as_base_data_frame(data)

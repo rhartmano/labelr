@@ -42,5 +42,5 @@ df <- add_val1(
   labs = c("M", "F", "O"), max.unique.vals = 50
 )
 
-somel(df) # same, but with value labels in place of values
+somel(df) # six random rows with value labels visible
 }
