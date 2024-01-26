@@ -1,6 +1,7 @@
 # labelr (development version)
 
 # labelr 1.0.3
+* function `axis_lab()` (with alias `alb()`) added - helper that allows one to easily use variable name labels as y or x axis labels with Base R plots or ggplot2
 
 * `use_val_labs()`, `add_lab_cols()`, and `val_labs_vec()` fixed to convert any irregular character values to NA labels (was converting to "NA")
 
