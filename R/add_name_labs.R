@@ -206,6 +206,12 @@ add_name_labs <- function(data,
   names(vals_vec) <- names_vec
   attr(data, "name.labs") <- vals_vec
 
+  # use any name.labs as label attributes
+  for (i in names(data)) {
+    name_lab <- suppressWarnings(get_name_labs(data, i)$lab)
+    if (name_lab[1] != "NA") attr(data[[i]], "label") <- name_lab[1]
+  }
+
   # update and resort attributes
   lab_atts <- get_all_lab_atts(data)
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)

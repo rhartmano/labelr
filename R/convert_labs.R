@@ -1,8 +1,8 @@
 #' Convert from Haven-style to labelr Variable Value Labels
 #'
 #' @description
-#' Convert a data.frame with Haven package-style value-labeled variables to a
-#' data.frame with `add_val_labs`-style one-to-one, value-labeled variables.
+#' Convert a data.frame with Haven package-style labels to a data.frame with
+#' labelr name labels and `add_val_labs`-style one-to-one, value labels.
 #'
 #' @param data the data.frame with Haven-style vector value label attributes.
 #' @param max.unique.vals constrains the variables that may receive value labels
@@ -48,6 +48,25 @@ convert_labs <- function(data, max.unique.vals = 50) {
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
 
+  # name label conversions
+  name_labs <- names(data)
+  names(name_labs) <- names(data)
+
+  for (i in names(data)) {
+    if (any(names(attr(data[[i]], "label")) == i)) {
+      name_labs[i] <- unname(attr(
+        data[[i]],
+        "label"
+      ))[names(attr(
+        data[[i]],
+        "label"
+      )) == i]
+    }
+  }
+
+  attr(data, "name.labs") <- name_labs
+
+  # value label conversions
   for (i in seq_along(names(data))) {
     this_var <- names(data)[i]
     other_lab_pres <- !is.null(attributes(data[[this_var]])$labels)

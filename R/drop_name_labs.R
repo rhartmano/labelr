@@ -93,6 +93,11 @@ drop_name_labs <- function(data, vars = NULL) {
     warning("\n \n  No name.lab variable labels found.\n")
   }
 
+  # drop any label attributes
+  for (i in names(data)) {
+    attr(data[[i]], "label") <- NULL
+  }
+
   # update and resort attributes
   lab_atts <- get_all_lab_atts(data)
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
