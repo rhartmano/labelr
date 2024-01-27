@@ -9,9 +9,9 @@ is_numable(x, nan2na = TRUE, inf2na = TRUE)
 \arguments{
 \item{x}{a character vector.}
 
-\item{nan2na}{convert NaN values to NA.}
+\item{nan2na}{treat NaN (including, e.g., "nan") values as NA values.}
 
-\item{inf2na}{convert Inf and -Inf values to NA.
+\item{inf2na}{treat Inf, -Inf values (including, e.g., "inf") as NA values.
 treated as equivalent to NA values.}
 }
 \value{

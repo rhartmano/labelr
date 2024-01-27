@@ -9,8 +9,8 @@
 #' `is_numable` facilitates.
 #'
 #' @param x a character vector.
-#' @param nan2na convert NaN values to NA.
-#' @param inf2na convert Inf and -Inf values to NA.
+#' @param nan2na treat NaN (including, e.g., "nan") values as NA values.
+#' @param inf2na treat Inf, -Inf values (including, e.g., "inf") as NA values.
 #' treated as equivalent to NA values.
 #' @return a 1L (scalar) logical vector.
 #' @export
