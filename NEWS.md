@@ -1,9 +1,7 @@
 # labelr (development version)
 
 # labelr 1.0.3
-* updated `slab()` logic to better handle operations that would result in one-column data.frames.
-
-* updated `gremlr()` and `greml()` to handle situations involving one-column data.frames
+* updated `gremlr()`, `greml()`, `slab()`, `sbrac()`, `somel()`, `taill()` to handle situations involving (or producing) one-column data.frames
 
 * updated `add_name_labs()`, `drop_name_labs()`, `convert_labs()`, and `clean_data_atts()` functions, so that changes (add or drop) of name.labs attributes are applied to native labels() attribute and, in case of `convert_labs()`, so that any incoming variable/column level labels() attributes (e.g., column name labels from a haven-imported tibble) are converted to labelr name.labs. Primary benefit of this is that RStudio View() will now show name labels underneath column names.
 

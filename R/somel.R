@@ -38,7 +38,7 @@ somel <- function(data, n = 6L) {
   these_atts <- get_all_lab_atts(data)
   inds2sample <- seq_len(nrow(data))
   inds <- sample(inds2sample, n, replace = FALSE)
-  datax <- data[inds, ]
+  datax <- data[inds, , drop = FALSE]
   datax <- add_lab_atts(datax, these_atts, num.convert = FALSE)
   data <- use_val_labs(datax)
   return(data)

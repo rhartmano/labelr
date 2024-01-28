@@ -130,7 +130,7 @@ sbrac <- function(data, ri = NULL, ci = NULL, partial = FALSE) {
   }
 
   if (!is.null(ri) && is.null(ci)) {
-    data <- data[row_char_names, ]
+    data <- data[row_char_names, , drop = FALSE]
     data <- as.data.frame(data)
     rownames(data) <- row_char_names
   } else if (!is.null(ri) && !is.null(ci)) {
