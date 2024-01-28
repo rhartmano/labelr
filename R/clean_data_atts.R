@@ -145,5 +145,12 @@ clean_data_atts <- function(data) {
 
   attributes(data) <- NULL
   attributes(data) <- final_atts
+
+  # use any name.labs as label attributes
+  for (i in names(data)) {
+    name_lab <- suppressWarnings(get_name_labs(data, i)$lab)
+    if (!is.na(name_lab[1]) && name_lab[1] != "NA") attr(data[[i]], "label") <- name_lab[1]
+  }
+
   return(data)
 }

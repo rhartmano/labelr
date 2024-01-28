@@ -141,7 +141,7 @@ slab <- function(data, condition, ...) {
     data <- data[vars]
     data <- as.data.frame(data)
     names(data) <- vars
-  } else if (length(vars) >= 1) {
+  } else if (length(vars) > 1) {
     data <- data[vars]
     data <- add_lab_atts(data, initial_lab_atts, num.convert = FALSE)
   } else if (length(vars) == 1) {

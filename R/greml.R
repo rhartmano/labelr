@@ -65,7 +65,7 @@ greml <- function(patterns, x, ignore.case = TRUE, vals = FALSE) {
     function(z) grepl(z, x, ignore.case = ignore.case)
   )
 
-  x <- apply(log_mat, 2, any)
+  x <- apply(as.matrix(log_mat), 2, any)
   if (vals) x <- names(x)[which(x)]
   return(x)
 }

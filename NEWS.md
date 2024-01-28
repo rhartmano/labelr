@@ -1,7 +1,11 @@
 # labelr (development version)
 
 # labelr 1.0.3
-* updated `add_name_labs()`, `drop_name_labs()`, and `convert_labs()` functions, so that changes (add or drop) of name.labs attributes are applied to native labels() attribute and, in case of `convert_labs()`, so that any incoming variable/column level labels() attributes (e.g., column name labels from a haven-imported tibble) are converted to labelr name.labs. Primary benefit of this is that RStudio View() will now show name labels underneath column names.
+* updated `slab()` logic to better handle operations that would result in one-column data.frames.
+
+* updated `gremlr()` and `greml()` to handle situations involving one-column data.frames
+
+* updated `add_name_labs()`, `drop_name_labs()`, `convert_labs()`, and `clean_data_atts()` functions, so that changes (add or drop) of name.labs attributes are applied to native labels() attribute and, in case of `convert_labs()`, so that any incoming variable/column level labels() attributes (e.g., column name labels from a haven-imported tibble) are converted to labelr name.labs. Primary benefit of this is that RStudio View() will now show name labels underneath column names.
 
 * functions `factor_to_lab_int()` (with alias `f2int()`) and `lab_int_to_factor()` (with alias `int2f()`) added to allow easy conversion of labeled integer variables to factors and of factors to labeled integer variables.
 
