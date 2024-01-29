@@ -51,7 +51,7 @@ sfilter <- function(data, condition) {
   col_names <- names(data)
   cond_ind <- eval(cond_call, data, parent.frame())
   cond_ind[is.na(cond_ind)] <- FALSE
-  data <- data[cond_ind, ]
+  data <- data[cond_ind, , drop = FALSE]
   row_names <- row_names[cond_ind]
   rownames(data) <- row_names
   data <- add_lab_atts(data, these_atts, num.convert = FALSE)

@@ -303,6 +303,9 @@ ssort <- function(data, vars, descending = FALSE, na.last =
   # coerce/create data.frames
   data_orig <- data <- as_base_data_frame(data)
 
+  # get all variable names in order
+  col_names <- colnames(data)
+
   # capture labelr attributes, so, they can be re-associated at the end
   these_atts <- get_all_lab_atts(data)
 
@@ -366,6 +369,10 @@ ssort <- function(data, vars, descending = FALSE, na.last =
     warning("
 \nNaN values converted to NA values.")
   }
+
+  # ensure returned result is a data.frame (for one-column data.frames)
+  data <- as.data.frame(data)
+  colnames(data) <- col_names
 
   # re-associate labelr attributes
   data <- add_lab_atts(data, these_atts, num.convert = FALSE)
