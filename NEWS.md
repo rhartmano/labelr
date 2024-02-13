@@ -1,6 +1,8 @@
 # labelr (development version)
 
 # labelr 1.0.3
+* split up original one vignette into two respective vignettes: Introduction and Special Topics.
+
 * updated `ssort()` to preserve rownames.
 
 * updated `gremlr()`, `greml()`, `slab()`, `sbrac()`, `somel()`, `taill()`, `sfilter()`, and `ssort()` to handle situations involving (or producing) one-column data.frames.

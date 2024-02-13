@@ -514,14 +514,18 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   if (sort.freq) {
     sort_vars <- c(last_col_name, vars)
     desc_args <- c(TRUE, rep(FALSE, length(vars)))
-    data2 <- suppressMessages(
+    data2 <- suppressWarnings(
+      suppressMessages(
       ssort(data2, sort_vars, desc_args)
+      )
     )
 
     # else, just sort by vars
   } else {
-    data2 <- suppressMessages(
+    data2 <- suppressWarnings(
+      suppressMessages(
       ssort(data2, vars)
+      )
     )
   }
 
