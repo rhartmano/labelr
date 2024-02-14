@@ -1,6 +1,8 @@
 # labelr (development version)
 
 # labelr 1.0.3
+* functions `add_lab_dummies()` and `add_lab_dumm1()` (with aliases `ald()` and `ald()`) added. These generate a dummy variable for each label of a value-labeled variable and return the supplied data.frame with these dummy variables added.
+
 * split up original one vignette into two respective vignettes: Introduction and Special Topics.
 
 * updated `ssort()` to preserve rownames.
@@ -15,6 +17,6 @@
 
 * `use_val_labs()`, `add_lab_cols()`, and `val_labs_vec()` fixed to convert any irregular character values to NA labels (was converting to "NA").
 
-* `as_base_data_frame()` title corrected (was a duplicate of `as_num()`).
+* `as_base_data_frame()` title corrected in documentation (was a duplicate of `as_num()`).
 
 * light copy-editing updates to README, vignette, and documentation. 

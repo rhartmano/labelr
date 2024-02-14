@@ -516,7 +516,7 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
     desc_args <- c(TRUE, rep(FALSE, length(vars)))
     data2 <- suppressWarnings(
       suppressMessages(
-      ssort(data2, sort_vars, desc_args)
+        ssort(data2, sort_vars, desc_args)
       )
     )
 
@@ -524,7 +524,7 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   } else {
     data2 <- suppressWarnings(
       suppressMessages(
-      ssort(data2, vars)
+        ssort(data2, vars)
       )
     )
   }

@@ -165,13 +165,13 @@ one-to-one value labels for the variable "raceth".
 
 ```{r}
 df <- add_val_labs(df, # data.frame with to-be-value-labeled column
-                   vars = "raceth", # quoted variable name of to-be-labeled col
-                   vals = c(1:7), # label values 1 through 7, inclusive
-                   labs = c(
-                     "White", "Black", "Hispanic", # ordered labels for vals 1-7
-                     "Asian", "AIAN", "Multi", "Other"
-                   ),
-                   max.unique.vals = 10 # max number of unique values permitted
+  vars = "raceth", # quoted variable name of to-be-labeled col
+  vals = c(1:7), # label values 1 through 7, inclusive
+  labs = c(
+    "White", "Black", "Hispanic", # ordered labels for vals 1-7
+    "Asian", "AIAN", "Multi", "Other"
+  ),
+  max.unique.vals = 10 # max number of unique values permitted
 )
 ```
 
@@ -218,10 +218,12 @@ names (i.e., vars "x1" and "x2"). We'll demonstrate this capability further at
 the end of this vignette.
 
 ```{r}
-df_temp <- add_quant_labs(data = df, 
-                          vars = "x", 
-                          qtiles = 5, 
-                          partial = TRUE)
+df_temp <- add_quant_labs(
+  data = df,
+  vars = "x",
+  qtiles = 5,
+  partial = TRUE
+)
 
 get_val_labs(df_temp)
 ```
@@ -238,8 +240,8 @@ are at or below 150 (but greater than 100).
 
 ```{r}
 df_temp <- add_quant_labs(
-  data = df_temp, 
-  vars = "x", 
+  data = df_temp,
+  vars = "x",
   vals = c(100, 150),
   partial = TRUE
 )
@@ -423,7 +425,6 @@ with(df, table(gender, raceth)) # base::with()
 with_val_labs(df, table(gender, raceth)) # labelr::with_val_labs()
 
 wvl(df, table(gender, raceth)) # labelr::wvl is a more compact alias
-
 ```
 
 In a little bit, we'll see that we have some parallel options for overlaying 
@@ -593,8 +594,8 @@ verify that the name labels are still there in the background, **then** we'll
 take `with_name_labs()` for a spin.  
 
 ```{r}
-#invert our prior use_name_labs() call
-mt2 <- use_var_names(mt2) #revert from name labels back to original colnames
+# invert our prior use_name_labs() call
+mt2 <- use_var_names(mt2) # revert from name labels back to original colnames
 head(mt2[c(1, 2)])
 ```
 
@@ -617,13 +618,13 @@ the console output.
 
 ```{r}
 # demo with_name_labs() (note that with_name_labs() will achieve same result)
-with_name_labs(mt2, t.test(mpg ~ am)) #wnl() is alias for with_name_labs()
+with_name_labs(mt2, t.test(mpg ~ am)) # wnl() is alias for with_name_labs()
 
-with_name_labs(mt2, lm(mpg ~ am)) 
+with_name_labs(mt2, lm(mpg ~ am))
 
-wnl(mt2, summary(mt2)) #wnl() is alias for with_name_labs()
+wnl(mt2, summary(mt2)) # wnl() is alias for with_name_labs()
 
-wnl(mt2, xtabs(~gear)) #wnl() is alias for with_name_labs()
+wnl(mt2, xtabs(~gear)) # wnl() is alias for with_name_labs()
 
 with(mt2, xtabs(~gear)) # compare this base::with() call to wnl() call above
 ```
