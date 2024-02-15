@@ -2,7 +2,7 @@
 % Please edit documentation in R/slab.R
 \name{slab}
 \alias{slab}
-\title{Subset a data Frame Using Value Labels}
+\title{Subset a Data Frame Using Value Labels}
 \usage{
 slab(data, condition, ...)
 }
@@ -34,44 +34,46 @@ if no column names are passed).
 }
 \description{
 \code{slab} ("subset using labels") allows one to filter rows and select columns
-from a data.frame using value or numerical range labels.
+from a data.frame based on variable-specific value label attributes.
 }
 \details{
 \code{slab} does base::subset-style data subsetting using variable value label
 meta-data that are associated with variable values but are not themselves
-values (i.e., will not appear in response to View(), head(), etc.). \code{slab}
-takes as its arguments a labelr value-labeled data.frame, followed by
+values (i.e., will not appear in response to \code{View()}, \code{head()}, etc.).
+In other words, value labels are supplied to the \code{slab()} call to direct the
+filtering process, but those value labels are not displayed in the cells of
+the returned data.frame -- the raw values themselves are. This functionality
+may be useful for interactively subsetting a data.frame, where character
+value labels may be more intuitive and easily recalled than the underlying
+variable values themselves (e.g., raceth=="White" & gender="F" may be more intuitive or
+readily recalled than raceth==3 & gender==2).
+
+\code{slab}takes as its arguments a labelr value-labeled data.frame, followed by
 condition-based row-filtering instructions (required) and a list of unquoted
 names of variables to be retained (optional; all variables returned by
 default).
 
-For example, if value labels were added to the integer nominal variable
-"raceth" of (notional) data.frame df (using \code{add_val_labs} or \code{add_val1}), one
-could then use flab to filter down to only raceth==3 rows and return only the
-columns id and raceth, using a call like slab(df, raceth=="African-American", id,
-raceth) (assuming here that a variable called id was present in df and that the
-integer value raceth==3 has previously been given the value label
-"African-American". As another example, slab(mtcars, am=="automatic", mpg,
-cyl, am, disp) would return (only) the variables mpg, cyl, am, and disp and
-only those rows of mtcars where automatic==0 (assuming that the value label
-"automatic" has been uniquely associated with the mtcars$am value of 0 via a
-prior call to \code{add_val_labs} or \code{add_val1}). This functionality may be useful
-for interactively subsetting a data.frame, where character value labels may
-be more intuitive and easily recalled than the underlying variable values
-themselves (e.g., raceth=="White" & gender="F" may be more intuitive or readily
-recalled than raceth==3 & gender==2).
+Note 1: When using \code{slab}, any conditional row-filtering syntax involving
+value-labeled variables must be expressed in terms of those variables' value
+labels, not the raw values themselves. Filtering on non-value-labeled
+variables is also permitted, with those variables' filtering conditions being
+expressed in terms of raw values. Further, \code{slab()} calls may reference both
+types of columns (i.e., value-labeled variables and non-value-labeled
+variables), provided filtering conditions for the former are expressed in
+terms of value labels.
 
-Note that \code{slab} (and labelr more broadly) is intended for moderate-sized (or
+Note 2: \code{slab} (and labelr more broadly) is intended for moderate-sized (or
 smaller) data.frames, defined loosely as those with a few million or fewer
-rows. With a conventional (c. 2023) laptop, labelr operations on modest-
+rows. With a conventional (c. 2024) laptop, labelr operations on modest-
 sized (~100K rows) take seconds (or less); with larger (> a few million rows)
 data.frames, labelr may take several minutes (or run out of memory and fail
-altogether!), depending on specifics.
+altogether!), depending on the complexity of the call and the number and type
+of cells implicated in it.
 
-See also \code{flab}, \code{use_val_labs}, \code{add_val_labs}, \code{add_val1},
-\code{add_quant_labs}, \code{add_quant1}, \cr \code{get_val_labs}, \code{drop_val_labs}. For
-label-preserving subsetting tools that subset in terms of raw values (not
-value labels), see \code{sfilter}, \code{sbrac}, \code{ssubset}, \code{sdrop}.
+See also \code{flab}, \code{use_val_labs}, \code{add_val_labs}, \code{add_val1},\code{add_quant_labs},
+\code{add_quant1}, \cr \code{get_val_labs}, \code{drop_val_labs}. Forlabel-preserving
+subsetting tools that subset in terms of raw values (not value labels), see
+\code{sfilter}, \code{sbrac}, \code{ssubset}, \code{sdrop}.
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set
@@ -99,7 +101,7 @@ df <- add_val1(
 get_val_labs(df, "gender")
 get_val_labs(df, "raceth")
 
-# use --labels-- to filter w/ flab() ("*F*ilter *lab*el")
+# use --labels-- to subset w/ slab() ("*S*ubset using *lab*els")
 dflab <- slab(df, raceth == "Asian" & gender == "F", id, gender)
 head(dflab, 4)
 

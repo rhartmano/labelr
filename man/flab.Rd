@@ -2,7 +2,7 @@
 % Please edit documentation in R/flab.R
 \name{flab}
 \alias{flab}
-\title{Filter Rows Using Variable Value Labels}
+\title{Filter Data Frame Rows Using Variable Value Labels}
 \usage{
 flab(data, condition)
 }
@@ -20,35 +20,38 @@ selected rows that meet the filtering condition(s).
 }
 \description{
 \code{flab} ("filter using labels") allows one to filter-subset a data.frame
-using value or numerical range labels.
+based on variable-specific value label attributes.
 }
 \details{
 \code{flab} accepts a labelr value-labeled data.frame, followed by condition-
-based row-filtering instructions (in the fashion of base::subset or
-dplyr::filter) expressed in terms of variable value labels that exist only
-as meta-data (i.e., not visible using View(), head(), etc.), and returns the
-filtered data.frame in terms of the values themselves.
+based row-filtering instructions (akin to \code{base::subset} or \code{dplyr::filter}),
+expressed in terms of variable value labels that exist only as meta-data
+(i.e., not visible using \code{View()}, \code{head()}, etc.), and returns the filtered
+data.frame in terms of the values themselves. In other words, value labels
+are supplied to the \code{flab()} call to direct the filtering process, but those
+value labels are not displayed in the cells of the returned data.frame -- the
+raw values themselves are. This functionality may be useful for interactively
+subsetting a data.frame, where character value labels may be more intuitive
+and easily recalled than the underlying variable values themselves (e.g.,
+raceth=="White" & gender="F" may be more intuitive or readily recalled than
+raceth==3 & gender==2).
 
-For example, if value labels were added to the integer nominal variable
-"raceth" of (notional) data.frame df (using \code{add_val_labs} or \code{add_val1}), one
-could then use flab to filter down to only raceth==3 rows using a call like
-flab(df, raceth=="African-American") (assuming here that the integer value
-raceth==3 has previously been given the value label "African-American". As
-another example, flab(mtcars, am=="automatic") would return (only) those rows
-of mtcars where automatic==0 if the value label "automatic" has been uniquely
-associated with the mtcars$am value of 0 (again, via a prior call to
-\code{add_val_labs} or \code{add_val1}). This functionality may be useful for
-interactively subsetting a data.frame, where character value labels may be
-more intuitive and easily recalled than the underlying variable values
-themselves (e.g., raceth=="White" & gender="F" may be more intuitive or readily
-recalled than raceth==3 & gender==2).
+Note 1: When using \code{flab}, any conditional row-filtering syntax involving
+value-labeled variables must be expressed in terms of those variables' value
+labels, not the raw values themselves. Filtering on non-value-labeled
+variables is also permitted, with those variables' filtering conditions being
+expressed in terms of raw values. Further, \code{flab()} calls may reference both
+types of columns (i.e., value-labeled variables and non-value-labeled
+variables), provided filtering conditions for the former are expressed in
+terms of value labels.
 
-Note that \code{flab} (and labelr more broadly) is intended for moderate-sized (or
+Note 2: \code{flab} (and labelr more broadly) is intended for moderate-sized (or
 smaller) data.frames, defined loosely as those with a few million or fewer
-rows. With a conventional (c. 2023) laptop, labelr operations on modest-
+rows. With a conventional (c. 2024) laptop, labelr operations on modest-
 sized (~100K rows) take seconds (or less); with larger (> a few million rows)
 data.frames, labelr may take several minutes (or run out of memory and fail
-altogether!), depending on specifics.
+altogether!), depending on the complexity of the call and the number and type
+of cells implicated in it.
 
 See also \code{slab}, \code{use_val_labs}, \code{add_val_labs}, \code{add_val1}, \code{add_quant_labs}, \code{add_quant1}, \cr
 \code{get_val_labs}, \code{drop_val_labs}. For label-preserving subsetting tools that subset in

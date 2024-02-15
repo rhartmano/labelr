@@ -51,8 +51,8 @@ useful in other applications where one wishes to test a vector against a
 focal and user-extensible class of NA-esque (or other) offending values.
 }
 \examples{
-# below is TRUE, because there is nothing NA-like in this vector
-check_irregular(1:10) # FALSE
+# below is FALSE, because there is nothing NA-like in this vector
+check_irregular(1:10)
 
 # below is TRUE, because we're treating 99 as "NA-esque"
 check_irregular(1:100, other = 99)

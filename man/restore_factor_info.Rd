@@ -2,8 +2,7 @@
 % Please edit documentation in R/restore_factor_info.R
 \name{restore_factor_info}
 \alias{restore_factor_info}
-\title{Restore Factor Status and Levels to a
-Character Variable of a Labeled Data Frame.}
+\title{Restore Factor Status, Levels to a Character Column of a Labeled Data Frame}
 \usage{
 restore_factor_info(data)
 }
