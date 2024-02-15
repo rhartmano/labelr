@@ -146,8 +146,8 @@ We can use `head()` to get a baseline look at select rows and variables
 head(df[c("origin", "dep_time", "dest", "year", "month", "carrier")])
 ```
 
-Now, let's do the same for a version we modified with `use_val_labs()`. Note that
-this cannot be "undone" (except for the usual clunky way of re-running our script
+Now, let's do the same for a version we modified with `use_val_labs()`. This 
+cannot be "undone" (except for the usual clunky way of re-running our script
 up to this point and not doing this!).
 
 ```{r}
@@ -292,10 +292,10 @@ head(use_val_labs(mtless), 5) # but they all go to NA if we `use_val_labs`
 Now, let's try an `add_lab_cols()` view.
 
 ```{r}
-mtlabs_plus <- add_lab_cols(mtlabs, c("mpg", "am")) # this creates and adds "am_lab" col
-mtlabs_plus <- sselect(mtlabs_plus, mpg, mpg_lab, am, am_lab) # let's select down to these two
+mtlabs_plus <- add_lab_cols(mtlabs, c("mpg", "am")) # creates, adds "am_lab" col
+mtlabs_plus <- sselect(mtlabs_plus, mpg, mpg_lab, am, am_lab) # select cols
 
-head(mtlabs_plus) # here's where we landed
+head(mtlabs_plus) # where we landed
 ```
 
 What if we had tried to explicitly label the NA values and/or irregular values 

@@ -193,7 +193,8 @@ df <- add_val1(
 
 Once again, we can create a lookup table, this time for our labels-to-values 
 mappings. Because we used `add_val_labs()` and `add_val`(), each unique value of 
-our value-labeled variables will (must) have one unique label (one-to-one                                mapping), and any unique values that were not explicitly assigned a label were 
+our value-labeled variables will (must) have one unique label (one-to-one 
+mapping), and any unique values that were not explicitly assigned a label were 
 given one automatically (the value itself, coerced to character as needed).
 
 ```{r}
