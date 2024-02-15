@@ -668,6 +668,14 @@ The available aliases are as follows:
 
 * `with_val_labs` alias is `wvl`
 
+* `add_lab_dummies` is  `ald` 
+
+* `add_lab_dumm1` is  `ald1` 
+
+* `lab_int_to_factor` is  `int2f` 
+
+* `factor_to_lab_int` is  `f2int` 
+
 * `add_name_labs` is  `anl` 
 
 * `get_name_labs` alias is `gnl`
@@ -687,3 +695,5 @@ The available aliases are as follows:
 * `get_frame_lab` alias is `gfl`
 
 * `drop_frame_lab` alias is `dfl`
+
+* `axis_lab` is  `alb` 
