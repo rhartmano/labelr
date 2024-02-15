@@ -30,8 +30,8 @@
 #' @return A logical vector (1L if any==TRUE; length of x if any==FALSE).
 #' @export
 #' @examples
-#' # below is TRUE, because there is nothing NA-like in this vector
-#' check_irregular(1:10) # FALSE
+#' # below is FALSE, because there is nothing NA-like in this vector
+#' check_irregular(1:10)
 #'
 #' # below is TRUE, because we're treating 99 as "NA-esque"
 #' check_irregular(1:100, other = 99)

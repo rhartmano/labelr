@@ -1,5 +1,4 @@
-#' Restore Factor Status and Levels to a
-#' Character Variable of a Labeled Data Frame.
+#' Restore Factor Status, Levels to a Character Column of a Labeled Data Frame
 #'
 #' @description
 #' `restore_factor_info` searches a data.frame for labelr-specific factor
