@@ -24,7 +24,21 @@ ald(
 )
 }
 \arguments{
-\item{data}{prefix.length (NOTE: This argument is ignored if
+\item{data}{a data.frame with at least one value-labeled variable (column).}
+
+\item{vars}{the value-labeled variable or variables from which dummy
+variable columns will be generated (variable names must be quoted).}
+
+\item{simple.names}{if TRUE (the default), dummy variable names will be the
+parent variable's name, followed by the sep separator (see above), followed
+by an automatically generated numerical id suffix. For example two dummy
+variable columns created from value-labeled column "tacos" using the sep
+argument of "." would be given the respective names "tacos.1" and "tacos.2").}
+
+\item{sep}{the separator character to use in constructing dummy variable
+column names (appears between the dummy variable name prefix and suffix).}
+
+\item{prefix.length}{(NOTE: This argument is ignored if
 simple.names = TRUE). A 1L integer indicating the number of leading
 characters of the parent column's name to use in constructing dummy variable
 column names. For example, if simple.names = FALSE, if prefix.length = 2, and
@@ -32,12 +46,6 @@ for a parent column named "tacos", each derivative dummy variable column name
 will begin with the prefix string "ta," (corresponding to the first two
 characters of "tacos"), followed by the sep separator character (see sep
 param, above), followed by the suffix string (see suffix.length param, below).}
-
-\item{simple.names}{if TRUE (the default), dummy variable names will be the
-parent variable's name, followed by the sep separator (see above), followed
-by an automatically generated numerical id suffix. For example two dummy
-variable columns created from value-labeled column "tacos" using the sep
-argument of "." would be given the respective names "tacos.1" and "tacos.2").}
 
 \item{suffix.length}{(NOTE: This argument is ignored if simple.names = TRUE).
 A 1L integer indicating the number of leading characters of each variable

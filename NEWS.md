@@ -1,4 +1,4 @@
-# labelr (development version)
+# labelr News
 
 # labelr 1.0.3
 * functions `add_lab_dummies()` and `add_lab_dumm1()` (with aliases `ald()` and `ald1()`) added. These generate a dummy variable for each label of a value-labeled variable and return the supplied data.frame with these dummy variables added.

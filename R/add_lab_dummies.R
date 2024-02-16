@@ -21,16 +21,16 @@
 #' `add_lab_dummies`.
 #'
 #' @param data a data.frame with at least one value-labeled variable (column).
-#' @param data vars the value-labeled variable or variables from which dummy
+#' @param vars the value-labeled variable or variables from which dummy
 #' variable columns will be generated (variable names must be quoted).
-#' @param data sep the separator character to use in constructing dummy variable
+#' @param sep the separator character to use in constructing dummy variable
 #' column names (appears between the dummy variable name prefix and suffix).
 #' @param simple.names if TRUE (the default), dummy variable names will be the
 #' parent variable's name, followed by the sep separator (see above), followed
 #' by an automatically generated numerical id suffix. For example two dummy
 #' variable columns created from value-labeled column "tacos" using the sep
 #' argument of "." would be given the respective names "tacos.1" and "tacos.2").
-#' @param data prefix.length (NOTE: This argument is ignored if
+#' @param prefix.length (NOTE: This argument is ignored if
 #' simple.names = TRUE). A 1L integer indicating the number of leading
 #' characters of the parent column's name to use in constructing dummy variable
 #' column names. For example, if simple.names = FALSE, if prefix.length = 2, and
