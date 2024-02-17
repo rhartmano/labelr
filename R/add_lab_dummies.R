@@ -267,6 +267,15 @@ Note: labelr is not optimized for data.frames this large.")
     # subset down to var of interest
     data_var <- sbrac(data, , var)
 
+    val_labs_att <- paste0("val.labs.", var)
+    if (!check_labs_att(data_var, val_labs_att)) {
+      stop(sprintf(
+        "
+No value labels found for supplied var --%s--.",
+        var
+      ))
+    }
+
     # ensure value labels are sorted
     data_var <- sort_val_labs(data_var)
 

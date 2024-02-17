@@ -227,7 +227,6 @@ data.frame to see which, if any, variables have value labels.
     counter <- 0
     dumm_pref <- substr(var, 1, prefix.length)
 
-
     for (i in unique(var_new[!is.na(var_new)])) {
       dumm_suff <- substr(i, 1, suffix.length)
       this_dummmy <- rep(NA, var_new_length)
@@ -278,6 +277,15 @@ Note: labelr is not optimized for data.frames this large.")
   for (var in vars) {
     # subset down to var of interest
     data_var <- sbrac(data, , var)
+
+    val_labs_att <- paste0("val.labs.", var)
+    if (!check_labs_att(data_var, val_labs_att)) {
+      stop(sprintf(
+        "
+No value labels found for supplied var --%s--.",
+        var
+      ))
+    }
 
     # ensure value labels are sorted
     data_var <- sort_val_labs(data_var)

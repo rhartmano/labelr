@@ -5,15 +5,18 @@
 \alias{int2f}
 \title{Convert a Value-labeled Integer Variable Column to a Factor Variable Column}
 \usage{
-lab_int_to_factor(data, var)
+lab_int_to_factor(data, var, ordered = FALSE)
 
-int2f(data, var)
+int2f(data, var, ordered = FALSE)
 }
 \arguments{
 \item{data}{a data.frame object.}
 
 \item{var}{the (unquoted) name of a value-labeled integer variable found in
 data.}
+
+\item{ordered}{logical flag to determine if resulting factor levels should be
+regarded as ordered (in ascending order of the integer values of var).}
 }
 \value{
 a data.frame.
@@ -24,8 +27,15 @@ using labelr value labels as factor level labels and returning the modified
 data.frame.
 }
 \details{
-Note: \code{int2f} is a compact alias for \code{lab_int_to_factor}: they do the same
+Note 1: \code{int2f} is a compact alias for \code{lab_int_to_factor}: they do the same
 thing, and the former is easier to type.
+
+Note 2: This function can be used to produce ordered factors but will not do
+so by default (see argument ordered).
+
+Note 3: This function's effects are NOT straightforwardly "undone" by
+\code{factor_to_lab_int()} See the latter's documentation for more information and
+an example demonstration.
 }
 \examples{
 class(iris[["Species"]])
@@ -39,4 +49,37 @@ iris_sp_fac <- lab_int_to_factor(iris_sp_int, Species)
 class(iris_sp_fac[["Species"]])
 
 levels(iris_sp_fac[["Species"]])
+
+# copy data.frame mtcars to mt2
+mt2 <- mtcars
+
+# add value labels to mtcars$carb and assign data.frame to object mt2
+mt2 <- add_val_labs(
+  data = mt2,
+  vars = "carb",
+  vals = c(1, 2, 3, 4, 6, 8),
+  labs = c(
+    "1c", "2c", # a tad silly, but these val labels will demo the principle
+    "3c", "4c",
+    "6c", "8c"
+  )
+)
+
+# carb as labeled integer
+class(mt2$carb)
+levels(mt2$carb)
+head(mt2$carb, 3)
+lm(mpg ~ carb, data = mt2)
+(adj_r2_int <- summary(lm(mpg ~ carb, data = mt2))$adj.r.squared)
+AIC(lm(mpg ~ carb, data = mt2))
+
+# carb as factor
+carb_fac <- mt2 # copy mt2 to new data.frame carb_fac
+carb_fac <- lab_int_to_factor(carb_fac, carb) # alias int2f() also works
+class(carb_fac$carb)
+levels(carb_fac$carb)
+head(carb_fac$carb, 3)
+lm(mpg ~ carb, data = carb_fac)
+(adj_r2_fac <- summary(lm(mpg ~ carb, data = carb_fac))$adj.r.squared)
+AIC(lm(mpg ~ carb, data = carb_fac))
 }

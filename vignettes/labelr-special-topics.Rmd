@@ -561,8 +561,145 @@ get_val_labs(ir_ord, "qrat") # labs are still there for qrat
 get_val_labs(ir_ord, "qrat_lab") # no labs here; this is just a character var
 ```
 
-It appears that you really can have it all, where "it all" is defined as 
-"factors and labels."
+### Other Factor and Categorical Variable Possibilities
+labelr offers some additional facilities for working with factors and categorical 
+variables. For example, functions `add_lab_dummies()` (alias `alb()`) and 
+`add_lab_dumm1()` (alias `ald1()`) will generate and assign a dummy (aka binary 
+aka indicator) variable for each unique value label of a value-labeled variable 
+-- factor or otherwise. 
+
+Alternatively, `lab_int_to_factor()` (alias `int2f()`) allows you to convert a 
+value-labeled integer variable (or other non-decimal-having numeric column) to a 
+factor, while `factor_to_lab_int()` (alias `f2int()`) allows you to convert a 
+factor to a value-labeled integer variable. Note that the latter is **NOT** a 
+straightforward "undo" for the former: the resulting unique integer values and 
+their ordering may differ, as we demonstrate. 
+
+First, let's convert a factor to a value-labeled integer.
+```{r}
+class(iris[["Species"]])
+
+iris_df <- factor_to_lab_int(iris, Species)
+
+class(iris_df[["Species"]])
+
+head(iris_df$Species)
+
+get_val_labs(iris_df, "Species")
+```
+
+Now, let's value-label an integer and convert it to a factor. Note that our 
+variable is not a strict `as.integer()` integer, but it's a numeric variable with 
+no decimal values, and that's good enough for `lab_int_to_factor()`. 
+
+```{r}
+carb_orig <- mtcars
+
+carb_orig <- add_val_labs(
+  data = mtcars,
+  vars = "carb",
+  vals = c(1, 2, 3, 4, 6, 8),
+  labs = c(
+    "1c", "2c", # a tad silly, but these value labels will demo the principle
+    "3c", "4c",
+    "6c", "8c"
+  )
+)
+
+# carb as labeled numeric
+is.integer(carb_orig$carb) # note: carb not technically an "as.integer()" integer
+
+class(carb_orig$carb) # but it IS numeric
+
+has_decv(carb_orig$carb) # and does NOT have decimals; so, lab_int_to_fac() works
+
+levels(carb_orig$carb) # none, not a factor
+
+head(carb_orig$carb, 3) # remember to compare to carb_to_int (below)
+
+mean(carb_orig$carb) # remember to compare to carb_to_int (below)
+
+lm(mpg ~ carb, data = carb_orig) # remember to compare to carb_to_int (below)
+
+# note this for comparison to below
+(adj_r2_orig <- summary(lm(mpg ~ carb, data = carb_orig))$adj.r.squared)
+
+# compare to counterparts below
+AIC(lm(mpg ~ carb, data = carb_orig))
+
+# Make carb a factor
+carb_fac <- lab_int_to_factor(carb_orig, carb) # alias int2f() also works
+
+class(carb_fac$carb) # now it's a factor
+
+levels(carb_fac$carb) # like any good factor, it has levels
+
+head(carb_fac$carb, 3)
+
+lm(mpg ~ carb, data = carb_fac) # again: carb is a factor
+
+# compare these model fit stats to counterparts above and below
+(adj_r2_fac <- summary(lm(mpg ~ carb, data = carb_fac))$adj.r.squared)
+
+# compare to counterparts above and below
+AIC(lm(mpg ~ carb, data = carb_fac))
+```
+
+Note that we can use `factor_to_lab_int()` to convert "carb" from a factor to a 
+labeled integer variable. However, this is not a straightforward "undo" of what 
+we just did: the resulting labeled integer won't be identical to the "carb" 
+column of mtcars that we started with, because `factor_to_lab_int()` converts 
+the supplied factor variable's values to sequentially ordered integers (from 1 
+to k, where k is the number of unique factor levels), ordered in terms of the 
+levels of the factor variable being converted. 
+
+```{r}
+# ??"back"?? to integer? Not quite. Compare below to carb_orig above
+carb_to_int <- factor_to_lab_int(carb_fac, carb) # alias int2f() also works
+
+class(carb_to_int$carb) # Is an integer
+
+levels(carb_to_int$carb) # NOT a factor
+
+head(carb_to_int$carb, 3) # NOT the same as carb_orig
+
+mean(carb_to_int$carb) # NOT the same as carb_orig
+
+identical(carb_to_int$carb, carb_orig$carb) # really!
+
+lm(mpg ~ carb, data = carb_to_int) # NOT the same as carb_orig
+
+# Compare to counterpart calls from earlier iterations of carb (above)
+(adj_r2_int <- summary(lm(mpg ~ carb, data = carb_to_int))$adj.r.squared)
+AIC(lm(mpg ~ carb, data = carb_to_int))
+```
+
+Now, let's quickly demo `add_lab_dummies()`. To do so, we'll revisit the 
+"Species" column of irlab, our factor variable from iris that we value-labeled a 
+few moments ago. It's still here and still has value labels.
+
+```{r}
+get_val_labs(irlab, "Species")
+```
+
+Let's use `add_lab_dummies()` to create a dummy variable for each of its labels.
+
+```{r}
+irl_dumm <- add_lab_dummies(irlab, "Species")
+head(irl_dumm) # they're there!
+tail(irl_dumm2) # again, they're there!
+```  
+
+We can use `add_lab_dumm1()` to achieve the same result without quoting the 
+column name. The countervailing advantage of`add_lab_dummies()` is that it let's 
+you create dummy variables for more than one value-labeled variable at a time 
+(`add_lab_dumm1()` does not).
+
+```{r}
+irl_dumm2 <- add_lab_dumm1(irlab, Species)
+head(irl_dumm2) # again, they're there!
+tail(irl_dumm2) # again, they're there!
+```  
 
 ## Value-Labeling Many Variables at Once
 Functions for adding value labels (e.g., `add_val_labs`, `add_quant_labs` and 

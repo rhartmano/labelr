@@ -65,6 +65,15 @@ var argument must be a single variable name (no more or less).")
   # subset down to var of interest
   data <- sbrac(data, , var)
 
+  val_labs_att <- paste0("val.labs.", var)
+  if (!check_labs_att(data, val_labs_att)) {
+    stop(sprintf(
+      "
+No value labels found for supplied var --%s--.",
+      var
+    ))
+  }
+
   # ensure value labels are sorted
   data <- sort_val_labs(data)
 
