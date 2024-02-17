@@ -1,24 +1,29 @@
-#' Check Whether Any Value from One Character Vector
-#' Appears in Each Value of Another Character Vector
+#' Determine Which Elements of a Character Vector Match at Least One Pattern
+#' Contained in Any of the Elements of Another Character Vector
 #'
 #' @description
-#' `gremlr` accepts two character vectors of strings and searches every element
-#' of the second one for the presence of any element of the first one. Every
-#' element of the second that has any element of the first vector is considered
-#' a match.
+#' `gremlr` accepts two character vectors of strings and, for each element of
+#' the second vector, determines whether that element matches any of the
+#' patterns supplied via any of the elements of the first vector.
 #'
 #' @details
 #' This function accepts a character vector of text substring patterns or
-#' regular expressions (patterns), and searches another character vector (x) to
-#' determine for each element of that second vector (x), whether any element of
-#' patterns appears anywhere in that element of x. If vals = TRUE (default is
-#' FALSE), each matched x element is returned; if vals = FALSE, a vector of
-#' named logical values equal in length to x is returned, indicating for each x
-#' element whether it contains any text substring or pattern found in any
-#' element of patterns (TRUE if so, FALSE if not), with the names corresponding
-#' to the elements of the x vector. Used internally by various labelr functions.
-#' If ignore.case = TRUE (the default), neither vector is treated case-
-#' sensitively (both are coerced to lower-case before other operations).
+#' regular expressions (patterns argument), and searches another character
+#' vector (x argument) to determine for each element of x, whether that element
+#' is a match (in the sense of `base::grepl()`) for any pattern element of
+#' of patterns. If vals = TRUE (default is FALSE), each matched x element is
+#' returned; if vals = FALSE, a vector of named logical values equal in length
+#' to x is returned, indicating for each x element whether it contains any text
+#' substring or pattern found in any element of patterns (TRUE if so, FALSE if
+#' not), with the names corresponding to the elements of the x vector. Used
+#' internally by various labelr functions. If ignore.case = TRUE (the default),
+#' neither vector is treated case-sensitively (both are coerced to lower-case
+#' before other operations).
+#'
+#' Used internally by various labelr functions  Note that this is the same
+#' search and syntax that is performed by `greml`(`gremlr` is "`greml` in
+#' reverse"), except that, whereas `greml` returns matches in terms of the
+#' patterns argument, `gremlr` returns matches in terms of x argument.
 #'
 #' @param patterns a character vector of comma-separated, quoted character
 #' strings or regular expressions.
@@ -30,10 +35,7 @@
 #' for any element of patterns (one named logical element returned for each x
 #' vector element). If TRUE, vals returns the unique values of x that were
 #' matched (one character element for each matched x argument vector
-#' element). Used internally by various labelr functions  Note that this is the
-#' same search and syntax that is performed by `greml`(`gremlr` is "`greml` in
-#' reverse"), except that, whereas `greml` returns matches in terms of patterns
-#' argument, `gremlr` returns matches in terms of x argument.
+#' element).
 #' @return a vector, either character (if vals = TRUE) or logical (if vals =
 #' FALSE).
 #' @export
