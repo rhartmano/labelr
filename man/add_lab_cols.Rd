@@ -2,22 +2,24 @@
 % Please edit documentation in R/add_lab_cols.R
 \name{add_lab_cols}
 \alias{add_lab_cols}
+\alias{alc}
 \title{"Add Variable Value Label Columns to a Data Frame}
 \usage{
 add_lab_cols(data, vars = NULL, suffix = "_lab")
+
+alc(data, vars = NULL, suffix = "_lab")
 }
 \arguments{
 \item{data}{the data.frame whose variable value labels you wish to leverage
 to add labels-on version of value-labeled variables to the supplied
-data.frame.
-(aka swap, turn on, activate, etc.)}
+data.frame.}
 
 \item{vars}{the names of the columns (variables) for which labels-on
 versions of the variable will be added to the returned data.frame.}
 
 \item{suffix}{a suffix that will be added to the names of all labels-on
 variables added to the data.frame (the non-suffix portion of the variable
-name will be identical to the original variable, e.g., the values-on version
+name will be identical to the original variable, e.g., the labels-on version
 of "x1" will be "x1_lab" (or whatever alternative suffix you supply).}
 }
 \value{
@@ -25,39 +27,29 @@ A data.frame consisting of the originally supplied data.frame, along
 with (all or the select) labels-on variable versions added to it.
 }
 \description{
-For a data.frame with value-labeled columns, make copies of those columns
-for which the labels are "turned on" (i.e., the values are converted to the
-labels), and add those columns to the data.frame (with the same names as the
-source columns plus a name suffix - "_lab," by default).
+Add copies of value-labeled columns to a data.frame, where the new columns'
+values are replaced with the corresponding value labels.
 }
 \details{
-labelr defines "value labels" as a vector of character strings, each of which
-is uniquely associated with a single distinct value of a data.frame column,
-such that there is a one-to-one mapping where converting labels to values and
-back again results in no information loss (i.e., no "collapsing" of multiple
-distinct values into a common label-defined category). \code{add_lab_cols} is
-an alternative to \code{use_val_labs} that preserves all variables (including
-value-labeled ones) in their present state and adds a version of each value-
-labeled variable for which values have converted labels -- allowing for
-a direct, side-by-side view of each value's corresponding label (e.g., follow
-along any row from "x1" to "x1_lab," noting which values go together). For
-manageably-sized data.frames, this may be an acceptably compact and
-comparatively more convenient, intuitive, and "safe" (i.e., less confusion-
-or error-inducing) alternative to other workflows, such as those that involve
-toggling back and forth between \code{use_val_labs} and \code{use_vals} and/or multiple
-data.frames derived from them. (Note that the "labels-on" variables that are
-added to the data.frame will be simple, self-contained character vectors that
-cannot themselves be converted or reverted to the original ("labels-off")
-values of the parent variables. Rather than acting as value-labeled variables
-unto themselves, the labels-on variables that are added to the data.frame
-should be regarded simply as free-standing character vectors with a purely
-conceptual relationship to their "parent" variables, serving as pragmatic
-adjuncts and/or surrogates for their parent variables wherever and to
-whatever extent may be useful). See also \code{use_val_labs}, \code{use_vals},
-\code{add_val_labs}, \code{add_val1}, \code{get_val_labs}, \code{drop_val_labs}, and \code{drop_val1}.
+Note: \code{alc} is a compact alias for \code{add_lab_cols}: they do the same thing,
+and the former is easier to type.
 
-If you wish to convert a single, value-labeled column's values to labels and
-return the result as a stand-alone vector, see \code{val_labs_vec}.
+\code{add_lab_cols} adds one or more "labels-on" columns to a data.frame, where
+"labels-on" means that the column's original values are replaced with the
+corresponding value labels. Note that these columns do not replace but are
+added to their parent/source columns in the returned data.frame. The
+resulting "labels-on" columns are simple, self-contained character columns
+that cannot themselves be converted or reverted to the original
+("labels-off") values of their parent/source columns.
+
+For other ways of accessing or leveraging value labels, see, e.g.,
+\code{use_val_labs}, \code{val_labs_vec}, \code{add_lab_dummies}, \code{lab_int_to_factor},
+\code{flab}, \code{slab}, \code{get_val_labs}, \code{with_val_labs}, \code{headl}, \code{taill}, \code{somel},
+and \code{tabl}. In particular, see \code{use_val_labs} if, rather than adding a
+"labels-on" column to a data.frame, you wish to replace a column's values
+with the corresponding value labels. See \code{val_labs_vec} if you wish to
+convert a single, value-labeled column's values to labels and return the
+result as a stand-alone vector, see \code{val_labs_vec}.
 }
 \examples{
 # one variable at a time, mtcars

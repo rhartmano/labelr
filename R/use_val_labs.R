@@ -130,17 +130,6 @@
 #' dflik_conv <- use_val_labs(dflik)
 #' head(dflik_conv, 3)
 use_val_labs <- function(data, vars = NULL) {
-  # make this a Base R data.frame
-  data <- as_base_data_frame(data)
-
-  # ensure value labels are sorted
-  data <- sort_val_labs(data)
-
-  if (nrow(data) > 300000) {
-    warning("
-Note: labelr is not optimized for data.frames this large.")
-  }
-
   # use numeric range labs for numeric variables
   use_q_labs <- function(data, var) {
     x <- data[[var]]
@@ -163,6 +152,17 @@ Note: labelr is not optimized for data.frames this large.")
     x_out <- as_numv(x_out)
     data[[var]] <- x_out
     return(data)
+  }
+
+  # make this a Base R data.frame
+  data <- as_base_data_frame(data)
+
+  # ensure value labels are sorted
+  data <- sort_val_labs(data)
+
+  if (nrow(data) > 300000) {
+    warning("
+Note: labelr is not optimized for data.frames this large.")
   }
 
   # check systematically for all found values being NA
@@ -200,6 +200,14 @@ if any, variables have value labels.
 
       # handle any labeled numerical values
       val_lab_name <- paste0("val.labs.", var_name)
+
+      if (!check_labs_att(data, val_lab_name)) {
+        stop(sprintf(
+          "
+No value labels found for supplied var --%s--.",
+          var_name
+        ))
+      }
 
       # handle value-labeled numerical variables
       # test for whether variable could be numeric
