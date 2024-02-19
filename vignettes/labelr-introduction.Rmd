@@ -229,6 +229,9 @@ df_temp <- add_quant_labs(
 get_val_labs(df_temp)
 ```
 
+Note: If you wish to apply quantile-based value labels to all numeric variables 
+at once, you may wish to explore `all_quant_labs()`.
+
 **Be careful** with setting partial to TRUE like this: If your data set featured 
 a column called "sex" or that featured the string "tax" or the suffix "max" in 
 its name, `add_quant_labs()` would attempt to apply the value labeling scheme to 
@@ -661,6 +664,8 @@ The available aliases are as follows:
 
 * `add_quant_labs` alias is `aql` 
 
+* `all_quant_labs` alias is `allq` 
+
 * `add_quant1` alias is `aq1` 
 
 * `add_m1_lab` alias is `am1l` 
@@ -704,3 +709,5 @@ The available aliases are as follows:
 * `drop_frame_lab` alias is `dfl`
 
 * `axis_lab` is  `alb` 
+
+* `tab_lab` is  `tabl2` 

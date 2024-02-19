@@ -7,6 +7,10 @@
 
 * function `axis_lab()` (with alias `alb()`) added - helper that allows one to easily use variable name labels as y or x axis labels with Base R plots or ggplot2.
 
+* function `all_quant_labs()` (with alias `allq()`) added: automatically add quantile-based numerical range value labels for all numeric variables that meet specifications.
+
+* function `tab_labs()` (with alias `tabl2()`) added: alternative implementation of `tabl()` functionality that always displays tabulations in terms of value labels (where they exist) and that automatically and temporarily converts any non-value-labeled, many-valued numerical variables to quantile category variables.
+
 * function `use_val_lab1()` (with alias `uvl1()`) added. This provides the same functionality as `use_val_labs()`, but allows the user to supply only one unquoted variable, whereas `use_val_labs()` requires quoted variable name arguments but allows the user to pass a vector of multiple variable names in one call. 
 
 * function `add_lab_col1()` (with alias `alc1()`) added. This provides the same functionality as `add_lab_cols()`, but allows the user to supply only one unquoted variable, whereas `add_lab_cols()` requires quoted variable name arguments but allows the user to pass a vector of multiple variable names in one call. 

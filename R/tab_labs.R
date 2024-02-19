@@ -1,39 +1,35 @@
-#' labelr-Friendly Frequency Tables
+#' Generate a Value Labels Frequency Table with Ad Hoc Numeric Coercion
 #'
 #' @description
-#' `tabl` calculates raw or weighted frequency counts (or proportions) over
-#' arbitrary categorical values, which may be expressed in terms of raw
-#' variable values or labelr label values.
+#' `tab_labs` is largely a wrapper to `labelr::tabl`, with the labs.on argument
+#' hard-coded to TRUE and with the added ability to automatically re-code
+#' many-valued numerical variables into quantile categories (for tabulation
+#' purposes).
 #'
 #' @details
-#' This function creates a labelr-friendly data.frame representation of
-#' multi-variable tabular data, where either labels or values can be displayed,
-#' and where various convenience options are provided, such as using frequency
-#' weights, using proportions instead of counts, rounding those percentages,
-#' or pivoting / casting one of the categorical variables' category levels
-#' (labels) to serve as columns in a cross-tab-like table.
+#' `tab_labs` calculates raw or weighted frequency counts (or proportions)
+#' over an arbitrary number of variables, with tabulations calculated and
+#' expressed in terms of value labels for any value-labeled variables, and with
+#' various options available.
 #'
-#' Note: See `tab_labs` for an alternative implementation that always displays
-#' tabulations in terms of value labels (where present) and that automatically
-#' recodes many-valued numeric variables into quantile categories.
+#' Note: Unlike `tabl`, `tab_labs` forces any value-labeled variable tabulations
+#' to be expressed in terms of value labels, not raw values themselves.
+#' Additionally, if qtiles argument is non-NULL (defaults is 4), any numeric
+#' variables whose unique values exceed the max.unique.vals thresh number
+#' (default is 10) will be converted to quantile categories for tabular display
+#' purposes (where, e.g., "q050" means values of variable that are at or below
+#' its 50th percentile).
 #'
 #' @param data a data.frame.
 #' @param vars a quoted character vector of variable names of categorical (to
 #' include integer) variables you wish to include in the table. If left NULL and
-#' labs.on = FALSE,`tabl` will attempt to construct a table over all combinations
-#' of all non-decimal-having variables in the data.frame that do not exceed your
-#' max.unique.vals threshold. If vars argument is left NULL and labs.on = TRUE,
-#' any value-labeled decimal-having numerical variables (e.g., those labeled
-#' using `add_quant_labs`) also will be included, since labs.on entails
-#' converting the numerical variable to a manageable set of character categories.
+#' labs.on = FALSE,`tab_labs` will attempt to construct a table over all combinations
+#' of all variables in the data.frame that do not exceed your max.unique.vals
+#' threshold.
+#' @param qtiles the number of quantile categories to employ in auto-labeling
+#' numeric columns that exceed the max.unique.vals threshold.
 #' @param wt an optional vector that includes cell counts or some other
 #' idiosyncratic "importance" weight. If NULL, no weighting will be employed.
-#' @param labs.on if labelr variable value labels are present, these -- rather
-#' than the raw variable values -- will be displayed in the returned table.
-#' Note: If you have previously altered your data.frame in a manner that
-#' converted variable value labels to actual variable values (using, e.g.,
-#' `use_val_labs`, `add_lab_cols`), then you should keep `tabl`'s labs.on
-#' argument set to FALSE.
 #' @param prop.digits if non-NULL, cell percentages (proportions) will be
 #' returned instead of counts, and these will be rounded to the digit specified
 #' (e.g., prop.digits = 3 means a value of 0.157 would be returned for a cell
@@ -76,35 +72,10 @@
 #' @export
 #'
 #' @examples
-#' # create a data set
+#' # assign mtcars data.frame to df data.frame
 #' df <- mtcars
 #'
-#' # variable names and their labels
-#' names_labs_vec <- c(
-#'   "mpg" = "Miles/(US) gallon",
-#'   "cyl" = "Number of cylinders",
-#'   "disp" = "Displacement (cu.in.)",
-#'   "hp" = "Gross horsepower",
-#'   "drat" = "Rear axle ratio",
-#'   "wt" = "Weight (1000 lbs)",
-#'   "qsec" = "1/4 mile time",
-#'   "vs" = "Engine (0 = V-shaped, 1 = straight)",
-#'   "am" = "Transmission (0 = automatic, 1 = manual)",
-#'   "gear" = "Number of forward gears",
-#'   "carb" = "Number of carburetors"
-#' )
-#'
-#' # add na values to make things interesting
-#' df[1, 1:11] <- NA
-#' rownames(df)[1] <- "Missing Car"
-#'
-#' # assign variable labels
-#' df <- add_name_labs(df,
-#'   vars = names(names_labs_vec),
-#'   labs = names_labs_vec
-#' )
-#'
-#' # now, add value labels
+#' # add value labels
 #' df <- add_val_labs(
 #'   data = df,
 #'   vars = "am",
@@ -123,220 +94,23 @@
 #'   )
 #' )
 #'
-#' # var arg can be unquoted if using add_val1()
-#' # note that this is not add_val_labs(); add_val1() has "var" arg instead of "vars
-#' df <- add_val1(
-#'   data = df,
-#'   var = cyl, # note, "var," not "vars" arg
-#'   vals = c(4, 6, 8),
-#'   labs = c(
-#'     "four-cyl",
-#'     "six-cyl",
-#'     "eight-cyl"
-#'   )
-#' )
+#' tab_labs(df, vars = c("am", "mpg", "disp", "carb"), qtiles = 3) # runs quickly
 #'
-#' df <- add_val_labs(
-#'   data = df,
-#'   vars = "gear",
-#'   vals = 3:5,
-#'   labs = c(
-#'     "3-speed",
-#'     "4-speed",
-#'     "5-speed"
-#'   )
-#' )
+#' # show how tab_labs() behaves with a non-value-labeled data.frame
+#' tab_labs(iris) # runs quickly
 #'
-#'
-#' # lookup mapping
-#' get_val_labs(df)
-#'
-#' # introduce other "irregular" values
-#' df$am[1] <- NA
-#'
-#' df[2, "am"] <- NaN
-#' df[3, "am"] <- -Inf
-#' df[5, "cyl"] <- "NAN"
-#'
-#' # take a look
-#' head(df)
-#'
-#' # demonstrate tabl() frequency tabulation function
-#'
-#' # this is the "first call" that will be referenced repeatedly below
-#' # labels on, sort by variable values, suppress/exclude NA/irregular values
-#' # ...return counts
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = NULL
-#' ) # return counts, not proportions
-#'
-#' # same as "first call", except now value labels are off
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = FALSE, # use variable values
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = NULL
-#' ) # return counts, not proportions
-#'
-#' # same as "first call," except now proportions instead of counts
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = 3
-#' ) # return proportions, rounded to 3rd decimal
-#'
-#' # same as "first call," except now sort by frequency counts
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = TRUE, # sort in order of descending frequency
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = NULL
-#' ) # return proportions, rounded to 3rd decimal
-#'
-#' # same as "first call," except now use weights
-#' set.seed(2944) # for reproducibility
-#' df$freqwt <- sample(10:50, nrow(df), replace = TRUE) # create (fake) freq wts
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL
-#' ) # return counts, not proportions
-#'
-#' df$freqwt <- NULL # we don't need this anymore
-#'
-#' # now, with extremely large weights to illustrate div.by
-#' set.seed(428441) # for reproducibility
-#' df$freqwt <- sample(1000000:10000000, nrow(df), replace = TRUE) # large freq wts
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL
-#' ) # return counts, not proportions
-#'
-#' # show div by - Millions
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL, # return counts, not proportions
-#'   div.by = "1M"
-#' ) # one million
-#'
-#' # show div by - Tens of millions
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL, # return counts, not proportions
-#'   div.by = "10M"
-#' ) # ten million
-#'
-#' # show div by - 10000
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL, # return counts, not proportions
-#'   div.by = 10000
-#' ) # ten thousand; could've used div.by = "10K"
-#'
-#' # show div by - 10000, but different syntax
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   wt = "freqwt", # use frequency weights
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = FALSE, # NAs and the like are included/shown
-#'   prop.digits = NULL, # return counts, not proportions
-#'   div.by = "10K"
-#' ) # ten thousand; could've used div.by = 10000
-#'
-#' df$freqwt <- NULL # we don't need this anymore
-#'
-#' # here, we include all "eligible" vars and change more settings at once
-#' # "eligible" means (1) "does not have decimals" and (2) does not have more
-#' # ...unique values than your max.unique.vals arg allows for
-#' # turn labels off, to make this more compact
-#' # do not show zero values (zero.rm)
-#' # do not show NA values (irreg.rm)
-#' tabl(df,
-#'   vars = NULL, # don't specify which variables to include (~ use all!)
-#'   labs.on = FALSE, # use values, not variable value labels
-#'   sort.freq = FALSE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   zero.rm = TRUE, # variable combinations that never occur are suppressed
-#'   prop.digits = NULL, # return counts, not proportions
-#'   max.unique.vals = 10
-#' ) # drop from table any var with >10 distinct values
-#'
-#' # same as above, but include zero counts, and NA/irregular values,
-#' # ...and sort by frequency
-#' tabl(df,
-#'   vars = NULL, # don't specify which variables to include (~ use all!)
-#'   labs.on = FALSE, # use values, not variable value labels
-#'   sort.freq = TRUE, # sort by frequency
-#'   irreg.rm = FALSE, # preserve/include NAs and irregular values
-#'   zero.rm = FALSE, # preserve/include non-observed (zero-count) vars
-#'   prop.digits = NULL, # return counts, not proportions
-#'   max.unique.vals = 10
-#' ) # drop from table any var with >10 distinct values
-#'
-#' # show cross-tab view with wide.col arg
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = TRUE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = NULL, # return counts, not proportions
-#'   wide.col = "am"
-#' ) # use "am" as a column variable in a cross-tab view
-#'
-#' tabl(df,
-#'   vars = c("cyl", "am"),
-#'   labs.on = TRUE, # use variable value labels
-#'   sort.freq = TRUE, # sort by vars values (not frequencies)
-#'   irreg.rm = TRUE, # NAs and the like are suppressed
-#'   prop.digits = NULL, # return counts, not proportions
-#'   wide.col = "cyl"
-#' ) # use "cyl" as a column variable in a cross-tab view
-#'
-#' # verify select counts using base::subset()
-#' nrow(subset(df, am == 0 & cyl == 4))
-#' nrow(subset(df, am == 0 & cyl == 8))
-#' nrow(subset(df, am == 1 & cyl == 8))
-#' nrow(subset(df, am == 0 & cyl == 6))
-#' nrow(subset(df, am == 1 & cyl == 6))
-tabl <- function(data,
-                 vars = NULL,
-                 wt = NULL,
-                 labs.on = FALSE,
-                 prop.digits = NULL,
-                 div.by = NULL,
-                 max.unique.vals = 10,
-                 sort.freq = TRUE,
-                 zero.rm = FALSE,
-                 irreg.rm = FALSE,
-                 wide.col = NULL) {
+#' tab_labs(mtcars) # takes a few (literal) minutes!
+tab_labs <- function(data,
+                     vars = NULL,
+                     qtiles = 4,
+                     wt = NULL,
+                     prop.digits = NULL,
+                     div.by = NULL,
+                     max.unique.vals = 10,
+                     sort.freq = TRUE,
+                     zero.rm = FALSE,
+                     irreg.rm = FALSE,
+                     wide.col = NULL) {
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
 
@@ -411,8 +185,16 @@ A variable name contains the \"@\" character, which is not permitted.")
     \n max.unique.vals may not exceed 5000.")
   }
 
-  # turn on value labels, if specified
-  if (labs.on) data <- use_val_labs(data)
+  # add quantile labels if specified
+  if (!is.null(qtiles)) {
+    data <- all_quant_labs(data,
+      qtiles = qtiles,
+      unique.vals.thresh = max.unique.vals
+    )
+  }
+
+  # turn on value labels
+  data <- use_val_labs(data)
 
   # drop vars with decimal points or too many unique values
   num_vars_to_drop <- sapply(
@@ -433,6 +215,16 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
     data <- data[!num_vars_to_drop]
     data <- as.data.frame(data)
     vars <- names(data)
+  }
+
+  # combinations
+  combos <- prod(sapply(data, function(x) length(unique(x, na.rm = TRUE))))
+
+  # zero.rm
+  if (combos > 100 && !zero.rm) {
+    zero.rm <- TRUE
+    warning("
+Requested table would be >100 rows. Excluding zero-frequency (unobserved) combinations")
   }
 
   # find a safe name to use (one not already in vars)
@@ -583,3 +375,7 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
 
   return(data2)
 }
+
+#' @export
+#' @rdname tab_labs
+tabl2 <- tab_labs

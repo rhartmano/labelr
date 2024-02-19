@@ -820,6 +820,11 @@ tabl(iris, "Species") # explicit vars arg with one-var ("Species")
 tabl(mtcars, zero.rm = TRUE) # vars arg null
 ```
 
+For an alternative implementation of `tabl()` that always returns tabulations in 
+terms of value labels (where they exist), see `tab_lab()` (with alias `tabl2()`). 
+In addition to this difference, `tab_lab()` will automatically recode many-valued 
+numerical variables into quantile categories to facilitate more compact display.
+
 ## Conclusion
 This is the suitably abrupt ending to our choppy, ad hoc overview of some 
 additional labelr capabilities and special topics. Thanks for reading.

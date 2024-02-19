@@ -98,6 +98,10 @@ and where various convenience options are provided, such as using frequency
 weights, using proportions instead of counts, rounding those percentages,
 or pivoting / casting one of the categorical variables' category levels
 (labels) to serve as columns in a cross-tab-like table.
+
+Note: See \code{tab_labs} for an alternative implementation that always displays
+tabulations in terms of value labels (where present) and that automatically
+recodes many-valued numeric variables into quantile categories.
 }
 \examples{
 # create a data set

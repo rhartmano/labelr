@@ -194,6 +194,7 @@ qtiles argument must be >1 and cannot exceed 100.\n")
       qtiles_expand <- quantile(x, probs = seq(0, 1, by = 1 / qtiles))[-1]
       qtiles_unique <- unique(qtiles_expand)
       qtiles_clean <- gsub("%", "", names(qtiles_expand))
+      qtiles_clean <- as.character(round(as.numeric(qtiles_clean, 1)))
 
       # second check for excessive qtiles
       if (length(qtiles_unique) != length(qtiles_expand)) {
