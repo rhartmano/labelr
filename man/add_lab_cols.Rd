@@ -3,24 +3,23 @@
 \name{add_lab_cols}
 \alias{add_lab_cols}
 \alias{alc}
-\title{"Add Variable Value Label Columns to a Data Frame}
+\title{Add Variable Value Label Columns to a Data Frame}
 \usage{
 add_lab_cols(data, vars = NULL, suffix = "_lab")
 
 alc(data, vars = NULL, suffix = "_lab")
 }
 \arguments{
-\item{data}{the data.frame whose variable value labels you wish to leverage
-to add labels-on version of value-labeled variables to the supplied
-data.frame.}
+\item{data}{a data.frame.}
 
-\item{vars}{the names of the columns (variables) for which labels-on
-versions of the variable will be added to the returned data.frame.}
+\item{vars}{the names of the columns (variables) for which "labels-on"
+(values replaced with value labels) versions of the variable will be added to
+the returned data.frame.}
 
 \item{suffix}{a suffix that will be added to the names of all labels-on
 variables added to the data.frame (the non-suffix portion of the variable
 name will be identical to the original variable, e.g., the labels-on version
-of "x1" will be "x1_lab" (or whatever alternative suffix you supply).}
+of "x1" will be "x1_lab" (or whatever alternative suffix you supply)).}
 }
 \value{
 A data.frame consisting of the originally supplied data.frame, along

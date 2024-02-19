@@ -1,43 +1,35 @@
-#' Create a Value Labels Column for a Single Variable and Add to the Data Frame
+#' Replace a Single Data Frame Column's Values with Its Value Labels
 #'
 #' @description
-#' For a single value-labeled column of a data.frame, create a copy of that
-#' column that replaces all of its values with the corresponding value labels
-#' and added that copy to the supplied data.frame.
+#' For a single value-labeled column of a data.frame, replace
+#' all of its values with the corresponding value labels and return the modified
+#' data.frame.
 #'
 #' @details
-#' Note 1: `add_lab_col1` is a variant of `add_lab_cols` that allows you to
+#' Note 1: `use_val_lab1` is a variant of `use_val_labs` that allows you to
 #' specify only one variable at a time but that allows you to pass its name
-#' without quoting it (compare add_lab_col1(mtcars, am) to
-#' add_lab_col1(mtcars, am)).
+#' without quoting it (compare use_val_lab1(mtcars, am) to
+#' use_val_lab1(mtcars, am)).
 #'
-#' Note 2: `alc1` is a compact alias for `add_lab_col1`: they do the same thing,
+#' Note 2: `uvl1` is a compact alias for `use_val_lab1`: they do the same thing,
 #' and the former is easier to type.
 #'
-#' `add_lab_col1` creates a "labels-on" version of a value-labeled column and
-#' adds that new column to the supplied data.frame. Here, "labels-on" means that
-#' the column's original values are replaced with the corresponding value
-#' labels. Note that this column does not replace but is added to its
-#' parent/source columns in the returned data.frame. The resulting "labels-on"
-#' column is a simple, self-contained character column that cannot itself be
-#' converted or reverted to the original ("labels-off") values of its
-#' parent/source column. See `add_lab_cols` for a list of other functions that
-#' may be useful in working with value labels.
+#' `use_val_lab1` replaces a single, value-labeled data.frame column with a
+#' "value labels-on" version of that column. Here, "labels-on" means that the
+#' column's original values are replaced with the corresponding value labels.
+#' Note that the modified column is a simple, self-contained character variable
+#' that cannot itself be converted or reverted back to the original ("labels-off")
+#' values of its parent/source column.
 #'
-#' @param data a data.frame.
-#' @param var the unquoted name of the column (variable) for which a "labels-on"
-#' (values replaced with value labels) version of the variable will be added to
-#' the returned data.frame.
-#' @param suffix a suffix that will be added to the name of the labels-on
-#' column added to the data.frame (the non-suffix portion of the variable
-#' name will be identical to the original variable, e.g., the labels-on version
-#' of "x1" will be "x1_lab" (or whatever alternative suffix you supply)).
+#' @param data the data.frame.
+#' @param var the unquoted name of the column (variable) whose values you wish
+#' to replace with the corresponding value labels.
 #'
-#' @return A data.frame consisting of the originally supplied data.frame, along
-#'  with the labels-on column added to it.
+#' @return A data.frame consisting of the originally supplied data.frame, with
+#' the var argument variable's values replaced with its value labels.
 #' @export
 #' @examples
-#' # add "labels-on" version of "am" to copy of mtcars
+#' # swap in "am" value labels for values in mtcars
 #' df <- mtcars # copy of mtcars
 #'
 #' # now, add value labels
@@ -48,10 +40,10 @@
 #'   labs = c("automatic", "manual")
 #' )
 #'
-#' # add value labels-on version of "am" to df, assign to df_plus
-#' df_plus <- add_lab_col1(df, am)
-#' head(df_plus[c("am", "am_lab")])
-add_lab_col1 <- function(data, var, suffix = "_lab") {
+#' # switch out "am" values for value labels, assign to df_plus
+#' df_plus <- use_val_lab1(df, am)
+#' head(df_plus[c("am")])
+use_val_lab1 <- function(data, var) {
   # use numeric range labs for numeric variables
   use_q_labsv <- function(data, var) {
     x <- data[[var]]
@@ -88,12 +80,6 @@ add_lab_col1 <- function(data, var, suffix = "_lab") {
   if (length(vars) != 1) {
     stop("\n
 var argument must be a single variable name (no more or less).")
-  }
-
-  # test length of var
-  if (length(suffix) != 1) {
-    stop("\n
-invalid suffix argument")
   }
 
   # make this a Base R data.frame
@@ -138,7 +124,6 @@ name of a value-labeled variable present in the data.frame.
   # use the labels (recode from vals to labels)
   for (i in seq_along(vars)) {
     var_name <- vars[i]
-    var_name_suffix <- paste0(var_name, suffix)
     val_lab_name <- paste0("val.labs.", var_name)
 
     if (!check_labs_att(data, val_lab_name)) {
@@ -159,7 +144,7 @@ No value labels found for supplied var --%s--.",
     # if not m1 and is numable, use use_q_labsv() vals-to-labs conversion
     if (num_test && not_m1_test) {
       var_new <- use_q_labsv(data, var_name)
-      data[[var_name_suffix]] <- var_new
+      data[[var_name]] <- var_new
 
       # handle other nominal value-labeled variables
       # these are the add_val_labs() and add_val1() value labels
@@ -172,9 +157,9 @@ No value labels found for supplied var --%s--.",
       var_new <- val_labv[var_old]
       var_new <- unname(var_new)
       var_new <- as_numv(var_new)
-      data[[var_name_suffix]] <- var_new
+      data[[var_name]] <- var_new
       vals_to_fix <- which(is.na(var_new) & !is.na(var_old))
-      data[vals_to_fix, var_name_suffix] <- var_old[vals_to_fix]
+      data[vals_to_fix, var_name] <- var_old[vals_to_fix]
     }
   }
 
@@ -189,14 +174,14 @@ No value labels found for supplied var --%s--.",
   # non-comprehensive but systematic test
   if (!any_all_na_init && any_all_na_end) {
     stop("
-\nThis application of add_lab_cols() would lead a column to be coerced to all NA values,
+\nThis application of use_val_labs() would lead a column to be coerced to all NA values,
 which is not allowed. This may result from attempting multiple nested or redundant
-calls to add_lab_cols() and/or related functions.
+calls to use_val_labs() and/or related functions.
            ")
   }
   return(data)
 }
 
 #' @export
-#' @rdname add_lab_col1
-alc1 <- add_lab_col1
+#' @rdname use_val_lab1
+uvl1 <- use_val_lab1

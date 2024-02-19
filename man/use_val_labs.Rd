@@ -12,14 +12,13 @@ uvl(data, vars = NULL)
 \arguments{
 \item{data}{a data.frame.}
 
-\item{vars}{the names of the columns (variables) for which labels-on
-versions of the variable will replace the original variable in the returned
-data.frame.}
+\item{vars}{the names of the columns (variables) for which value labels will
+will replace original values in the returned data.frame.}
 }
 \value{
-A data.frame, with (all or the select) variable value labels "turned
-on" (i.e., substituted for original variable values), and any affected
-variables coerced to character if they were not already.
+A data.frame, with (all or the select) variable value labels
+substituted for original variable values and any affected variables coerced
+to character if they were not already.
 }
 \description{
 Replace the actual values of data.frame variables with the corresponding
@@ -29,30 +28,19 @@ value labels (previous assigned using \code{add_val_labs} or a related function)
 Note: \code{uvl} is a compact alias for \code{use_val_labs}: they do the same thing,
 and the former is easier to type.
 
-Warning: \code{use_val_labs} will replace existing variable values with value
-labels and cannot be undone. If you wish to preserve variable values, be sure
-to assign the result of \code{use_val_labs} to a new object (vs. overwriting the
-data.frame you supply to the data argument), OR use \code{add_lab_cols} to add
-variables containing value labels to the supplied data set without replacing
-the original variables, OR use \code{val_abs_vec} to replace a single column's
-values with its value labels and return the result as a stand-alone character
-vector. For other ways to leverage value labels for common data management or
-inspection tasks, while preserving raw data values in returned object, see
-\code{flab} ("filter using labels"), \code{slab} ("subset using labels"), \code{tabl}
-(tabulate frequencies using labels), \code{somel}, \code{headl}, and \code{taill}.
-
-\code{use_val_labs} works with \code{add_val_labs}, \code{add_val1}, \code{add_quant_labs},
-\code{add_q1}, \code{add_m1_lab}, \code{add1m1}, \code{get_val_labs}, \code{drop_val_labs}, and
-\code{drop_val1} to facilitate creation, modification, accessing, use, and
-destruction of variable-specific value labels.
-
 \code{use_val_labs} takes a variable value-labeled data.frame and substitutes each
-(labeled) variable's labels for its values, returning a data.frame whose
+(labeled) variable's value labels for its values, returning a data.frame whose
 dimensions, names, and members are the same as the inputted data.frame. This
-may be useful if one wishes to inspect the data.frame (using, e.g., head(),
-tail(), View()) or labeled value frequencies (e.g., table()) using the
+may be useful if one wishes to view data.frame information using the
 (potentially) more intuitively meaningful value labels (e.g., gender=1 values
 displayed as "Male" instead of 1).
+
+#' Warning: \code{use_val_labs} will replace existing variable values with value
+labels and cannot be undone. If you wish to preserve variable values, be sure
+to assign the result of \code{use_val_labs} to a new object. For other ways to
+leverage value labels for common data management or inspection tasks, while
+preserving raw data values in returned object, see \code{add_lab_cols},
+\code{add_lab_dummies}, \code{flab}, \code{slab}, \code{tabl}, \code{headl}, \code{taill}, and \code{somel}.
 }
 \examples{
 # Example #1 - mtcars example, one variable at a time

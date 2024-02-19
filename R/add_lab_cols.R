@@ -1,4 +1,4 @@
-#' "Add Variable Value Label Columns to a Data Frame
+#' Add Variable Value Label Columns to a Data Frame
 #'
 #' @description
 #' Add copies of value-labeled columns to a data.frame, where the new columns'
@@ -25,15 +25,14 @@
 #' convert a single, value-labeled column's values to labels and return the
 #' result as a stand-alone vector, see `val_labs_vec`.
 #'
-#' @param data the data.frame whose variable value labels you wish to leverage
-#' to add labels-on version of value-labeled variables to the supplied
-#' data.frame.
-#' @param vars the names of the columns (variables) for which labels-on
-#' versions of the variable will be added to the returned data.frame.
+#' @param data a data.frame.
+#' @param vars the names of the columns (variables) for which "labels-on"
+#' (values replaced with value labels) versions of the variable will be added to
+#' the returned data.frame.
 #' @param suffix a suffix that will be added to the names of all labels-on
 #' variables added to the data.frame (the non-suffix portion of the variable
 #' name will be identical to the original variable, e.g., the labels-on version
-#' of "x1" will be "x1_lab" (or whatever alternative suffix you supply).
+#' of "x1" will be "x1_lab" (or whatever alternative suffix you supply)).
 #'
 #' @return A data.frame consisting of the originally supplied data.frame, along
 #'  with (all or the select) labels-on variable versions added to it.
@@ -218,7 +217,7 @@ No value labels found for supplied var --%s--.",
     stop("
 \nThis application of add_lab_cols() would lead a column to be coerced to all NA values,
 which is not allowed. This may result from attempting multiple nested or redundant
-calls to add_lab_cols() and/or use_val_labs().
+calls to add_lab_cols() and/or related functions.
            ")
   }
   return(data)

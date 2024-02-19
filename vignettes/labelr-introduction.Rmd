@@ -667,6 +667,8 @@ The available aliases are as follows:
 
 * `use_val_labs` alias is `uvl`
 
+* `use_val_lab1` alias is `uvl1`
+
 * `with_val_labs` alias is `wvl`
 
 * `add_lab_cols` alias is `alc`

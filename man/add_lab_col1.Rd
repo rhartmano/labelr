@@ -3,24 +3,23 @@
 \name{add_lab_col1}
 \alias{add_lab_col1}
 \alias{alc1}
-\title{"Create a Value Labels Column for a Single Variable and Add to the Data Frame}
+\title{Create a Value Labels Column for a Single Variable and Add to the Data Frame}
 \usage{
 add_lab_col1(data, var, suffix = "_lab")
 
 alc1(data, var, suffix = "_lab")
 }
 \arguments{
-\item{data}{the data.frame whose variable value labels you wish to leverage
-to add labels-on version of value-labeled variables to the supplied
-data.frame.}
+\item{data}{a data.frame.}
 
-\item{var}{the unquoted name of the column (variable) for which you wish to
-add a labels-on version to the returned data.frame.}
+\item{var}{the unquoted name of the column (variable) for which a "labels-on"
+(values replaced with value labels) version of the variable will be added to
+the returned data.frame.}
 
 \item{suffix}{a suffix that will be added to the name of the labels-on
 column added to the data.frame (the non-suffix portion of the variable
 name will be identical to the original variable, e.g., the labels-on version
-of "x1" will be "x1_lab" (or whatever alternative suffix you supply).}
+of "x1" will be "x1_lab" (or whatever alternative suffix you supply)).}
 }
 \value{
 A data.frame consisting of the originally supplied data.frame, along
