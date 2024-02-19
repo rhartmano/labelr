@@ -269,6 +269,17 @@ data.frame to see which, if any, variables have value labels.
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
 
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
+
+  if (!all(vars %in% names(data))) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a value-labeled variable present in the data.frame.
+         ")
+  }
+
   if (nrow(data) > 300000) {
     warning("
 Note: labelr is not optimized for data.frames this large.")

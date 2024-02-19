@@ -79,6 +79,17 @@ add_quant1 <- function(data, var, qtiles = NULL, vals = NULL, labs = NULL) {
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
 
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
+
+  if (!all(vars %in% names(data))) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a value-labeled variable present in the data.frame.
+         ")
+  }
+
   # test for NULL - one of qtiles and vals must be NULL, other must be non-NULL
   null_qtiles <- is.null(qtiles)
   null_vals <- is.null(vals)

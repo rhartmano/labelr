@@ -109,6 +109,17 @@ add1m1 <- function(data, var, vals, lab,
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
 
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
+
+  if (!all(vars %in% names(data))) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a value-labeled variable present in the data.frame.
+         ")
+  }
+
   # capture data.frame name and coerce to Base R data.frame
   dfname <- deparse(substitute(data))
   data <- as_base_data_frame(data)

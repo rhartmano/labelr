@@ -65,6 +65,16 @@ drop_val1 <- function(data, var) {
   var <- deparse(substitute(var))
   test_quote <- any(grepl("\"", var))
   if (test_quote && is.character(var)) var <- gsub("\"", "", var)
+  var <- gsub("c\\(", "", var)
+  var <- gsub("\\(", "", var)
+  var <- gsub("\\)", "", var)
+
+  if (!all(var %in% names(data))) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a value-labeled variable present in the data.frame.
+         ")
+  }
 
   var_val_label <- paste0("val.labs.", var)
   any_val_labs <- any(grepl(var_val_label, names(get_all_lab_atts(data))))

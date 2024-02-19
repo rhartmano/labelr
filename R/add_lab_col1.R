@@ -81,12 +81,22 @@ add_lab_col1 <- function(data, var, suffix = "_lab") {
   vars <- deparse(substitute(var))
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
 
   # test length of var
   if (length(vars) != 1) {
     stop("\n
 var argument must be a single variable name (no more or less).")
   }
+
+  # test length of var
+  if (length(suffix) != 1) {
+    stop("\n
+invalid suffix argument")
+  }
+
 
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
@@ -123,7 +133,7 @@ var argument must be a single variable name (no more or less).")
   if (!all(vars %in% names(data))) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
-variable name that corresponds to a value-labeled variable present in the data.frame.
+name of a value-labeled variable present in the data.frame.
          ")
   }
 
@@ -146,7 +156,6 @@ No value labels found for supplied var --%s--.",
 
     # test for presence of many-to-one (m1) labels
     this_var_val_lab <- get_labs_att(data, val_lab_name)[[1]]
-
     not_m1_test <- length(unique(names(this_var_val_lab))) == length(unique(unname(this_var_val_lab)))
 
     # if not m1 and is numable, use use_q_labsv() vals-to-labs conversion

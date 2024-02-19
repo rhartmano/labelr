@@ -103,6 +103,16 @@ add_val1 <- function(data, var, vals, labs,
   vars <- deparse(substitute(var))
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
+
+  if (!all(vars %in% names(data))) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a value-labeled variable present in the data.frame.
+         ")
+  }
 
   # use character version of vals as labs if latter is null
   if (is.null(labs) & !is.null(vals)) labs <- as.character(vals)
