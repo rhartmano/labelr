@@ -9,7 +9,9 @@
 
 * function `all_quant_labs()` (with alias `allq()`) added: automatically add quantile-based numerical range value labels for all numeric variables that meet specifications.
 
-* function `tab_labs()` (with alias `tabl2()`) added: alternative implementation of `tabl()` functionality that always displays tabulations in terms of value labels (where they exist) and that automatically and temporarily converts any non-value-labeled, many-valued numerical variables to quantile category variables.
+* function `tab_labs()` (with alias `tabl2()`) added: alternative implementation of `tabl()` functionality that always displays tabulations in terms of value labels (for columns that have them), whereas `tabl()` displays tabulations in terms of raw values by default (even for value-labeled variables). `tab_labs()` also incorporates a qtiles argument that temporarily converts any requested non-value-labeled, many-valued numeric variables to quantile category variables, so that they can be included in tabulations.
+
+* function `tabl()` updated with `tab_labs()` -style qtiles argument that allows for non-value-labeled, many-valued numeric variables to be converted temporarily and on the fly to quantile category variables so that they can be included in returned table results. However, this argument is IGNORED UNLESS the user explicitly supplies an integer value between 2 and 100 AND the labs.on argument is set to TRUE.
 
 * function `use_val_lab1()` (with alias `uvl1()`) added. This provides the same functionality as `use_val_labs()`, but allows the user to supply only one unquoted variable, whereas `use_val_labs()` requires quoted variable name arguments but allows the user to pass a vector of multiple variable names in one call. 
 
@@ -18,6 +20,10 @@
 * updated `add_name_labs()`, `drop_name_labs()`, `convert_labs()`, and `clean_data_atts()` functions, so that changes (add or drop) of name.labs attributes are applied to native labels() attribute and, in case of `convert_labs()`, so that any incoming variable/column level labels() attributes (e.g., column name labels from a haven-imported tibble) are converted to labelr name.labs. Primary benefit of this is that RStudio View() will now show name labels underneath column names.
 
 * `use_val_labs()`, `add_lab_cols()`, and `val_labs_vec()` fixed to convert any irregular character values to NA labels (was converting to "NA").
+
+* `tabl()` wide.cols (pivot, cross-tab) functionality improved to show 0 instead of NA for empty cross-tab cell counts.
+
+* `add_quant_labs()` and `add_quant1()` now round non-integer auto-generated quantile value labels to avoid long, repeating-decimal value labels (e.g., "q067" instead of "q066.66666...").
 
 * updated `ssort()` to preserve rownames.
 

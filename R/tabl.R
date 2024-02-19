@@ -10,12 +10,12 @@
 #' multi-variable tabular data, where either labels or values can be displayed,
 #' and where various convenience options are provided, such as using frequency
 #' weights, using proportions instead of counts, rounding those percentages,
-#' or pivoting / casting one of the categorical variables' category levels
-#' (labels) to serve as columns in a cross-tab-like table.
+#' automatically expressing many-valued numerical variables in terms of quantile
+#' categories, or pivoting / casting one of the categorical variables' category
+#' levels (labels) to serve as columns in a cross-tab-like table.
 #'
-#' Note: See `tab_labs` for an alternative implementation that always displays
-#' tabulations in terms of value labels (where present) and that automatically
-#' recodes many-valued numeric variables into quantile categories.
+#' Note: See `tab_labs` for a wrapper that always displays tabulations in terms
+#' of value labels (where present).
 #'
 #' @param data a data.frame.
 #' @param vars a quoted character vector of variable names of categorical (to
@@ -26,14 +26,23 @@
 #' any value-labeled decimal-having numerical variables (e.g., those labeled
 #' using `add_quant_labs`) also will be included, since labs.on entails
 #' converting the numerical variable to a manageable set of character categories.
+#' Additionally, note the effects of the qtiles argument (directly below).
+#' @param qtiles if not NULL, must be a 1L integer between 2 and 100 indicating
+#' the number of quantile categories to employ in temporarily (for purposes of
+#' tabulation) auto-value-labeling numeric columns that do not already have
+#' value labels AND exceed the max.unique.vals threshold. If NULL (the default),
+#' any such variables will NOT be auto-labeled and will be discarded from the
+#' tabulation process. Note: qtiles is ignored (treated same as NULL) if
+#' labs.on = FALSE, which also is the default. Therefore, to leverage this
+#' feature, both of the following non-default arguments must be explicitly
+#' user-specified: (1) labs.on must be set to TRUE, AND (2) the qtiles argument
+#' must be some single integer value. Note also that, for any numeric variables
+#' that already have value labels in the context of the supplied data.frame,
+#' those pre-existing value labels will be used. See examples.
 #' @param wt an optional vector that includes cell counts or some other
 #' idiosyncratic "importance" weight. If NULL, no weighting will be employed.
 #' @param labs.on if labelr variable value labels are present, these -- rather
 #' than the raw variable values -- will be displayed in the returned table.
-#' Note: If you have previously altered your data.frame in a manner that
-#' converted variable value labels to actual variable values (using, e.g.,
-#' `use_val_labs`, `add_lab_cols`), then you should keep `tabl`'s labs.on
-#' argument set to FALSE.
 #' @param prop.digits if non-NULL, cell percentages (proportions) will be
 #' returned instead of counts, and these will be rounded to the digit specified
 #' (e.g., prop.digits = 3 means a value of 0.157 would be returned for a cell
@@ -76,35 +85,14 @@
 #' @export
 #'
 #' @examples
-#' # create a data set
+#' # assign mtcars to new data.frame df
 #' df <- mtcars
-#'
-#' # variable names and their labels
-#' names_labs_vec <- c(
-#'   "mpg" = "Miles/(US) gallon",
-#'   "cyl" = "Number of cylinders",
-#'   "disp" = "Displacement (cu.in.)",
-#'   "hp" = "Gross horsepower",
-#'   "drat" = "Rear axle ratio",
-#'   "wt" = "Weight (1000 lbs)",
-#'   "qsec" = "1/4 mile time",
-#'   "vs" = "Engine (0 = V-shaped, 1 = straight)",
-#'   "am" = "Transmission (0 = automatic, 1 = manual)",
-#'   "gear" = "Number of forward gears",
-#'   "carb" = "Number of carburetors"
-#' )
 #'
 #' # add na values to make things interesting
 #' df[1, 1:11] <- NA
 #' rownames(df)[1] <- "Missing Car"
 #'
-#' # assign variable labels
-#' df <- add_name_labs(df,
-#'   vars = names(names_labs_vec),
-#'   labs = names_labs_vec
-#' )
-#'
-#' # now, add value labels
+#' # add value labels
 #' df <- add_val_labs(
 #'   data = df,
 #'   vars = "am",
@@ -326,11 +314,23 @@
 #' nrow(subset(df, am == 1 & cyl == 8))
 #' nrow(subset(df, am == 0 & cyl == 6))
 #' nrow(subset(df, am == 1 & cyl == 6))
+#'
+#' # will work on an un-labeled data.frame
+#' tabl(mtcars, vars = c("am", "gear", "carb"), labs.on = TRUE)
+#'
+#' # if labs.on = TRUE and qtiles arg is non-null, many-valued numeric variables
+#' # will be (temporarily) converted to quantile categories, even if they have
+#' # no prior value labels associated with them
+#' tabl(mtcars,
+#'   vars = c("am", "gear", "carb", "mpg"), # note behavior of "mpg"
+#'   labs.on = TRUE, qtiles = 5
+#' )
 tabl <- function(data,
                  vars = NULL,
-                 wt = NULL,
                  labs.on = FALSE,
                  prop.digits = NULL,
+                 qtiles = NULL,
+                 wt = NULL,
                  div.by = NULL,
                  max.unique.vals = 10,
                  sort.freq = TRUE,
@@ -411,6 +411,14 @@ A variable name contains the \"@\" character, which is not permitted.")
     \n max.unique.vals may not exceed 5000.")
   }
 
+  # add quantile labels if specified
+  if (!is.null(qtiles) && labs.on) {
+    data <- all_quant_labs(data,
+      qtiles = qtiles,
+      unique.vals.thresh = max.unique.vals
+    )
+  }
+
   # turn on value labels, if specified
   if (labs.on) data <- use_val_labs(data)
 
@@ -433,6 +441,16 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
     data <- data[!num_vars_to_drop]
     data <- as.data.frame(data)
     vars <- names(data)
+  }
+
+  # combinations
+  combos <- prod(sapply(data, function(x) length(unique(x, na.rm = TRUE))))
+
+  # zero.rm
+  if (combos > 100 && !zero.rm) {
+    zero.rm <- TRUE
+    warning("
+Requested table would be >100 rows. Excluding zero-frequency (unobserved) combinations")
   }
 
   # find a safe name to use (one not already in vars)
@@ -570,6 +588,14 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
     data2 <- as.data.frame(data2)
     data2 <- data2[names(data2)]
     data2 <- as.data.frame(data2)
+
+    # convert NA to 0 (counts) in new pivoted-wider cols
+    orig_vars <- base::setdiff(vars, wide.col)
+    new_vars <- base::setdiff(names(data2), orig_vars)
+    for (i in new_vars) {
+      data2[[i]] <- as_numv(data2[[i]])
+      data2[is.na(data2[[i]]), i] <- 0
+    }
   }
 
   # restore numeric status to any variables for which this makes sense

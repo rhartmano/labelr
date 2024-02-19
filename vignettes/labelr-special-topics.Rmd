@@ -795,35 +795,70 @@ Finally, let's get to know labelr's `tabl()` function, which supports count
 or proportion tabulations with labels turned "on" or "off" and offers some other 
 functionalities. 
 
+```{r}
+set.seed(4847) # for reproducibility
+df <- make_demo_data(n = 100) # make a fictional n = 100 data set
+
+df <- add_val1(df, # data.frame
+  var = raceth, # var to label, unquoted since this is add_val1()
+  vals = c(1:7), # label values 1 through 7, inclusive
+  labs = c(
+    "White", "Black", "Hispanic", # ordered labels for sequential vals 1-7
+    "Asian", "AIAN", "Multi", "Other"
+  )
+)
+
+df <- add_val1(
+  data = df,
+  var = gender,
+  vals = c(0, 1, 2), # the values to be labeled
+  labs = c("Male", "Female", "Other"), # labs order should reflect vals order
+  max.unique.vals = 10
+)
+
+# label values of var "x1" according to quantile ranges
+df <- add_quant1(
+  data = df,
+  var = x1, # apply quantile range value labels to this var
+  qtiles = 3 # first, seceond, and third tertiles
+)
+
+# apply many-vals-get-one-label labels to "edu" (note vals 3-5 all get same lab)
+df <- add_m1_lab(df, "edu", vals = c(3:5), lab = "Some College+")
+df <- add_m1_lab(df, "edu", vals = 1, lab = "Not HS Grad")
+df <- add_m1_lab(df, "edu", vals = 2, lab = "HSG, No College")
+
+# show value labels
+get_val_labs(df)
+```
+
 With `tabl()`, tables can be generated... 
 
 ...in terms of values
 ```{r}
-head(tabl(df), 20) # labs.on = FALSE is default
+tabl(df, vars = "gender", labs.on = FALSE) # labs.on = FALSE is default
 ```
 ...or in terms of labels
 ```{r}
-head(tabl(df, labs.on = TRUE), 20) # labs.on = TRUE is not the default
+tabl(df, vars = "gender", labs.on = TRUE) # labs.on = TRUE is NOT the default
 ```
 ...in proportions
 ```{r}
-head(tabl(df, labs.on = TRUE, prop.digits = 3), 20)
+tabl(df, vars = c("gender", "edu"), labs.on = TRUE, prop.digits = 3)
 ```
 ...cross-tab style
 ```{r}
-head(tabl(df, labs.on = TRUE, wide.col = "gender"), 20)
+head(tabl(df, vars = c("raceth", "edu"), labs.on = TRUE, wide.col = "gender"), 20)
 ```
 ...with non-value-labeled data.frames
 ```{r}
 tabl(iris, "Species") # explicit vars arg with one-var ("Species")
 
-tabl(mtcars, zero.rm = TRUE) # vars arg null
+tabl(mtcars, zero.rm = TRUE) # Note: vars arg null
 ```
 
 For an alternative implementation of `tabl()` that always returns tabulations in 
 terms of value labels (where they exist), see `tab_lab()` (with alias `tabl2()`). 
-In addition to this difference, `tab_lab()` will automatically recode many-valued 
-numerical variables into quantile categories to facilitate more compact display.
 
 ## Conclusion
 This is the suitably abrupt ending to our choppy, ad hoc overview of some 

@@ -2,9 +2,7 @@
 #'
 #' @description
 #' `tab_labs` is largely a wrapper to `labelr::tabl`, with the labs.on argument
-#' hard-coded to TRUE and with the added ability to automatically re-code
-#' many-valued numerical variables into quantile categories (for tabulation
-#' purposes).
+#' hard-coded to TRUE.
 #'
 #' @details
 #' `tab_labs` calculates raw or weighted frequency counts (or proportions)
@@ -14,11 +12,6 @@
 #'
 #' Note: Unlike `tabl`, `tab_labs` forces any value-labeled variable tabulations
 #' to be expressed in terms of value labels, not raw values themselves.
-#' Additionally, if qtiles argument is non-NULL (defaults is 4), any numeric
-#' variables whose unique values exceed the max.unique.vals thresh number
-#' (default is 10) will be converted to quantile categories for tabular display
-#' purposes (where, e.g., "q050" means values of variable that are at or below
-#' its 50th percentile).
 #'
 #' @param data a data.frame.
 #' @param vars a quoted character vector of variable names of categorical (to
@@ -27,7 +20,9 @@
 #' of all variables in the data.frame that do not exceed your max.unique.vals
 #' threshold.
 #' @param qtiles the number of quantile categories to employ in auto-labeling
-#' numeric columns that exceed the max.unique.vals threshold.
+#' numeric columns that exceed the max.unique.vals threshold. Note: Numeric
+#' variables that already have value labels as part of the supplied data.frame
+#' will not be relabeled (i.e., the pre-existing value labels will be used).
 #' @param wt an optional vector that includes cell counts or some other
 #' idiosyncratic "importance" weight. If NULL, no weighting will be employed.
 #' @param prop.digits if non-NULL, cell percentages (proportions) will be
@@ -97,9 +92,9 @@
 #' tab_labs(df, vars = c("am", "mpg", "disp", "carb"), qtiles = 3) # runs quickly
 #'
 #' # show how tab_labs() behaves with a non-value-labeled data.frame
-#' tab_labs(iris) # runs quickly
+#' tab_labs(iris)
 #'
-#' tab_labs(mtcars) # takes a few (literal) minutes!
+#' tab_labs(mtcars, vars = c("am", "mpg", "disp", "gear", "cyl"))
 tab_labs <- function(data,
                      vars = NULL,
                      qtiles = 4,
@@ -362,6 +357,14 @@ Requested table would be >100 rows. Excluding zero-frequency (unobserved) combin
     data2 <- as.data.frame(data2)
     data2 <- data2[names(data2)]
     data2 <- as.data.frame(data2)
+
+    # convert NA to 0 (counts) in new pivoted-wider cols
+    orig_vars <- base::setdiff(vars, wide.col)
+    new_vars <- base::setdiff(names(data2), orig_vars)
+    for (i in new_vars) {
+      data2[[i]] <- as_numv(data2[[i]])
+      data2[is.na(data2[[i]]), i] <- 0
+    }
   }
 
   # restore numeric status to any variables for which this makes sense
