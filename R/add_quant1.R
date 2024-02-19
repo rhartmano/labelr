@@ -86,7 +86,7 @@ add_quant1 <- function(data, var, qtiles = NULL, vals = NULL, labs = NULL) {
   if (!all(vars %in% names(data))) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
-name of a value-labeled variable present in the data.frame.
+name of a variable that is present in the data.frame.
          ")
   }
 

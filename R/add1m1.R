@@ -116,7 +116,7 @@ add1m1 <- function(data, var, vals, lab,
   if (!all(vars %in% names(data))) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
-name of a value-labeled variable present in the data.frame.
+name of a variable that is present in the data.frame.
          ")
   }
 

@@ -97,7 +97,6 @@ var argument must be a single variable name (no more or less).")
 invalid suffix argument")
   }
 
-
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
 
