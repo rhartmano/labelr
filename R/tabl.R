@@ -30,15 +30,11 @@
 #' @param qtiles if not NULL, must be a 1L integer between 2 and 100 indicating
 #' the number of quantile categories to employ in temporarily (for purposes of
 #' tabulation) auto-value-labeling numeric columns that do not already have
-#' value labels AND exceed the max.unique.vals threshold. If NULL (the default),
-#' any such variables will NOT be auto-labeled and will be discarded from the
-#' tabulation process. Note: qtiles is ignored (treated same as NULL) if
-#' labs.on = FALSE, which also is the default. Therefore, to leverage this
-#' feature, both of the following non-default arguments must be explicitly
-#' user-specified: (1) labs.on must be set to TRUE, AND (2) the qtiles argument
-#' must be some single integer value. Note also that, for any numeric variables
-#' that already have value labels in the context of the supplied data.frame,
-#' those pre-existing value labels will be used. See examples.
+#' value labels AND that exceed the max.unique.vals threshold. If NULL, any such
+#' variables will NOT be auto-labeled and will be discarded from the tabulation
+#' process. By default qtiles = 4, and returned table entries for auto-labeled
+#' variables will be labeled as "q025" (i.e., first quartile), "q050", "q075", and
+#' "q100".
 #' @param wt an optional vector that includes cell counts or some other
 #' idiosyncratic "importance" weight. If NULL, no weighting will be employed.
 #' @param labs.on if labelr variable value labels are present, these -- rather
@@ -261,14 +257,14 @@
 #'
 #' df$freqwt <- NULL # we don't need this anymore
 #'
-#' # here, we include all "eligible" vars and change more settings at once
-#' # "eligible" means (1) "does not have decimals" and (2) does not have more
-#' # ...unique values than your max.unique.vals arg allows for
 #' # turn labels off, to make this more compact
 #' # do not show zero values (zero.rm)
 #' # do not show NA values (irreg.rm)
+#' # many-valued numeric variables will be converted to quantile categories by
+#' # ...qtiles argument
 #' tabl(df,
-#'   vars = NULL, # don't specify which variables to include (~ use all!)
+#'   vars = c("am", "gear", "carb", "mpg"),
+#'   qtiles = 4, # many-valued numerics converted to quantile
 #'   labs.on = FALSE, # use values, not variable value labels
 #'   sort.freq = FALSE, # sort by vars values (not frequencies)
 #'   irreg.rm = TRUE, # NAs and the like are suppressed
@@ -277,14 +273,15 @@
 #'   max.unique.vals = 10
 #' ) # drop from table any var with >10 distinct values
 #'
-#' # same as above, but include zero counts, and NA/irregular values,
-#' # ...and sort by frequency
+#' # same as above, but include NA/irregular category values,
+#' # zero.rm is TRUE; include unobserved (zero-count) category combinations
 #' tabl(df,
-#'   vars = NULL, # don't specify which variables to include (~ use all!)
+#'   vars = c("am", "gear", "carb", "mpg"),
+#'   qtiles = 4,
 #'   labs.on = FALSE, # use values, not variable value labels
 #'   sort.freq = TRUE, # sort by frequency
 #'   irreg.rm = FALSE, # preserve/include NAs and irregular values
-#'   zero.rm = FALSE, # preserve/include non-observed (zero-count) vars
+#'   zero.rm = FALSE, # include non-observed combinations
 #'   prop.digits = NULL, # return counts, not proportions
 #'   max.unique.vals = 10
 #' ) # drop from table any var with >10 distinct values
@@ -316,20 +313,12 @@
 #' nrow(subset(df, am == 1 & cyl == 6))
 #'
 #' # will work on an un-labeled data.frame
-#' tabl(mtcars, vars = c("am", "gear", "carb"), labs.on = TRUE)
-#'
-#' # if labs.on = TRUE and qtiles arg is non-null, many-valued numeric variables
-#' # will be (temporarily) converted to quantile categories, even if they have
-#' # no prior value labels associated with them
-#' tabl(mtcars,
-#'   vars = c("am", "gear", "carb", "mpg"), # note behavior of "mpg"
-#'   labs.on = TRUE, qtiles = 5
-#' )
+#' tabl(mtcars, vars = c("am", "gear", "carb", "mpg"))
 tabl <- function(data,
                  vars = NULL,
                  labs.on = FALSE,
                  prop.digits = NULL,
-                 qtiles = NULL,
+                 qtiles = 4,
                  wt = NULL,
                  div.by = NULL,
                  max.unique.vals = 10,
@@ -411,17 +400,30 @@ A variable name contains the \"@\" character, which is not permitted.")
     \n max.unique.vals may not exceed 5000.")
   }
 
-  # add quantile labels if specified
-  if (!is.null(qtiles) && labs.on) {
-    data <- all_quant_labs(data,
-      qtiles = qtiles,
-      unique.vals.thresh = max.unique.vals
-    )
-  }
-
   # turn on value labels, if specified
-  if (labs.on) data <- use_val_labs(data)
+  if (labs.on) {
+    # add quantile labels if specified
+    if (!is.null(qtiles)) {
+      data <- all_quant_labs(data,
+        qtiles = qtiles,
+        unique.vals.thresh = max.unique.vals
+      )
+    }
 
+    data <- suppressWarnings(use_val_labs(data))
+  } else {
+    data <- strip_labs(data)
+
+    # add quantile labels if specified
+    if (!is.null(qtiles)) {
+      data <- all_quant_labs(data,
+        qtiles = qtiles,
+        unique.vals.thresh = max.unique.vals
+      )
+    }
+
+    data <- suppressWarnings(use_val_labs(data))
+  }
   # drop vars with decimal points or too many unique values
   num_vars_to_drop <- sapply(
     data,
@@ -447,10 +449,10 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   combos <- prod(sapply(data, function(x) length(unique(x, na.rm = TRUE))))
 
   # zero.rm
-  if (combos > 100 && !zero.rm) {
+  if (combos > 10000 && !zero.rm) {
     zero.rm <- TRUE
     warning("
-Requested table would be >100 rows. Excluding zero-frequency (unobserved) combinations")
+Requested table would be >10000 rows. Excluding zero-frequency (unobserved) combinations")
   }
 
   # find a safe name to use (one not already in vars)

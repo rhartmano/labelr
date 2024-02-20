@@ -216,10 +216,10 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   combos <- prod(sapply(data, function(x) length(unique(x, na.rm = TRUE))))
 
   # zero.rm
-  if (combos > 100 && !zero.rm) {
+  if (combos > 10000 && !zero.rm) {
     zero.rm <- TRUE
     warning("
-Requested table would be >100 rows. Excluding zero-frequency (unobserved) combinations")
+Requested table would be >10000 rows. Excluding zero-frequency (unobserved) combinations")
   }
 
   # find a safe name to use (one not already in vars)

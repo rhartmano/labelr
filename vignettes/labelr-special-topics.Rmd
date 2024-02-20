@@ -854,7 +854,10 @@ head(tabl(df, vars = c("raceth", "edu"), labs.on = TRUE, wide.col = "gender"), 2
 ```{r}
 tabl(iris, "Species") # explicit vars arg with one-var ("Species")
 
-tabl(mtcars, zero.rm = TRUE) # Note: vars arg null
+# many-valued numeric vars automatically converted to quantile categories
+tabl(mtcars, c("am", "gear", "cyl", "disp", "mpg"),
+  qtiles = 4, zero.rm = TRUE
+)
 ```
 
 For an alternative implementation of `tabl()` that always returns tabulations in 
