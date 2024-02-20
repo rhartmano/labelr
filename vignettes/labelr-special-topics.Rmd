@@ -836,19 +836,19 @@ With `tabl()`, tables can be generated...
 
 ...in terms of values
 ```{r}
-tabl(df, vars = "gender", labs.on = FALSE) # labs.on = FALSE is default
+tabl(df, vars = "gender", labs.on = FALSE)
 ```
 ...or in terms of labels
 ```{r}
-tabl(df, vars = "gender", labs.on = TRUE) # labs.on = TRUE is NOT the default
+tabl(df, vars = "gender", labs.on = TRUE) # labs.on = TRUE is the default
 ```
 ...in proportions
 ```{r}
-tabl(df, vars = c("gender", "edu"), labs.on = TRUE, prop.digits = 3)
+tabl(df, vars = c("gender", "edu"), prop.digits = 3)
 ```
 ...cross-tab style
 ```{r}
-head(tabl(df, vars = c("raceth", "edu"), labs.on = TRUE, wide.col = "gender"), 20)
+head(tabl(df, vars = c("raceth", "edu"), wide.col = "gender"), 20)
 ```
 ...with non-value-labeled data.frames
 ```{r}
@@ -859,9 +859,6 @@ tabl(mtcars, c("am", "gear", "cyl", "disp", "mpg"),
   qtiles = 4, zero.rm = TRUE
 )
 ```
-
-For an alternative implementation of `tabl()` that always returns tabulations in 
-terms of value labels (where they exist), see `tab_lab()` (with alias `tabl2()`). 
 
 ## Conclusion
 This is the suitably abrupt ending to our choppy, ad hoc overview of some 
