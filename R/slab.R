@@ -39,7 +39,7 @@
 #' of cells implicated in it.
 #'
 #' See also `flab`, `use_val_labs`, `add_val_labs`, `add_val1`,`add_quant_labs`,
-#' `add_quant1`, \cr `get_val_labs`, `drop_val_labs`. Forlabel-preserving
+#' `add_quant1`, \cr `get_val_labs`, `drop_val_labs`. For label-preserving
 #' subsetting tools that subset in terms of raw values (not value labels), see
 #' `sfilter`, `sbrac`, `ssubset`, `sdrop`.
 #'

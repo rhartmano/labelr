@@ -172,7 +172,7 @@ slab(mt2, am == "automatic" & gear == "4+", am, gear)
 # "tabl" - Produce label-friendly tables
 tabl(mt2, vars = c("am", "gear"), labs.on = TRUE) # labels on, sorted by freq
 
-tabl(mt2, vars = c("am", "gear"), labs.on = FALSE) # labels off (default)
+tabl(mt2, vars = c("am", "gear"), labs.on = FALSE) # labels off
 
 # interactively swap in name labels for column names
 # (Note: This is a relatively brittle convenience function that will not support

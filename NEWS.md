@@ -1,5 +1,10 @@
 # labelr News
 
+# labelr 0.1.4
+* Two shared, vestigial code chunks removed from the following: `use_val_labs()`, `use_val_lab1()`, `add_lab_cols()`, `add_lab_col1()`, and `val_labs_vec()`  documentation). Code involved checking for all values NA from an earlier iteration of `use_val_labs()`. Code is more concise; functions, arguments, and outputs are unchanged.
+
+* Copy edit fixes to minor documentation items (e.g., an outdated comment in README, an infelicities example in `use_val1()` and `add_lab_col1()` documentation).
+
 # labelr 0.1.3
 * functions `add_lab_dummies()` and `add_lab_dumm1()` (with aliases `ald()` and `ald1()`) added. These generate a dummy variable for each label of a value-labeled variable and return the supplied data.frame with these dummy variables added.
 

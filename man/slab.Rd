@@ -71,7 +71,7 @@ altogether!), depending on the complexity of the call and the number and type
 of cells implicated in it.
 
 See also \code{flab}, \code{use_val_labs}, \code{add_val_labs}, \code{add_val1},\code{add_quant_labs},
-\code{add_quant1}, \cr \code{get_val_labs}, \code{drop_val_labs}. Forlabel-preserving
+\code{add_quant1}, \cr \code{get_val_labs}, \code{drop_val_labs}. For label-preserving
 subsetting tools that subset in terms of raw values (not value labels), see
 \code{sfilter}, \code{sbrac}, \code{ssubset}, \code{sdrop}.
 }

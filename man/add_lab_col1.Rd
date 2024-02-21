@@ -34,7 +34,7 @@ and added that copy to the supplied data.frame.
 Note 1: \code{add_lab_col1} is a variant of \code{add_lab_cols} that allows you to
 specify only one variable at a time but that allows you to pass its name
 without quoting it (compare add_lab_col1(mtcars, am) to
-add_lab_col1(mtcars, am)).
+add_lab_cols(mtcars, "am")).
 
 Note 2: \code{alc1} is a compact alias for \code{add_lab_col1}: they do the same thing,
 and the former is easier to type.

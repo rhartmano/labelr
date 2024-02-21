@@ -28,7 +28,7 @@ data.frame.
 Note 1: \code{use_val_lab1} is a variant of \code{use_val_labs} that allows you to
 specify only one variable at a time but that allows you to pass its name
 without quoting it (compare use_val_lab1(mtcars, am) to
-use_val_lab1(mtcars, am)).
+use_val_labs(mtcars, "am")).
 
 Note 2: \code{uvl1} is a compact alias for \code{use_val_lab1}: they do the same thing,
 and the former is easier to type.

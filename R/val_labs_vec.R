@@ -106,12 +106,6 @@ Note: labelr is not optimized for data.frames this large.")
     return(data)
   }
 
-  # check systematically for all found values being NA
-  size <- 5000
-  if (nrow(data) < size) size <- nrow(data)
-  inds2check <- unique(floor(seq(1, nrow(data), length.out = size)))
-  any_all_na_init <- any(sapply(data[inds2check, ], function(x) all(is.na(x))))
-
   # get value labs
   val.labs <- get_val_labs(data)
 
@@ -167,20 +161,6 @@ data.frame to see which, if any, variables have value labels.
     }
 
     attributes(data)[[val_lab_name]] <- NULL
-  }
-
-  # check systematically for columns that lost many values to NA
-  inds2check <- unique(floor(seq(1, nrow(data), length.out = size)))
-  any_all_na_end <- any(sapply(data[inds2check, ], function(x) all(is.na(x))))
-
-  # throw an error if some column acquired new NA values based on
-  # non-comprehensive but systematic test
-  if (!any_all_na_init && any_all_na_end) {
-    stop("
-\nThis application of val_labs_vec() would lead the vector to be coerced to all NA values,
-which is not allowed. This may result from attempting multiple nested or redundant
-calls to val_labs_vec().
-           ")
   }
 
   data <- clean_data_atts(data)
