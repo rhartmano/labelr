@@ -392,7 +392,10 @@ tabl <- function(data,
   data <- as_base_data_frame(data)
 
   # get nrow
-  nrow_data <- nrow(data)
+  if (nrow(data) > 300000) {
+    warning("
+Note: tabl() is not optimized for data.frames this large.\n")
+  }
 
   # grab weights value if present
   if (!is.null(wt)) {
@@ -447,8 +450,6 @@ At least one colname arg to vars or wide.col not found in supplied data.frame.")
     data <- sbrac(data, , vars) # subset, preserving labels
   }
 
-  # check for prohibited variable names (those w/ @ in name)
-
   # check max vals - 5000 unique value labels for a variable is a hard cap:
   # Under no circumstances can a variable with 5000 distinct values receive value
   # ...labels
@@ -461,10 +462,10 @@ At least one colname arg to vars or wide.col not found in supplied data.frame.")
   if (labs.on) {
     # add quantile labels if specified
     if (!is.null(qtiles)) {
-      data <- all_quant_labs(data,
+      data <- suppressWarnings(all_quant_labs(data,
         qtiles = qtiles,
         unique.vals.thresh = max.unique.vals
-      )
+      ))
     }
 
     data <- suppressWarnings(use_val_labs(data))
@@ -473,10 +474,10 @@ At least one colname arg to vars or wide.col not found in supplied data.frame.")
 
     # add quantile labels if specified
     if (!is.null(qtiles)) {
-      data <- all_quant_labs(data,
+      data <- suppressWarnings(all_quant_labs(data,
         qtiles = qtiles,
         unique.vals.thresh = max.unique.vals
-      )
+      ))
     }
 
     data <- suppressWarnings(use_val_labs(data))

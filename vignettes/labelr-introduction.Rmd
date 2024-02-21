@@ -93,11 +93,11 @@ data.frame values.
 Note: To minimize dependencies and reduce unexpected behaviors, many labelr 
 functions **will coerce augmented/non-standard data.frames (e.g., tibbles, 
 data.tables) to base R ("vanilla") data.frames.** If you work with non-standard 
-data.frames such as these, the suggested workflow is to affix and use labelr 
-labels **before** transforming the base R data.frame to a non-standard 
-data.frame, if at all. While some augmented data.frames and their functions may 
-"play well" with labelr-style labels and functions, this is not guaranteed. 
-Experiment as desired and at your own discretion and risk.
+data.frames, the suggested workflow is to affix and use labelr labels **before** 
+transforming the base R data.frame to a non-standard data.frame, if at all. 
+While some augmented data.frames and their functions may "play well" with 
+labelr-style labels and functions, this is not guaranteed. Experiment as desired 
+and at your own discretion.
 
 ## Adding and Looking up Frame, Name, and Value Labels
 We'll start our exploration of core labelr functions with a fake "demographic" 
@@ -298,7 +298,7 @@ that allows you to value-label a single variable whose name is unquoted. It is
 All of this is nice, but have we really accomplished anything? A casual view of 
 the data.frame raises some doubts:
   
-  ```{r}
+```{r}
 head(df_copy, 3) # our pre-labeling copy of the data.frame
 
 head(df, 3) # our latest, post-labeling version of same data.frame
@@ -569,7 +569,7 @@ subsequent calls.
 
 For example: 
   
-  ```{r}
+```{r}
 lm(`Miles/(US) gallon` ~ `Number of cylinders`, data = mt2) # pasting in var names
 lm(mpg ~ cyl, data = use_var_names(mt2)) # same result if name labels are "off"
 ```
@@ -709,5 +709,3 @@ The available aliases are as follows:
 * `drop_frame_lab` alias is `dfl`
 
 * `axis_lab` is  `alb` 
-
-* `tab_lab` is  `tabl2` 

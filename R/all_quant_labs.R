@@ -42,7 +42,7 @@ all_quant_labs <- function(data,
 
   if (nrow(data) > 300000) {
     warning("
-\nNote: labelr is not optimized for data.frames this large.")
+Note: labelr is not optimized for data.frames this large.\n")
   }
 
   var_names <- names(data)

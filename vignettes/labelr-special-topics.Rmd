@@ -687,11 +687,11 @@ Let's use `add_lab_dummies()` to create a dummy variable for each of its labels.
 ```{r}
 irl_dumm <- add_lab_dummies(irlab, "Species")
 head(irl_dumm) # they're there!
-tail(irl_dumm2) # again, they're there!
+tail(irl_dumm) # again, they're there!
 ```  
 
 We can use `add_lab_dumm1()` to achieve the same result without quoting the 
-column name. The countervailing advantage of`add_lab_dummies()` is that it let's 
+column name. The countervailing advantage of `add_lab_dummies()` is that it let's 
 you create dummy variables for more than one value-labeled variable at a time 
 (`add_lab_dumm1()` does not).
 
@@ -820,7 +820,7 @@ df <- add_val1(
 df <- add_quant1(
   data = df,
   var = x1, # apply quantile range value labels to this var
-  qtiles = 3 # first, seceond, and third tertiles
+  qtiles = 3 # first, second, and third tertiles
 )
 
 # apply many-vals-get-one-label labels to "edu" (note vals 3-5 all get same lab)
