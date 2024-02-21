@@ -9,7 +9,7 @@
 
 * function `all_quant_labs()` (with alias `allq()`) added: automatically add quantile-based numerical range value labels for all numeric variables that meet specifications.
 
-* function `tabl()` updated. labs.on = TRUE is now the default. qtiles argument added that allows for non-value-labeled, many-valued numeric variables to be converted temporarily and on the fly to quantile category variables, so that they can be included in returned table results. 
+* function `tabl()` updated. labs.on = TRUE is now the default. qtiles argument added that allows for non-value-labeled, many-valued numeric variables to be converted temporarily and on the fly to quantile category variables, so that they can be included in returned table results. Tabulation "engine" now relies on base `table()`, which makes select tabulations much faster.
 
 * function `use_val_lab1()` (with alias `uvl1()`) added. This provides the same functionality as `use_val_labs()`, but allows the user to supply only one unquoted variable, whereas `use_val_labs()` requires quoted variable name arguments but allows the user to pass a vector of multiple variable names in one call. 
 

@@ -327,6 +327,67 @@ tabl <- function(data,
                  zero.rm = FALSE,
                  irreg.rm = FALSE,
                  wide.col = NULL) {
+  ############################################################################
+  # tabl_df - internal function to calculated compact tables and weighted tables
+  ############################################################################
+  tabl_df <- function(data, vars = NULL, group.id.name = "gid", wts = NULL) {
+    # safe_char_val() - search for presence of character stub in x
+    # ...and identify the first variant of stub that is not already in x
+    # "variant of stub" means the leading stub characters with numbers affixed
+    # ..afterward
+    safe_char_val <- function(x, stub) {
+      if (is.data.frame(x)) {
+        x <- as.data.frame(x)
+        x <- names(x)
+      }
+      if (!stub %in% x) {
+        the_name <- stub
+      } else {
+        the_name <- NULL
+        found_it <- FALSE
+        count <- 0
+        while (!found_it) {
+          count <- count + 1
+          the_name <- paste0(stub, "_", count)
+          if (!the_name %in% x) found_it <- TRUE
+        }
+      }
+
+      return(the_name)
+    }
+    # end safe_char_val
+
+    group_id_nm <- safe_char_val(names(data), group.id.name)
+
+    if (is.null(vars)) vars <- names(data)
+    if (!is.null(wts)) vars <- base::setdiff(vars, wts)
+
+    data_l <- data.frame(table(data[vars]))
+    data_l <- data.frame(col1 = rownames(data_l), data_l)
+    names(data_l)[1] <- group_id_nm
+    names(data_l)[ncol(data_l)] <- "n"
+
+    i <- sapply(data_l, is.factor)
+    data_l[i] <- lapply(data_l[i], as.character)
+
+    if (!is.null(wts)) {
+      data <- merge(data_l, data, all = TRUE)
+      data_z <- tapply(data[[wts]], data[["gid"]], sum)
+      data_z <- data.frame(col1 = names(data_z), "n.wtd" = unname(data_z))
+      data_z[is.na(data_z$n.wtd), "n.wtd"] <- 0
+      names(data_z)[1] <- group_id_nm
+      i <- sapply(data_z, is.character)
+      data_z[i] <- lapply(data_z[i], as.numeric)
+      data_l <- merge(data_l, data_z, by = group_id_nm)
+    }
+
+    data_l[[1]] <- NULL
+    return(data_l)
+  }
+  ############################################################################
+  # end tabl_df() - begin main tabl() function code
+  ############################################################################
+
   # make this a Base R data.frame
   data <- as_base_data_frame(data)
 
@@ -388,11 +449,6 @@ At least one colname arg to vars or wide.col not found in supplied data.frame.")
 
   # check for prohibited variable names (those w/ @ in name)
 
-  if (any(grepl("@", names(data)))) {
-    stop("
-A variable name contains the \"@\" character, which is not permitted.")
-  }
-
   # check max vals - 5000 unique value labels for a variable is a hard cap:
   # Under no circumstances can a variable with 5000 distinct values receive value
   # ...labels
@@ -450,10 +506,10 @@ Excluding variable --%s-- (includes decimals or exceeds max.unique.vals).\n", th
   combos <- prod(sapply(data, function(x) length(unique(x, na.rm = TRUE))))
 
   # zero.rm
-  if (combos > 10000 && !zero.rm) {
+  if (combos > 100000 && !zero.rm) {
     zero.rm <- TRUE
     warning("
-Requested table would be >10000 rows. Excluding zero-frequency (unobserved) combinations")
+Requested table would be >100000 rows. Excluding zero-frequency (unobserved) combinations")
   }
 
   # find a safe name to use (one not already in vars)
@@ -486,36 +542,13 @@ Requested table would be >10000 rows. Excluding zero-frequency (unobserved) comb
     data <- cbind(data, wts) # restore weights
     data <- as.data.frame(data)
     names(data)[ncol(data)] <- wt
-    data_split <- split(data, data[vars], sep = "@")
-    freq <- sapply(data_split, function(x) sum(x[[wt]]))
-    rm(data_split)
-    data2 <- data.frame(names(freq), freq)
-    names(data2) <- c(the_name, last_col_name)
-    rownames(data2) <- NULL
-    vars_split <- lapply(data2[[the_name]], function(v) unlist(strsplit(v, "@")))
-    vars_split <- do.call("rbind", vars_split)
-    vars_split <- as.data.frame(vars_split)
-    names(vars_split) <- vars
-    data2 <- cbind(vars_split, data2)
-    data2 <- as.data.frame(data2)
-    data2[[the_name]] <- NULL
+    data2 <- tabl_df(data, vars = vars, wts = wt)
+    data2[["n"]] <- NULL
 
     # do unweighted counts if wt arg is NULL (see sapply() call below w/ nrow())
   } else {
     last_col_name <- "n"
-    data_split <- split(data, data[vars], sep = "@")
-    freq <- sapply(data_split, function(x) nrow(x))
-    rm(data_split)
-    data2 <- data.frame(names(freq), freq)
-    names(data2) <- c(the_name, last_col_name)
-    rownames(data2) <- NULL
-    vars_split <- lapply(data2[[the_name]], function(v) unlist(strsplit(v, "@")))
-    vars_split <- do.call("rbind", vars_split)
-    vars_split <- as.data.frame(vars_split)
-    names(vars_split) <- vars
-    data2 <- cbind(vars_split, data2)
-    data2 <- as.data.frame(data2)
-    data2[[the_name]] <- NULL
+    data2 <- tabl_df(data, vars = vars)
   }
 
   # remove irregular values, as requested
