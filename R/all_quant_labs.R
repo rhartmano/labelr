@@ -37,6 +37,14 @@ all_quant_labs <- function(data,
                            qtiles = 5,
                            not.vars = NULL,
                            unique.vals.thresh = 10) {
+  # make this a Base R data.frame
+  data <- as_base_data_frame(data)
+
+  if (nrow(data) > 300000) {
+    warning("
+\nNote: labelr is not optimized for data.frames this large.")
+  }
+
   var_names <- names(data)
   if (!is.null(not.vars)) var_names <- base::setdiff(var_names, not.vars)
 
@@ -44,7 +52,7 @@ all_quant_labs <- function(data,
     val_labs_i <- paste0("val.labs.", i)
     if (!check_labs_att(data, val_labs_i)) {
       if (is.numeric(data[[i]]) && length(unique(data[[i]])) >= unique.vals.thresh) {
-        data <- add_quant_labs(data, i, qtiles = qtiles)
+        data <- suppressWarnings(add_quant_labs(data, i, qtiles = qtiles))
       }
     }
   }
