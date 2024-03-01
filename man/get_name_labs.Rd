@@ -3,7 +3,7 @@
 \name{get_name_labs}
 \alias{get_name_labs}
 \alias{gnl}
-\title{Return Lookup Table of Variable Names and Name Labels}
+\title{Return Look-up Table of Variable Names and Name Labels}
 \usage{
 get_name_labs(data, vars = NULL)
 

@@ -15,6 +15,8 @@
 
 * Copy edit fixes and improved argument explanations in documentation items (e.g., an outdated comment in README, an infelicitous example in `use_val1()` and `add_lab_col1()` documentation).
 
+* function `get_val_lab1()` (with alias `gvl1()`) added, providing a variant of `get_val_labs()` that follows the conventions of other `*1()` functions (i.e., allowing only a single variable, whose name may be passed unquoted to the var argument). In addition, `get_val_lab1()` includes a simplify argument (FALSE by default) that allows the user to return the value-label mapping as a named vector.
+
 # labelr 0.1.3
 * functions `add_lab_dummies()` and `add_lab_dumm1()` (with aliases `ald()` and `ald1()`) added. These generate a dummy variable for each label of a value-labeled variable and return the supplied data.frame with these dummy variables added.
 

@@ -1,4 +1,4 @@
-#' Return Lookup Table of Variable Names and Name Labels
+#' Return Look-up Table of Variable Names and Name Labels
 #'
 #' @description
 #' For a name-labeled data.frame, `get_name_labs` returns a derivative

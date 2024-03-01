@@ -3,7 +3,7 @@
 \name{get_val_labs}
 \alias{get_val_labs}
 \alias{gvl}
-\title{Return Lookup Table of Variable Values and Value Labels}
+\title{Return Look-up Table of Variable Values and Value Labels}
 \usage{
 get_val_labs(data, var = NULL)
 
@@ -30,16 +30,16 @@ derivative data.frame that shows the value-to-label mapping for each unique
 value of each value-labeled variable.
 }
 \details{
-Note 1: Columns of the returned data.frame are coerced to character for
-display purposes, as a result of concatenating value information from
-different variables of potentially different classes. In particular, all
-elements of the "vals" column are expressed as character even if the
-underlying values themselves are numeric. Accordingly, the data.frame returned
-by \code{get_val_labs} is intended to facilitate --visual-- display and inspection
-of what (if any) value label has been associated with each variable value; it
-is --not-- intended to be used for accurate determination of the underlying
-classes or types of the variables as they exist in the primary data.frame that
-you passed to it.
+Note 1: \code{get_val_labs} returns a data.frame that is intended strictly to
+facilitate human-in-the-loop --visual-- display and inspection of what (if
+any) value label has been associated with each variable value. It is --not--
+intended for use in automated querying or subsetting or as an indicator of
+of the supplied data.frame's columns' underlying classes or atomic types. In
+particular, all columns of the --returned-- data.frame object are coerced to
+character for display purposes, as a result of concatenating value
+information from different variables of potentially different atomic types or
+classes. For example, all elements of the "vals" column are expressed as
+character even if the underlying values themselves are numeric.
 
 Note 2: \code{gvl} is a compact alias for \code{get_val_labs}: they do the same thing,
 and the former is easier to type
