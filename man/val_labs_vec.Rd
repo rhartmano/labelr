@@ -25,8 +25,13 @@ its values with the corresponding value labels, and return the result as a
 vector.
 }
 \details{
-Note: \code{vlv} is a compact alias for \code{val_labs_vec}: they do the same thing,
+Note 1: \code{vlv} is a compact alias for \code{val_labs_vec}: they do the same thing,
 and the former is easier to type.
+
+Note 2: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest.
 
 \code{val_labs_vec} works with other labelr functions to facilitate creation,
 modification, accessing, use, and destruction of variable-specific value

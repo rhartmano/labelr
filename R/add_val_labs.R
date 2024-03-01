@@ -181,20 +181,22 @@ add_val_labs <- function(data, vars, vals, labs,
                          partial = FALSE, not.vars = NULL,
                          max.unique.vals = 10,
                          init = FALSE) {
-  # check max vals
-  if (max.unique.vals > 5000) {
-    stop("
-    \n max.unique.vals may not exceed 5000.")
+  # function to streamline a data.frame while preserving prior labelr attributes
+  sunique <- function(data, vars = NULL) {
+    lab_atts <- get_all_lab_atts(data)
+    if (!is.null(vars)) {
+      data <- data[vars]
+      data <- as.data.frame(data)
+      names(data) <- vars
+    }
+
+    data_unique <- unique(data)
+    data_unique <- add_lab_atts(data_unique, lab_atts,
+      num.convert = FALSE,
+      clean = FALSE
+    )
+    return(data_unique)
   }
-
-  # use character version of vals as labs if latter is null
-  if (is.null(labs) & !is.null(vals)) labs <- as.character(vals)
-
-  if (length(vals) != length(labs)) {
-    stop("
-vals and labs arguments must be of equal length.\n")
-  }
-
 
   # find cases where the same observation (coerced to character)
   # appears in both vals and labs but in different places
@@ -221,6 +223,20 @@ vals and labs arguments must be of equal length.\n")
       return(test_both)
     }
 
+    # check max vals
+    if (max.unique.vals > 5000) {
+      stop("
+    \n max.unique.vals may not exceed 5000.")
+    }
+
+    # use character version of vals as labs if latter is null
+    if (is.null(labs) & !is.null(vals)) labs <- as.character(vals)
+
+    if (length(vals) != length(labs)) {
+      stop("
+vals and labs arguments must be of equal length.\n")
+    }
+
     # test both for all indices
     test_all <- any(sapply(
       vals_along,
@@ -238,7 +254,9 @@ vals and labs arguments must be of equal length.\n")
 At least one item in your vals argument also appears in your labs argument, but
 in a different position. An example would be if \"dog\" appeared as your first
 val but also as your third lab. This is not allowed: One observation's val
-cannot be another observation's lab.\n")
+cannot appear as another observation's lab in a single call to add_val_labs().
+
+If you want to apply the same label to multiple values, try add_m1_labs().\n\n")
   }
 
   # capture data.frame name and coerce to Base R data.frame
@@ -308,23 +326,6 @@ variable (column) vector classes must be numeric, integer, character, logical, o
     }
   }
 
-  # streamline the data.frame
-  sunique <- function(data, vars = NULL) {
-    lab_atts <- get_all_lab_atts(data)
-    if (!is.null(vars)) {
-      data <- data[vars]
-      data <- as.data.frame(data)
-      names(data) <- vars
-    }
-
-    data_unique <- unique(data)
-    data_unique <- add_lab_atts(data_unique, lab_atts,
-      num.convert = FALSE,
-      clean = FALSE
-    )
-    return(data_unique)
-  }
-
   ### streamline your data.frame
   data_unique <- sunique(data, vars = elig_vars)
 
@@ -389,24 +390,28 @@ These are handled automatically.")
       ))
     }
 
-    # see if this variable already has any val.labs
-    # if so, check for already-assigned labels: each label can have only one value
+    # check for already-assigned labels: each label can have only one value
     this_val_label <- paste0("val.labs.", var)
     this_var_have_val_labs <- check_labs_att(data_unique, this_val_label)
+
     if (this_var_have_val_labs) {
-      used_lab_test <- any(labs %in% unname(get_labs_att(data_unique, this_val_label)[[1]]))
+      this_var_lab_atts <- get_labs_att(data_unique, this_val_label)[[1]]
+
+      # check for add_m1_lab()-style labels already present
+      if (length(unique(this_var_lab_atts)) != length(this_var_lab_atts)) {
+        stop("
+This variable already has add_m1_lab()-style value labels associated with it.
+add_val1() is not compatible with this type of value-labeling. Try add_m1_lab() or
+try drop_val_labs() and start over.\n")
+      }
+
+      used_lab_test <- any(labs %in% unname(this_var_lab_atts))
       if (used_lab_test) {
         # free up val lab(s) to be re-applied to other vals
         labs_to_overwrite <- labs[which(labs %in% attributes(data_unique)[[this_val_label]])]
         var_val_labs <- get_labs_att(data_unique, this_val_label)[[1]]
         var_val_labs[var_val_labs %in% labs_to_overwrite] <- names(var_val_labs)[var_val_labs %in% labs_to_overwrite]
         attributes(data_unique)[[this_val_label]] <- var_val_labs
-
-        warning(sprintf(
-          "
-  You are re-assigning at least one value label(s) previously applied to other values of -- %s --.\n",
-          var
-        ))
       }
     }
 
@@ -500,7 +505,7 @@ Adjust max.unique.vals arg?", var
 
     if (length(final_names) != length(final_vals)) {
       stop(sprintf(
-        "\nConcerning Var --%s--
+        "\nConcerning Var --%s-- \n
 Var-specific error in specification of vals or labs.\n
 Use get_val_labs() to see which value labels are currently applied to this
 var and consider first dropping extant labels (using drop_val_labs()) and
@@ -511,6 +516,30 @@ value label end state: \n
 (3) add_quant_labs() is for applying labels to value ranges of a numeric var.",
         var
       ))
+    }
+
+    # find any contradictions like this and throw an error if we find them
+    conflict_check <- val_labs_conflict(final_names, final_vals)
+
+    if (conflict_check) {
+      stop(sprintf(
+        "\nConcerning variable --%s-- \n
+add_val_labs() will not permit you to use one *value* of %s as the *label* for
+some *other value* of %s.
+
+If you want to apply the same label to multiple values, try add_m1_labs().\n\n",
+        var, var, var
+      ))
+    }
+
+    if (this_var_have_val_labs) {
+      if (used_lab_test) {
+        warning(sprintf(
+          "
+\nRe-assigning value label(s) previously applied to --%s--.\n",
+          var
+        ))
+      }
     }
 
     names(final_vals) <- final_names

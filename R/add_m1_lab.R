@@ -92,6 +92,23 @@ add_m1_lab <- function(data, vars, vals, lab,
                        partial = FALSE, not.vars = NULL,
                        max.unique.vals = 10,
                        init = FALSE) {
+  # function to streamline a data.frame while preserving prior labelr attributes
+  sunique <- function(data, vars = NULL) {
+    lab_atts <- get_all_lab_atts(data)
+    if (!is.null(vars)) {
+      data <- data[vars]
+      data <- as.data.frame(data)
+      names(data) <- vars
+    }
+
+    data_unique <- unique(data)
+    data_unique <- add_lab_atts(data_unique, lab_atts,
+      num.convert = FALSE,
+      clean = FALSE
+    )
+    return(data_unique)
+  }
+
   # function to recode many to one
   recode_m21 <- function(x, bef, aft, unique = FALSE) {
     x <- as.character(x)
@@ -195,23 +212,6 @@ variable (column) vector classes must be numeric, integer, character, logical, o
       labels to the var.
     ")
     }
-  }
-
-  # streamline the data.frame
-  sunique <- function(data, vars = NULL) {
-    lab_atts <- get_all_lab_atts(data)
-    if (!is.null(vars)) {
-      data <- data[vars]
-      data <- as.data.frame(data)
-      names(data) <- vars
-    }
-
-    data_unique <- unique(data)
-    data_unique <- add_lab_atts(data_unique, lab_atts,
-      num.convert = FALSE,
-      clean = FALSE
-    )
-    return(data_unique)
   }
 
   ### streamline your data.frame

@@ -29,6 +29,7 @@ Let's load labelr and the nycflights13 package.
 ```{r}
 opening_ding <- Sys.time() # to time labelr
 
+library(labelr)
 library(nycflights13)
 ```
 
@@ -81,8 +82,9 @@ df <- add_name_labs(df, name.labs = names_labs_vec)
 get_name_labs(df) # show that they've been added
 ```
 
-Let's add variable VALUE labels for variable "carrier." Helpfully, this ships 
-with the nycflights13 package itself.
+Let's add variable VALUE labels for variable "carrier." Helpfully, a mapping of 
+airlines' carrier codes to their full ships with the nycflights13 package itself.
+
 
 ```{r}
 airlines <- nycflights13::airlines
@@ -100,8 +102,26 @@ The name field of airlines gives us the full airline names.
 ny_lab <- airlines$name
 ```
 
-df (flights) also has an integer month variable. We will "hand-jam" month value 
-labels
+Let's add use these vectors to add value labels to df. We'll demo 
+`add_val1()`, which accepts only on variable but allows you to pass its name 
+unquoted. 
+
+```{r}
+df <- add_val1(df,
+  var = carrier, vals = ny_val,
+  labs = ny_lab,
+  max.unique.vals = 20
+)
+```
+
+Our data.frame also has a month variable, expressed in integer terms (e.g., 1 
+indicates January, 9 indicates September). We will "hand-jam" month value labels,
+using `add_val_labs()`. This command is equivalent to `add_val1()`, except that 
+it requires variable names to be quoted but allows you to supply more than one 
+of them at a time (i.e., you can supply a character vector of variable names). 
+In this case, we'll use it on just one variable.
+
+First, we'll create our vectors of unique values and labels. 
 
 ```{r}
 ny_month_vals <- c(1:12) # values
@@ -111,16 +131,12 @@ ny_month_labs <- c(
 ) # labels
 ```
 
-Let's add these value labels. First, we'll demo `add_val1()`, then 
-`add_val_labs()`, then `add_quant_labs()`.
+Note that order is important here: We need to supply exactly as many values as 
+value labels, with each value label being uniquely associated with the value 
+that shares its index. For example, in the above case, `ny_month_vals[3]` is 
+(here, `3`) is  associated with the ny_month_labs[3] (here, `"MAR"`)).
 
-```{r}
-df <- add_val1(df,
-  var = carrier, vals = ny_val,
-  labs = ny_lab,
-  max.unique.vals = 20
-)
-```
+Now, let's use these two vectors to add value labels for the variable "month".
 
 ```{r}
 df <- add_val_labs(df,
@@ -131,11 +147,15 @@ df <- add_val_labs(df,
 )
 ```
 
+Finally, we'll use `add_quant_labs()` to provide numerical range value labels 
+for five quintiles of the variable "dep_time."
+
+
 ```{r}
 df <- add_quant_labs(df, "dep_time", qtiles = 5)
 ```
 
-Let's see where this leaves us.
+Let's see where these value-labeling operations have left us.
 
 ```{r}
 get_val_labs(df)
@@ -146,9 +166,9 @@ We can use `head()` to get a baseline look at select rows and variables
 head(df[c("origin", "dep_time", "dest", "year", "month", "carrier")])
 ```
 
-Now, let's do the same for a version we modified with `use_val_labs()`. This 
-cannot be "undone" (except for the usual clunky way of re-running our script
-up to this point and not doing this!).
+Now, let's do the same for a version of df that we've modified with 
+`use_val_labs()`, which converts all values of value-labeled variables to their 
+corresponding labels.
 
 ```{r}
 df_swapd <- use_val_labs(df)
@@ -156,9 +176,10 @@ df_swapd <- use_val_labs(df)
 head(df_swapd[c("origin", "dep_time", "dest", "year", "month", "carrier")])
 ```
 
-Instead of replacing values (which we can't undo), it might be safer to simply
-add "value-labels-on" character variables to the data.frame. This adds nearly
-1M new cells, but let's throw caution to the wind with `add_lab_cols()`.
+Instead of replacing values using `use_val_labs()` -- something we can't directly 
+undo -- it might be safer to simply add "value-labels-on" character variables to 
+the data.frame, while preserving the parent variables. This adds nearly 1M new 
+cells to our df, but let's throw caution to the wind with `add_lab_cols()`.
 
 ```{r}
 df_plus <- add_lab_cols(df, vars = c("carrier", "month", "dep_time"))
@@ -196,9 +217,9 @@ the_buzzer - opening_ding
 ```
 
 ## NA and "Irregular" Values
-labelr is no fan of NA values or other "irregular" values, which are defined as
-infinite values, not-a-number values, and character values that look like them
-(e.g., "NAN", "INF", "inf", "Na"). 
+labelr is not a fan of NA values or other "irregular" values, which are defined 
+as infinite values, not-a-number values, and character values that look like 
+them (e.g., "NAN", "INF", "inf", "Na"). 
 
 When value-labeling a column / variable, such values are automatically given the 
 catch-all label "NA" (which will be converted to an actual NA in any columns 

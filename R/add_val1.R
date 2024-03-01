@@ -23,9 +23,16 @@
 #' Note 2: `avl1` is a compact alias for `add_val1`: they do the same thing,
 #' and the former is easier to type
 #'
+#' Note 3: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `add_val_labs()`.
+#'
 #' @param data a data.frame.
-#' @param var the unquoted name of the variable to which value labels will be
-#' added.
+#' @param var the unquoted name of the variable (column) to which value labels
+#' will be added.
 #' @param vals a vector of distinct values of the actual variable, each of which
 #' is to be associated with a label supplied to the labs argument in the same
 #' positional order (e.g., vals = c(1,0), labs = c("manual", "automatic") will
@@ -94,28 +101,22 @@
 add_val1 <- function(data, var, vals, labs,
                      max.unique.vals = 10,
                      init = FALSE) {
-  # check max vals
-  if (max.unique.vals > 5000) {
-    stop("
-    \n max.unique.vals may not exceed 5000.")
+  # function to streamline a data.frame while preserving prior labelr attributes
+  sunique <- function(data, vars = NULL) {
+    lab_atts <- get_all_lab_atts(data)
+    if (!is.null(vars)) {
+      data <- data[vars]
+      data <- as.data.frame(data)
+      names(data) <- vars
+    }
+
+    data_unique <- unique(data)
+    data_unique <- add_lab_atts(data_unique, lab_atts,
+      num.convert = FALSE,
+      clean = FALSE
+    )
+    return(data_unique)
   }
-
-  vars <- deparse(substitute(var))
-  test_quote <- any(grepl("\"", vars))
-  if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
-  vars <- gsub("c\\(", "", vars)
-  vars <- gsub("\\(", "", vars)
-  vars <- gsub("\\)", "", vars)
-
-  if (!all(vars %in% names(data))) {
-    stop("
-\nInvalid var argument specification: var arg should be a single, unquoted
-name of a variable that is present in the data.frame.
-         ")
-  }
-
-  # use character version of vals as labs if latter is null
-  if (is.null(labs) & !is.null(vals)) labs <- as.character(vals)
 
   # find cases where the same observation (coerced to character)
   # appears in both vals and labs but in different places
@@ -151,6 +152,28 @@ name of a variable that is present in the data.frame.
     return(test_all)
   }
 
+  # check max vals
+  if (max.unique.vals > 5000) {
+    stop("
+    \n max.unique.vals may not exceed 5000.")
+  }
+
+  # capture var argument
+  vars <- deparse(substitute(var))
+  test_quote <- any(grepl("\"", vars))
+  if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
+  vars <- gsub("c\\(", "", vars)
+  vars <- gsub("\\(", "", vars)
+  vars <- gsub("\\)", "", vars)
+
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a variable that is present in the data.frame.
+         ")
+  }
+
   # find any contradictions like this and throw an error if we find them
   conflict_check <- val_labs_conflict(vals, labs)
 
@@ -159,24 +182,22 @@ name of a variable that is present in the data.frame.
 At least one item in your vals argument also appears in your labs argument, but
 in a different position. An example would be if \"dog\" appeared as your first
 val but also as your third lab. This is not allowed: One observation's val
-cannot be another observation's lab.\n")
-  }
+cannot appear as another observation's lab in a single call to add_val1().
 
-  if (length(vals) != length(labs)) {
-    stop("
-vals and labs arguments must be of equal length.\n")
+If you want to apply the same label to multiple values, try add_m1_labs().\n\n")
   }
 
   # capture data.frame name and coerce to Base R data.frame
   dfname <- deparse(substitute(data))
   data <- as_base_data_frame(data)
 
-  # check for no valid vars found
+  # check again for no valid vars found
   if (!any(vars %in% names(data))) {
     stop("
 Taken together, your inputs do not identify any vars to value-label. Possibilities include:
-1. you are using the var arg to specify multiple vars (add_val1() cannot do that; try add_val_labs());
-2. your var arg input requests a variable that simply does not exist in your data.frame, because
+1. you meant to but did not set partial = TRUE;
+2. you supplied not.vars input that \"cancels out\" (e.g., identifies the same var(s) as) your vars input;
+3. your vars arg input requests a variable that simply does not exist in your data.frame, because
    you've previously dropped it or you've specified its name incorrectly.\n")
   }
 
@@ -184,7 +205,7 @@ Taken together, your inputs do not identify any vars to value-label. Possibiliti
   if (any(!sapply(data[vars], function(x) check_class(x)))) {
     incomp_vars <- names(which(!sapply(data[vars], function(x) check_class(x))))[1]
     stop(sprintf("
-Var --%s-- is of class() that is not supported by labelr.
+One or more vars (including --%s--) are of class() that is not supported by labelr.
 variable (column) vector classes must be numeric, integer, character, logical, or factor.", incomp_vars))
   }
 
@@ -206,8 +227,8 @@ variable (column) vector classes must be numeric, integer, character, logical, o
   }
 
   # keep only variables that stay within max.unique.vals
-  elig_vars <- names(data[vars])[sapply(
-    data[vars],
+  elig_vars <- names(data)[sapply(
+    data,
     function(x) length(unique(x)) <= max.unique.vals
   )]
 
@@ -224,23 +245,6 @@ variable (column) vector classes must be numeric, integer, character, logical, o
     }
   }
 
-  # streamline the data.frame
-  sunique <- function(data, vars = NULL) {
-    lab_atts <- get_all_lab_atts(data)
-    if (!is.null(vars)) {
-      data <- data[vars]
-      data <- as.data.frame(data)
-      names(data) <- vars
-    }
-
-    data_unique <- unique(data)
-    data_unique <- add_lab_atts(data_unique, lab_atts,
-      num.convert = FALSE,
-      clean = FALSE
-    )
-    return(data_unique)
-  }
-
   ### streamline your data.frame
   data_unique <- sunique(data, vars = elig_vars)
 
@@ -248,8 +252,9 @@ variable (column) vector classes must be numeric, integer, character, logical, o
   if (!any(vars %in% names(data_unique))) {
     stop("
 Taken together, your inputs do not identify any vars to value-label. Possibilities include:
-1. you are using the var arg to specify multiple vars (add_val1() cannot do that; try add_val_labs());
-2. your var arg input requests a variable that simply does not exist in your data.frame, because
+1. you meant to but did not set partial = TRUE;
+2. you selected a var whose unique values exceed the limit you've set with your max.unique.vals arg;
+3. your vars arg input requests a variable that simply does not exist in your data.frame, because
    you've previously dropped it or you've specified its name incorrectly.\n")
   }
 
@@ -304,25 +309,28 @@ These are handled automatically.")
       ))
     }
 
-    # see if this variable already has any val.labs
-    # if so, check for already-assigned labels: each label can have only one value
+    # check for already-assigned labels: each label can have only one value
     this_val_label <- paste0("val.labs.", var)
     this_var_have_val_labs <- check_labs_att(data_unique, this_val_label)
-    if (this_var_have_val_labs) {
-      used_lab_test <- any(labs %in% unname(get_labs_att(data_unique, this_val_label)[[1]]))
 
+    if (this_var_have_val_labs) {
+      this_var_lab_atts <- get_labs_att(data_unique, this_val_label)[[1]]
+
+      # check for add_m1_lab()-style labels already present
+      if (length(unique(this_var_lab_atts)) != length(this_var_lab_atts)) {
+        stop("
+\nThis variable already has add_m1_lab()-style value labels associated with it.
+add_val1() is not compatible with this type of value-labeling. Try add_m1_lab() or
+try drop_val_labs() and start over.\n")
+      }
+
+      used_lab_test <- any(labs %in% unname(this_var_lab_atts))
       if (used_lab_test) {
         # free up val lab(s) to be re-applied to other vals
         labs_to_overwrite <- labs[which(labs %in% attributes(data_unique)[[this_val_label]])]
         var_val_labs <- get_labs_att(data_unique, this_val_label)[[1]]
         var_val_labs[var_val_labs %in% labs_to_overwrite] <- names(var_val_labs)[var_val_labs %in% labs_to_overwrite]
         attributes(data_unique)[[this_val_label]] <- var_val_labs
-
-        warning(sprintf(
-          "
-  You are re-assigning at least one value label(s) previously applied to other values of -- %s --.\n",
-          var
-        ))
       }
     }
 
@@ -335,19 +343,19 @@ These are handled automatically.")
       x <- as.character(x)
     }
 
+    if (!check_class(x)) {
+      stop(sprintf(
+        "\n\nVar --%s-- is of class() that is not supported by labelr. Its class
+must be one of: numeric, integer, character, logical, or factor.", var
+      ))
+    }
+
     if (has_decv(x)) {
       stop(sprintf(
         "\n\nVar --%s-- is numeric with decimal values.\n
 Round to whole number and/or coerce to character and try again.\n
 Alternatively, use add_quant_labs() or add_quant1() to apply
 numerical range labels to the variable in its current form.", var
-      ))
-    }
-
-    if (!check_class(x)) {
-      stop(sprintf(
-        "\n\nVar --%s-- is of class() that is not supported by labelr. Its class
-must be one of: numeric, integer, character, logical, or factor.", var
       ))
     }
 
@@ -376,7 +384,6 @@ Adjust max.unique.vals arg?", var
 
       for (i in seq_along(vals_vec)) {
         name_to_change <- names(attr(data_unique, this_var_val_label)) %in% names(vals_vec)[i]
-
         if (!any(name_to_change)) {
           current_val_labs <- attr(data_unique, this_var_val_label)
           new_val_label_to_add <- vals_vec[i]
@@ -387,6 +394,9 @@ Adjust max.unique.vals arg?", var
         attr(data_unique, this_var_val_label)[name_to_change] <- vals_vec[i]
       }
     } else {
+      # in case any vals not already present in x
+      x <- c(vals, x)
+
       vals_vec <- recode_vals(x,
         bef = vals,
         aft = labs,
@@ -414,28 +424,56 @@ Adjust max.unique.vals arg?", var
 
     if (length(final_names) != length(final_vals)) {
       stop(sprintf(
-        "\nConcerning Var --%s--
+        "\nConcerning Var --%s-- \n
 Var-specific error in specification of vals or labs.\n
 Use get_val_labs() to see which value labels are currently applied to this
 var and consider first dropping extant labels (using drop_val_labs()) and
 then select the appropriate value-labeling approach for your var and preferred
 value label end state: \n
-(1) add_val_labs() is for one-to-one labels;
+(1) add_val1() is for one-to-one labels;
 (2) add_m1_lab() is for applying the same label to more than one value; and
 (3) add_quant_labs() is for applying labels to value ranges of a numeric var.",
         var
       ))
     }
 
+    # find any contradictions like this and throw an error if we find them
+    conflict_check <- val_labs_conflict(final_names, final_vals)
+
+    if (conflict_check) {
+      stop(sprintf(
+        "\n
+Concerning variable --%s-- \n
+add_val1() will not permit you to use one *value* of %s as the *label* for
+some *other value* of %s.
+
+If you want to apply the same label to multiple values, try add_m1_labs().\n\n",
+        var, var, var
+      ))
+    }
+
+    if (this_var_have_val_labs) {
+      if (used_lab_test) {
+        warning(sprintf(
+          "
+\nRe-assigning value label(s) previously applied to --%s--.\n",
+          var
+        ))
+      }
+    }
+
     names(final_vals) <- final_names
+
     attributes(data_unique)[[this_var_val_label]] <- final_vals
   }
 
+  # end main loop
+
   lab_atts <- get_all_lab_atts(data_unique)
+
   data <- add_lab_atts(data, lab_atts, num.convert = FALSE)
   return(data)
 }
-
 
 #' @export
 #' @rdname add_val1

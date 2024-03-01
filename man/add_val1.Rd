@@ -12,8 +12,8 @@ avl1(data, var, vals, labs, max.unique.vals = 10, init = FALSE)
 \arguments{
 \item{data}{a data.frame.}
 
-\item{var}{the unquoted name of the variable to which value labels will be
-added.}
+\item{var}{the unquoted name of the variable (column) to which value labels
+will be added.}
 
 \item{vals}{a vector of distinct values of the actual variable, each of which
 is to be associated with a label supplied to the labs argument in the same
@@ -77,6 +77,13 @@ quoting it (compare add_val1(mtcars, am) to add_val_labs(mtcars, "am").
 
 Note 2: \code{avl1} is a compact alias for \code{add_val1}: they do the same thing,
 and the former is easier to type
+
+Note 3: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest. If you
+wish to supply a character vector with the names of variables (columns) of
+interest, use \code{add_val_labs()}.
 }
 \examples{
 # one variable at a time, mtcars

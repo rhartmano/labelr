@@ -26,8 +26,8 @@ ald1(
 \arguments{
 \item{data}{a data.frame with at least one value-labeled variable (column).}
 
-\item{var}{the unquoted name of the value-labeled variable or variables
-from which dummy variable columns will be generated.}
+\item{var}{the unquoted name of the value-labeled variable (column) from
+which dummy variable columns will be generated.}
 
 \item{simple.names}{if TRUE (the default), dummy variable names will be the
 parent variable's name, followed by the sep separator (see above), followed
@@ -83,6 +83,13 @@ names using the leading characters of the parent column name, followed by a
 separator character, followed by the leading characters of the value label.
 (white spaces in the value label will be replaced with the separator
 character).
+
+Note 4: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest. If you
+wish to supply a character vector with the names of variables (columns) of
+interest, use \code{add_lab_dummies()}.
 }
 \examples{
 # one variable at a time, mtcars

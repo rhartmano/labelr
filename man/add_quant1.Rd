@@ -63,6 +63,13 @@ the specified vars in any previous \code{add_quant1} calls. This is in contrast 
 
 Note 2: \code{aql1} is a compact alias for \code{add_quant1}: they do the same thing, and
 the former is easier to type
+
+Note 3: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest. If you
+wish to supply a character vector with the names of variables (columns) of
+interest, use \code{add_quant_labs()}.
 }
 \examples{
 # mtcars demo

@@ -6,8 +6,13 @@
 #' vector.
 #'
 #' @details
-#' Note: `vlv` is a compact alias for `val_labs_vec`: they do the same thing,
+#' Note 1: `vlv` is a compact alias for `val_labs_vec`: they do the same thing,
 #' and the former is easier to type.
+#'
+#' Note 2: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest.
 #'
 #' `val_labs_vec` works with other labelr functions to facilitate creation,
 #' modification, accessing, use, and destruction of variable-specific value
@@ -48,15 +53,44 @@
 #' am_labs
 #'
 val_labs_vec <- function(data, var) {
+  # use numeric range labs for numeric variables
+  use_q_labs <- function(data, var) {
+    x <- data[[var]]
+    x <- irregular2v(x, to = NA, nan.include = TRUE, inf.include = TRUE)
+    this_val_label_var <- paste0("val.labs.", var)
+    char_q <- attributes(data)[[this_val_label_var]]
+    char_q <- char_q[char_q != "NA"]
+    qvals <- as.numeric(names(char_q))
+    names(qvals) <- as.character(char_q)
+    qvals <- rev(qvals)
+    x_out <- rep("Other", length(x))
+
+    for (i in seq_along(qvals)) {
+      this_val <- qvals[i]
+      this_lab <- names(qvals)[i]
+      x_out[!is.na(x) & x <= this_val] <- this_lab
+    }
+
+    x_out[is.na(x)] <- "NA"
+    x_out <- as_numv(x_out)
+    data[[var]] <- x_out
+    return(data)
+  }
+
   # make var character value
   var <- deparse(substitute(var))
   test_quote <- any(grepl("\"", var))
-  if (test_quote && is.character(var)) vars <- gsub("\"", "", var)
+  if (test_quote && is.character(var)) var <- gsub("\"", "", var)
+  var <- gsub("c\\(", "", var)
+  var <- gsub("\\(", "", var)
+  var <- gsub("\\)", "", var)
 
-  # test length of var
-  if (length(var) != 1) {
-    stop("\n
-var argument must be a single variable name (no more or less).")
+  # test for presence of var in data.frame
+  if (!all(var %in% names(data)) || length(var) != 1) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a variable that is present in the data.frame.
+         ")
   }
 
   # make this a Base R data.frame
@@ -80,30 +114,6 @@ No value labels found for supplied var --%s--.",
   if (nrow(data) > 300000) {
     warning("
 Note: labelr is not optimized for data.frames this large.")
-  }
-
-  # use numeric range labs for numeric variables
-  use_q_labs <- function(data, var) {
-    x <- data[[var]]
-    x <- irregular2v(x, to = NA, nan.include = TRUE, inf.include = TRUE)
-    this_val_label_var <- paste0("val.labs.", var)
-    char_q <- attributes(data)[[this_val_label_var]]
-    char_q <- char_q[char_q != "NA"]
-    qvals <- as.numeric(names(char_q))
-    names(qvals) <- as.character(char_q)
-    qvals <- rev(qvals)
-    x_out <- rep("Other", length(x))
-
-    for (i in seq_along(qvals)) {
-      this_val <- qvals[i]
-      this_lab <- names(qvals)[i]
-      x_out[!is.na(x) & x <= this_val] <- this_lab
-    }
-
-    x_out[is.na(x)] <- "NA"
-    x_out <- as_numv(x_out)
-    data[[var]] <- x_out
-    return(data)
   }
 
   # get value labs
@@ -165,6 +175,7 @@ data.frame to see which, if any, variables have value labels.
 
   data <- clean_data_atts(data)
   x <- data[[var]]
+  attributes(x) <- NULL
   return(x)
 }
 

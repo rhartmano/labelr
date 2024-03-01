@@ -14,6 +14,13 @@
 #' Note 2: `uvl1` is a compact alias for `use_val_lab1`: they do the same thing,
 #' and the former is easier to type.
 #'
+#' Note 3: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `use_val_labs()`.
+#'
 #' `use_val_lab1` replaces a single, value-labeled data.frame column with a
 #' "value labels-on" version of that column. Here, "labels-on" means that the
 #' column's original values are replaced with the corresponding value labels.
@@ -76,10 +83,12 @@ use_val_lab1 <- function(data, var) {
   vars <- gsub("\\(", "", vars)
   vars <- gsub("\\)", "", vars)
 
-  # test length of var
-  if (length(vars) != 1) {
-    stop("\n
-var argument must be a single variable name (no more or less).")
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a variable that is present in the data.frame.
+         ")
   }
 
   # make this a Base R data.frame

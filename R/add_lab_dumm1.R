@@ -24,9 +24,16 @@
 #' (white spaces in the value label will be replaced with the separator
 #' character).
 #'
+#' Note 4: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `add_lab_dummies()`.
+#'
 #' @param data a data.frame with at least one value-labeled variable (column).
-#' @param var the unquoted name of the value-labeled variable or variables
-#' from which dummy variable columns will be generated.
+#' @param var the unquoted name of the value-labeled variable (column) from
+#' which dummy variable columns will be generated.
 #' @param sep the separator character to use in constructing dummy variable
 #' column names (appears between the dummy variable name prefix and suffix).
 #' @param simple.names if TRUE (the default), dummy variable names will be the
@@ -268,15 +275,15 @@ data.frame to see which, if any, variables have value labels.
   vars <- deparse(substitute(var))
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
-
   vars <- gsub("c\\(", "", vars)
   vars <- gsub("\\(", "", vars)
   vars <- gsub("\\)", "", vars)
 
-  if (!all(vars %in% names(data))) {
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
-name of a value-labeled variable present in the data.frame.
+name of a variable that is present in the data.frame.
          ")
   }
 

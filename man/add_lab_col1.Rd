@@ -12,9 +12,8 @@ alc1(data, var, suffix = "_lab")
 \arguments{
 \item{data}{a data.frame.}
 
-\item{var}{the unquoted name of the column (variable) for which a "labels-on"
-(values replaced with value labels) version of the variable will be added to
-the returned data.frame.}
+\item{var}{the unquoted name of the column (variable) whose values you wish
+to replace with the corresponding value labels.}
 
 \item{suffix}{a suffix that will be added to the name of the labels-on
 column added to the data.frame (the non-suffix portion of the variable
@@ -38,6 +37,13 @@ add_lab_cols(mtcars, "am")).
 
 Note 2: \code{alc1} is a compact alias for \code{add_lab_col1}: they do the same thing,
 and the former is easier to type.
+
+Note 3: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest. If you
+wish to supply a character vector with the names of variables (columns) of
+interest, use \code{add_lab_cols()}.
 
 \code{add_lab_col1} creates a "labels-on" version of a value-labeled column and
 adds that new column to the supplied data.frame. Here, "labels-on" means that

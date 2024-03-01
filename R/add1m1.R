@@ -15,9 +15,16 @@
 #' requires a strict one-to-one mapping of distinct variable values and distinct
 #' value labels.
 #'
+#' Note 3: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `add_m1_lab()`.
+#'
 #' @param data a data.frame.
-#' @param var a character vector that corresponds to the name(s) of one or more
-#' variables to which value labels will be added.
+#' @param var the unquoted name of the variable (column) to which value labels
+#' will be added.
 #' @param vals a vector of distinct values of the actual variable, each of which
 #' is to be associated with the label supplied to the lab argument. Note: NA and
 #' other "irregular" (e.g., NaN, Inf) values all are automatically assigned the
@@ -67,6 +74,23 @@
 add1m1 <- function(data, var, vals, lab,
                    max.unique.vals = 10,
                    init = FALSE) {
+  # function to streamline a data.frame while preserving prior labelr attributes
+  sunique <- function(data, vars = NULL) {
+    lab_atts <- get_all_lab_atts(data)
+    if (!is.null(vars)) {
+      data <- data[vars]
+      data <- as.data.frame(data)
+      names(data) <- vars
+    }
+
+    data_unique <- unique(data)
+    data_unique <- add_lab_atts(data_unique, lab_atts,
+      num.convert = FALSE,
+      clean = FALSE
+    )
+    return(data_unique)
+  }
+
   # function to recode many to one
   recode_m21 <- function(x, bef, aft, unique = FALSE) {
     x <- as.character(x)
@@ -113,7 +137,8 @@ add1m1 <- function(data, var, vals, lab,
   vars <- gsub("\\(", "", vars)
   vars <- gsub("\\)", "", vars)
 
-  if (!all(vars %in% names(data))) {
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
 name of a variable that is present in the data.frame.
@@ -175,23 +200,6 @@ variable (column) vector classes must be numeric, integer, character, logical, o
       labels to the var.
     ")
     }
-  }
-
-  # streamline the data.frame
-  sunique <- function(data, vars = NULL) {
-    lab_atts <- get_all_lab_atts(data)
-    if (!is.null(vars)) {
-      data <- data[vars]
-      data <- as.data.frame(data)
-      names(data) <- vars
-    }
-
-    data_unique <- unique(data)
-    data_unique <- add_lab_atts(data_unique, lab_atts,
-      num.convert = FALSE,
-      clean = FALSE
-    )
-    return(data_unique)
   }
 
   ### streamline your data.frame

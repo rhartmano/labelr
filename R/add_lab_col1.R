@@ -14,6 +14,13 @@
 #' Note 2: `alc1` is a compact alias for `add_lab_col1`: they do the same thing,
 #' and the former is easier to type.
 #'
+#' Note 3: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `add_lab_cols()`.
+#'
 #' `add_lab_col1` creates a "labels-on" version of a value-labeled column and
 #' adds that new column to the supplied data.frame. Here, "labels-on" means that
 #' the column's original values are replaced with the corresponding value
@@ -25,9 +32,8 @@
 #' may be useful in working with value labels.
 #'
 #' @param data a data.frame.
-#' @param var the unquoted name of the column (variable) for which a "labels-on"
-#' (values replaced with value labels) version of the variable will be added to
-#' the returned data.frame.
+#' @param var the unquoted name of the column (variable) whose values you wish
+#' to replace with the corresponding value labels.
 #' @param suffix a suffix that will be added to the name of the labels-on
 #' column added to the data.frame (the non-suffix portion of the variable
 #' name will be identical to the original variable, e.g., the labels-on version
@@ -84,10 +90,12 @@ add_lab_col1 <- function(data, var, suffix = "_lab") {
   vars <- gsub("\\(", "", vars)
   vars <- gsub("\\)", "", vars)
 
-  # test length of var
-  if (length(vars) != 1) {
-    stop("\n
-var argument must be a single variable name (no more or less).")
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
+    stop("
+\nInvalid var argument specification: var arg should be a single, unquoted
+name of a variable that is present in the data.frame.
+         ")
   }
 
   # test length of var

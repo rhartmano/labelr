@@ -27,6 +27,13 @@
 #' Note 2: `aql1` is a compact alias for `add_quant1`: they do the same thing, and
 #' the former is easier to type
 #'
+#' Note 3: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest. If you
+#' wish to supply a character vector with the names of variables (columns) of
+#' interest, use `add_quant_labs()`.
+#'
 #' @param data a data.frame.
 #' @param var the unquoted name of the variable to which value labels will be
 #' added.
@@ -78,12 +85,12 @@ add_quant1 <- function(data, var, qtiles = NULL, vals = NULL, labs = NULL) {
   vars <- deparse(substitute(var))
   test_quote <- any(grepl("\"", vars))
   if (test_quote && is.character(vars)) vars <- gsub("\"", "", vars)
-
   vars <- gsub("c\\(", "", vars)
   vars <- gsub("\\(", "", vars)
   vars <- gsub("\\)", "", vars)
 
-  if (!all(vars %in% names(data))) {
+  # test for presence of var in data.frame
+  if (!all(vars %in% names(data)) || length(vars) != 1) {
     stop("
 \nInvalid var argument specification: var arg should be a single, unquoted
 name of a variable that is present in the data.frame.

@@ -9,8 +9,8 @@ add1m1(data, var, vals, lab, max.unique.vals = 10, init = FALSE)
 \arguments{
 \item{data}{a data.frame.}
 
-\item{var}{a character vector that corresponds to the name(s) of one or more
-variables to which value labels will be added.}
+\item{var}{the unquoted name of the variable (column) to which value labels
+will be added.}
 
 \item{vals}{a vector of distinct values of the actual variable, each of which
 is to be associated with the label supplied to the lab argument. Note: NA and
@@ -58,6 +58,13 @@ label to multiple distinct values of a variable ("m1" is short for
 "many-to-one"). This is in contrast to \code{add_val1} (and \code{add_val_labs}), which
 requires a strict one-to-one mapping of distinct variable values and distinct
 value labels.
+
+Note 3: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest. If you
+wish to supply a character vector with the names of variables (columns) of
+interest, use \code{add_m1_lab()}.
 }
 \examples{
 df <- mtcars
