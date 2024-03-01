@@ -1,6 +1,10 @@
 # labelr News
 
 # labelr 0.1.4
+* Functions `has_val_labs()`, `has_m1_labs()`, and `has_quant_labs()` added to facilitate logical check of a single data.frame variable (column) for the presence of, respectively: (1) any sort of value labels, (2) `add_m1_lab()`-style value labels specifically, or (3) `add_quant_labs()`-style value labels specifically.
+
+* Function `all_vals_uniquev()` (alias `all_univ()`) added. This checks where the length of a vector is equal to the length of the unique values in the vector (is equivalent to `length(x)` == `length(unique(x))`. It is anticipated that this will be used internally in future iterations of labelr.
+
 * Improved `add_val_labs()` (and `add_val1()`) to better detect and prevent their use on variables that already have `add_m1_lab()` -style many-to-one values labels. Previously, it was possible in some cases to modify select `add_m1_lab()`-style value labels using `add_val_labs()`. Now, `add_val_labs()` (and `add_val1()`) will detect and prohibit this behavior, redirecting the user to use `add_m1_lab()` for such variables. This reinforces the distinction between `add_val_labs()`-style (one-to-one) and `add_m1_lab()`-style (many-values-to-one-label) value labels, whereas prior behavior blurred this line.
 
 * Modified select `*1()` functions (e.g., `add_lab_col1()`, `use_val_lab1()`) so that they explicitly dis-allow indirection (e.g., passing an arbitrarily named character vector containing column names) and instead require that the supplied variable name (the var argument) be the literal name of a single variable present in the supplied data.frame. The functions permit users to pass that var name unquoted or quoted, although the documentation advises the user to supply unquoted variable names.
