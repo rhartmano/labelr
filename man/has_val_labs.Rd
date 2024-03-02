@@ -5,15 +5,22 @@
 \alias{hvl}
 \title{Is This a Value-labeled Variable (Column)?}
 \usage{
-has_val_labs(data, var)
+has_val_labs(data, var, type = "any")
 
-hvl(data, var)
+hvl(data, var, type = "any")
 }
 \arguments{
 \item{data}{a data.frame.}
 
 \item{var}{the unquoted name of the variable (column) to check for the
 presence of value labels.}
+
+\item{type}{the type of value label to check the variable for: "any,"
+"1to1," "m1," or "q." If "1to1," check will be for value labels added via
+\code{add_val_labs()} or \code{add_val1()}. If "m1," check will be for value labels
+added via \code{add_m1_lab()} or \code{add1m1()}. If "q," check will be for value
+labels added via \code{add_quant_labs()} or \code{add_quant1()}. If "any," will return
+TRUE if any of the foregoing value label types is found.}
 }
 \value{
 A 1L logical.
@@ -52,7 +59,7 @@ dflik <- add_val_labs(
   partial = TRUE
 )
 
-has_val_labs(dflik, y1) #TRUE
+has_val_labs(dflik, y1) # TRUE
 
-has_val_labs(dflik, y3) #FALSE, see not.vars arg above
+has_val_labs(dflik, y3) # FALSE, see not.vars arg above
 }

@@ -1,50 +1,49 @@
-#' Is This an `add_m1_lab()` Many-to-One-Style Value-labeled Variable (Column)?
+#' Is This a `add_val_labs()`-style Value-labeled Variable (Column)?
 #'
 #' @description
-#' Determine whether a specific variable of a data.frame has many-to-one-style
-#' value labels associated with it (i.e., via `add_m1_lab()` or `add1m1()`).
+#' Determine whether a specific variable of a data.frame has value labels
+#' associated with it that were added using `add_val_labs()` or `add_val1()`.
 #'
 #' @details
-#' `hm1l` is a compact alias for `has_m1_labs`: they do the same thing, and the
+#' `h11l` is a compact alias for `has_avl_labs`: they do the same thing, and the
 #' former is easier to type
 #'
 #' @param data a data.frame.
 #' @param var the unquoted name of the variable (column) to check for the
-#' presence of many-to-one-style value labels.
+#' presence of `add_val_labs()`-style (one-to-one) value labels.
 #' @return A 1L logical.
 #' @export
 #' @examples
-#' # add many-to-one style labels for "carb" and one-to-one style for "am"
-#' df <- mtcars
-#'
-#' df <- add_m1_lab(df,
-#'   vars = "carb",
-#'   vals = 1:3,
-#'   lab = "<=3",
-#'   max.unique.vals = 10
+#' # add val labs to multiple variables at once
+#' # make a "Likert"-type fake data set to demo
+#' # note, by default, add_val_labs() "vars" arg will do partial matching
+#' # in this case, we catch all vars with "y" in their name, except "y3"
+#' set.seed(272)
+#' dflik <- make_likert_data(scale = 1:7)
+#' vals2label <- 1:7
+#' labs2use <- c(
+#'   "VSD",
+#'   "SD",
+#'   "D",
+#'   "N",
+#'   "A",
+#'   "SA",
+#'   "VSA"
 #' )
 #'
-#' df <- add_m1_lab(df,
-#'   vars = "carb",
-#'   vals = c(4, 6, 8),
-#'   lab = ">=4",
-#'   max.unique.vals = 10
+#' dflik <- add_val_labs(
+#'   data = dflik, vars = c("y"), # note the vars args
+#'   not.vars = "y3",
+#'   vals = vals2label,
+#'   labs = labs2use,
+#'   partial = TRUE
 #' )
 #'
-#' df <- add_val_labs(df,
-#'   vars = "am",
-#'   vals = c(0, 1),
-#'   labs = c("autom", "manu"),
-#'   max.unique.vals = 10
-#' )
+#' has_avl_labs(dflik, y1) # TRUE
 #'
-#' has_m1_labs(df, carb) # TRUE, carb has m1-style value labels
-#'
-#' has_val_labs(df, am) # TRUE, am does have value labels
-#'
-#' has_m1_labs(df, am) # FALSE, am's value labels are not not m1-style labels
-has_m1_labs <- function(data, var) {
-  type <- "m1"
+#' has_avl_labs(dflik, y3) # FALSE, see not.vars arg above
+has_avl_labs <- function(data, var) {
+  type <- "1to1"
 
   # capture var argument
   vars <- deparse(substitute(var))
@@ -103,5 +102,5 @@ name of a variable that is present in the data.frame.
 }
 
 #' @export
-#' @rdname has_m1_labs
-hm1l <- has_m1_labs
+#' @rdname has_avl_labs
+h11l <- has_avl_labs

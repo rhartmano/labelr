@@ -2,13 +2,9 @@
 % Please edit documentation in R/has_quant_labs.R
 \name{has_quant_labs}
 \alias{has_quant_labs}
-\alias{hql}
-\title{Does This Variable (Column) Have \code{add_quant_labs()}-style Numerical
-Range-based Value Labels?}
+\title{Is this an \code{add_quant_labs()}-style Value-labeled Variable (Column)?}
 \usage{
 has_quant_labs(data, var)
-
-hql(data, var)
 }
 \arguments{
 \item{data}{a data.frame.}
@@ -20,16 +16,15 @@ presence of \code{add_quant_labs()}-style numerical range-based value labels.}
 A 1L logical.
 }
 \description{
-Determine whether a specific variable of a data.frame has numerical
-range-based value labels associated with it (i.e., via \code{add_m1_lab()} or
-\code{add1m1()}).
+Determine whether a specific variable of a data.frame has value labels
+associated with it that were added using \code{add_quant_labs()} or \code{add_quant1()}.
 }
 \details{
 \code{hql} is a compact alias for \code{has_quant_labs}: they do the same thing, and
 the former is easier to type
 }
 \examples{
-#copy mtcars to mt2 and assign various types of value labels
+# copy mtcars to mt2 and assign various types of value labels
 mt2 <- mtcars
 
 # add 1-to-1 value labels
@@ -40,9 +35,9 @@ mt2 <- add_val_labs(
   labs = c("automatic", "manual")
 )
 
-has_val_labs(mt2, am)  #TRUE, it does
-has_m1_labs(mt2, am) #FALSE, they are NOT add_m1_lab()-style
-has_quant_labs(mt2, am) #FALSE, they are NOT add_quant_labs() -style
+has_val_labs(mt2, am) # TRUE, it does
+has_m1_labs(mt2, am) # FALSE, they are NOT add_m1_lab()-style
+has_quant_labs(mt2, am) # FALSE, they are NOT add_quant_labs() -style
 
 # add many-to-1 value labels
 mt2 <- add_m1_lab(
@@ -52,9 +47,9 @@ mt2 <- add_m1_lab(
   lab = "4+"
 )
 
-has_val_labs(mt2, gear)  #TRUE, it does
-has_m1_labs(mt2, gear) #TRUE, they ARE add_m1_lab()-style
-has_quant_labs(mt2, gear) #FALSE, they NOT not add_quant_labs() -style
+has_val_labs(mt2, gear) # TRUE, it does
+has_m1_labs(mt2, gear) # TRUE, they ARE add_m1_lab()-style
+has_quant_labs(mt2, gear) # FALSE, they NOT not add_quant_labs() -style
 
 # add quartile-based numerical range value labels
 mt2 <- add_quant_labs(
@@ -63,7 +58,7 @@ mt2 <- add_quant_labs(
   qtiles = 4
 )
 
-has_val_labs(mt2, disp)  #TRUE, it does
-has_m1_labs(mt2, disp) #FALSE, they are NOT add_m1_lab()-style
-has_quant_labs(mt2, disp) #TRUE, they ARE add_quant_labs() -style
+has_val_labs(mt2, disp) # TRUE, it does
+has_m1_labs(mt2, disp) # FALSE, they are NOT add_m1_lab()-style
+has_quant_labs(mt2, disp) # TRUE, they ARE add_quant_labs() -style
 }

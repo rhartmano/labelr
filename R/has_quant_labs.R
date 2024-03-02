@@ -1,10 +1,8 @@
-#' Does This Variable (Column) Have `add_quant_labs()`-style Numerical
-#' Range-based Value Labels?
+#' Is this an `add_quant_labs()`-style Value-labeled Variable (Column)?
 #'
 #' @description
-#' Determine whether a specific variable of a data.frame has numerical
-#' range-based value labels associated with it (i.e., via `add_m1_lab()` or
-#' `add1m1()`).
+#' Determine whether a specific variable of a data.frame has value labels
+#' associated with it that were added using `add_quant_labs()` or `add_quant1()`.
 #'
 #' @details
 #' `hql` is a compact alias for `has_quant_labs`: they do the same thing, and
@@ -54,6 +52,8 @@
 #' has_m1_labs(mt2, disp) # FALSE, they are NOT add_m1_lab()-style
 #' has_quant_labs(mt2, disp) # TRUE, they ARE add_quant_labs() -style
 has_quant_labs <- function(data, var) {
+  type <- "q"
+
   # capture var argument
   vars <- deparse(substitute(var))
   test_quote <- any(grepl("\"", vars))
@@ -72,37 +72,44 @@ name of a variable that is present in the data.frame.
 
   att <- paste0("val.labs.", vars)
   att_list <- get_all_lab_atts(data)
-  val_labs_test_val <- check_labs_att(data, att)
+  any_val <- check_labs_att(data, att)
+  m1_val <- FALSE
+  q_val <- FALSE
 
-  if (val_labs_test_val) {
-    m1_test_val <- length(unique(att_list[att][[1]])) != length(att_list[att][[1]])
-  } else {
-    m1_test_val <- FALSE
-  }
+  if (any_val) {
+    m1_val <- length(unique(att_list[att][[1]])) != length(att_list[att][[1]])
 
-  if (val_labs_test_val && !m1_test_val) {
-    unique_labs <- length(unique(unname(get_labs_att(
+    q_unique_labs <- length(unique(unname(get_labs_att(
       data,
       paste0(
         "val.labs.",
         vars
       )
     )[[1]])))
-    unique_vals <- unname(vapply(
+    q_unique_vals <- unname(vapply(
       data[vars],
       function(x) length(unique(x)),
       integer(1)
     ))
 
-    test_val <- unique_vals > unique_labs
-  } else {
-    test_val <- FALSE
+    q_val <- q_unique_vals > q_unique_labs
   }
 
-  return(test_val)
+  out_val <- FALSE
+
+  if (type == "any") {
+    out_val <- any_val
+  } else if (type == "m1" && any_val && !q_val) {
+    out_val <- m1_val
+  } else if (type == "q" && !m1_val && any_val) {
+    out_val <- q_val
+  } else if (type == "1to1" && !q_val && !m1_val) {
+    out_val <- any_val
+  }
+
+  return(out_val)
 }
 
-
 #' @export
-#' @rdname has_quant_labs
+#' @rdname has_avl_labs
 hql <- has_quant_labs

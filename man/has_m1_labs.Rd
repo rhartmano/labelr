@@ -3,7 +3,7 @@
 \name{has_m1_labs}
 \alias{has_m1_labs}
 \alias{hm1l}
-\title{Is This a Many-to-One-Style Value-labeled Variable (Column)?}
+\title{Is This an \code{add_m1_lab()} Many-to-One-Style Value-labeled Variable (Column)?}
 \usage{
 has_m1_labs(data, var)
 
@@ -47,13 +47,13 @@ df <- add_m1_lab(df,
 df <- add_val_labs(df,
   vars = "am",
   vals = c(0, 1),
-  labs = c("autom","manu"),
+  labs = c("autom", "manu"),
   max.unique.vals = 10
 )
 
-has_m1_labs(df, carb) #TRUE, carb has m1-style value labels
+has_m1_labs(df, carb) # TRUE, carb has m1-style value labels
 
-has_val_labs(df, am) #TRUE, am does have value labels
+has_val_labs(df, am) # TRUE, am does have value labels
 
-has_m1_labs(df, am) #FALSE, am's value labels are not not m1-style labels 
+has_m1_labs(df, am) # FALSE, am's value labels are not not m1-style labels
 }
