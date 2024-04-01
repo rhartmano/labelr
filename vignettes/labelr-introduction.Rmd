@@ -29,7 +29,7 @@ labelr supports the following kinds of labels:
   
 2. **Name labels** - Each data.frame column (variable) may be given exactly one 
     name label, which is an extended variable name or brief description of the 
-    variable. Name labels equivalent to what Stata and SAS call "variable 
+    variable. Name labels are equivalent to what Stata and SAS call "variable 
     labels."
 
 3. **Value labels** - Specific values of a data.frame column (variable) can be 
@@ -166,7 +166,7 @@ one-to-one value labels for the variable "raceth".
 ```{r}
 df <- add_val_labs(df, # data.frame with to-be-value-labeled column
   vars = "raceth", # quoted variable name of to-be-labeled col
-  vals = c(1:7), # label values 1 through 7, inclusive
+  vals = c(1:7), # to-be-labeled values 1 through 7, inclusive
   labs = c(
     "White", "Black", "Hispanic", # ordered labels for vals 1-7
     "Asian", "AIAN", "Multi", "Other"
@@ -186,7 +186,7 @@ df <- add_val1(
   data = df,
   var = gender, # contrast this var argument to the vars argument demo'd above
   vals = c(0, 1, 2), # the values to be labeled
-  labs = c("Male", "Female", "Other"), # the labels, applied in order to the vals
+  labs = c("Male", "Female", "Other"), # the labels, applied in order, to the vals
   max.unique.vals = 10
 )
 ```
@@ -215,8 +215,8 @@ do so.
 
 Here, we will use `add_quant_labs` with the partial argument set to TRUE to 
 apply quintile range labels to **all variables** of df that have an "x" in their 
-names (i.e., vars "x1" and "x2"). We'll demonstrate this capability further at 
-the end of this vignette.
+names (i.e., vars "x1" and "x2"). We demonstrate this capability further at 
+the end of the separate "Special Topics" vignette.
 
 ```{r}
 df_temp <- add_quant_labs(
@@ -229,18 +229,23 @@ df_temp <- add_quant_labs(
 get_val_labs(df_temp)
 ```
 
-Note: If you wish to apply quantile-based value labels to all numeric variables 
-at once, you may wish to explore `all_quant_labs()`.
+For these variables, `get_val_labs()` shows the quantity values that define the 
+requested quantile thresholds (in this case, quintiles), with all values at or 
+below the given threshold (and above the previous threshold) receiving the 
+corresponding label.
 
 **Be careful** with setting partial to TRUE like this: If your data set featured 
 a column called "sex" or that featured the string "tax" or the suffix "max" in 
 its name, `add_quant_labs()` would attempt to apply the value labeling scheme to 
 that column as well! 
 
-We can use the same function to assign arbitrary, user-specified range labels. 
-Here, we assign numerical range labels based on an arbitrary cutpoint that 
-differentiate values of "x1" and "x2" that are at or below 100 from values that 
-are at or below 150 (but greater than 100).
+(One more side note: If you wish to apply quantile-based value labels to all 
+numeric variables at once, you may wish to explore `all_quant_labs()`.)
+
+Moving on. We can use the same function to assign arbitrary, user-specified range 
+labels. Here, we assign numerical range labels based on an arbitrary cutpoint 
+that differentiates values of "x1" and "x2" that are at or below 100 from values 
+that are at or below 150 (but greater than 100).
 
 ```{r}
 df_temp <- add_quant_labs(
@@ -276,11 +281,10 @@ necessarily part of a numerical range, this can be done through successive calls
 to `add_m1_lab()` Here, the "m1" is shorthand for "many to one," as in "many 
 values get the same one value label." 
 
-Note that each call to `add_m1_lab()` applies a single value label, so,  
-multiple calls are needed to apply multiple labels. Here, we illustrate this 
-workflow, applying the label "Some College+" to values 3, 4, or 5 of the 
-variable "edu", then applying other distinct labels to values 1 and 2, 
-respectively.
+Note that each call to `add_m1_lab()` applies a single value label, so, multiple 
+calls are needed to apply multiple labels. Here, we illustrate this workflow, 
+applying the label "Some College+" to values 3, 4, or 5 of the variable "edu", 
+then applying other distinct labels to values 1 and 2, respectively.
 
 ```{r}
 df <- add_m1_lab(df, "edu", vals = c(3:5), lab = "Some College+")
@@ -343,7 +347,7 @@ We're back(ed up)!
   
 In addition to this hack, labelr provides label-preserving variants of common 
 data management functions, including `sfilter()`, `sselect()`, `ssubset()`, 
-`srename()`, `ssort()`, and others. Here, the "s" prefix is for "safely," as in, 
+`srename()`, `ssort()`, and others. (Here, the "s" prefix is for "safely," as in, 
 "your labels will be safely retained"). Other popular packages (e.g., "dplyr") 
 may also preserve label attributes, but an advantage of the labelr functions 
 like `sselect()` is that they will update the label attributes of affected 
@@ -442,20 +446,21 @@ For example, we can assign the result of a `use_val_labs()` call to an object.
 The result will be a data.frame with the same names and dimensions as the one 
 supplied, with value labels replacing values for all value-labeled variables 
 (or for a subset of those variables, if you specify them). Those variables will 
-be coerced to character (if they were not already). Since there is no "undo" 
-shortcut for this action, it is safest to assign the result to a new object.
+be coerced to character (if they were not already). Since there is no simple 
+"undo" facility for this action, it is safest to assign the result to a new 
+object.
 
 ```{r}
 df_labd <- use_val_labs(df)
 head(df_labd) # note, this is utils::head(), not labelr::headl()
 ```
 
-Better still, we do not need to choose between values and labels. We can use 
-`add_lab_cols()` to preserve all existing variables (columns), including the 
+Perhaps better still, we do not need to choose between values and labels. We can 
+use `add_lab_cols()` to preserve all existing variables (columns), including the 
 value-labeled ones, while adding to our data.frame an additional 
 labels-as-values column for each value-labeled column. 
 
-Easier done than said, perhaps. Take a look:
+Easier done than said. Take a look:
 
 ```{r}
 df_plus_labs <- add_lab_cols(df)
@@ -466,9 +471,8 @@ head(df_plus_labs[c("gender", "gender_lab", "raceth", "raceth_lab")])
 We also can filter a value-labeled data.frame using value labels, returning a 
 subsetted data.frame in terms of the original values. In other words, we can use 
 the more semantically meaningful value labels to guide our subsetting, even as 
-they remain "invisible" and "in the background" as far as conventional R data 
-views, descriptives, and analyses are concerned. Again, I find this "easier done 
-than said."
+they remain "invisible" and "in the background" of the returned, filtered 
+data.frame. Again, I find this "easier done than said."
 
 ```{r}
 head(df)
@@ -589,9 +593,9 @@ collapse::qsu(mt2) # use an external package for more informative descriptives
 
 Another approach is to use `with_name_labs()` (or its more compact alias 
 `wnl()`), which will automatically display name labels in place of column names 
-in fairly flexible ways. `with_name_labs()` is an alternative approach that you 
-can call on the regular, name-labeled data.frame. You should **not** call it on 
-a data.frame after swapping in name labels with `use_name_labs()`.
+in fairly flexible ways. `with_name_labs()` is an alternative to `use_name_labs()` 
+that you can call on the regular, name-labeled data.frame. You should **not** 
+call it on a data.frame after swapping in name labels with `use_name_labs()`.
 
 With that said, let's revert back to our original column names, then we'll 
 verify that the name labels are still there in the background, **then** we'll 
@@ -613,7 +617,7 @@ get_name_labs(mt2)
 
 Note that this sort of switching back and forth between your original column 
 names and name labels (i.e., `use_name_labs()` and `use_var_names()`) assumes 
-you are **not** otherwise modifying your either set of names in the interim. 
+you are **not** otherwise modifying either set of names in the interim. 
 
 Now, pay attention to the variable names in the console output of the following 
 calls to `with_name_labs()`.You'll be using the familiar column names in your 
@@ -645,10 +649,10 @@ plays well with a range of "workhorse" exploratory and descriptive commands.
 This concludes our whirlwind tour of labelr functionalities. You've graduated.
 
 Well, almost. Before you go, here is a list of aliases for common functions. 
-Aside from having a different name, each alias function is identical to (i.e., 
-performs the same operations, returning the same result as) the parent function 
-that it aliases. More concise and more cryptic, these alias functions will save 
-you some typing at the console (and some characters in your scripts).
+Other than its name, each alias function is identical to (i.e., performs the 
+same operations, returning the same result as) the parent function that it 
+aliases. More concise and more cryptic, these alias functions will save you some 
+typing at the console (and some characters in your scripts).
 
 The available aliases are as follows:
   

@@ -44,6 +44,15 @@ We'll add a "frame label," which describes the data.frame overall.
 df <- add_frame_lab(df, frame.lab = "On-time data for all flights that
                     departed NYC (i.e. JFK, LGA or EWR) in 2013.")
 ```
+Note that the source data.frame (`nycflights13::flights`) is a tibble. The labelr
+package coerces augmented data.frames, such as tibbles and data.tables, into 
+"pure"Base R data.frames -- and alerts you that it has done so. The intent is to 
+avoid the dependencies, errors, or inconsistent and unpredictable behaviors that 
+might result from labelr trying to integrate with or make sense of these or other 
+competing, alternative data.frame constructs, which (a) by design behave 
+differently from standard R data.frames in various subtle or not-so-subtle ways 
+and which (b) may continue to evolve in the future.
+
 Let's see what this did.
 ```{r}
 attr(df, "frame.lab") # check for attribute
@@ -114,12 +123,22 @@ df <- add_val1(df,
 )
 ```
 
-Our data.frame also has a month variable, expressed in integer terms (e.g., 1 
-indicates January, 9 indicates September). We will "hand-jam" month value labels,
-using `add_val_labs()`. This command is equivalent to `add_val1()`, except that 
-it requires variable names to be quoted but allows you to supply more than one 
-of them at a time (i.e., you can supply a character vector of variable names). 
-In this case, we'll use it on just one variable.
+(Side note on warnings: The package issues the first in what will become a series 
+of potentially annoying warnings that you are applying value labels to a larger 
+data.frame than labelr was built to handle. There is a reason that this is a 
+warning, not an error: labelr will work on larger data.frames until it doesn't, 
+which is to say that the burdens of computational intensiveness will become a 
+drag on speed and R's in-session memory capacity. In the present case, labelr 
+handles the data.frame just fine, but things take a little longer, and labelr 
+seizes most opportunities to remind you that you're making it work overtime.)
+
+Okay, back to the value-labeling. Our data.frame also has a month variable, 
+expressed in integer terms (e.g., 1 indicates January, 9 indicates September). 
+We will "hand-jam" month value labels,using `add_val_labs()`. This command is 
+equivalent to `add_val1()`, except that it requires variable names to be quoted 
+but allows you to supply more than one of them at a time (i.e., you can supply 
+a character vector of variable names). In this case, we'll use it on just one 
+variable.
 
 First, we'll create our vectors of unique values and labels. 
 
@@ -676,7 +695,7 @@ levels of the factor variable being converted.
 
 ```{r}
 # ??"back"?? to integer? Not quite. Compare below to carb_orig above
-carb_to_int <- factor_to_lab_int(carb_fac, carb) # alias int2f() also works
+carb_to_int <- factor_to_lab_int(carb_fac, carb) # alias f2int() also works
 
 class(carb_to_int$carb) # Is an integer
 
@@ -712,7 +731,7 @@ tail(irl_dumm) # again, they're there!
 ```  
 
 We can use `add_lab_dumm1()` to achieve the same result without quoting the 
-column name. The countervailing advantage of `add_lab_dummies()` is that it let's 
+column name. The countervailing advantage of `add_lab_dummies()` is that it lets 
 you create dummy variables for more than one value-labeled variable at a time 
 (`add_lab_dumm1()` does not).
 
