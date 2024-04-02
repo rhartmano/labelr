@@ -16,7 +16,7 @@ A list of 0, 1, or more character variables.
 \code{get_all_factors} returns a list of character vectors, where each character
 vector is a given factor variable's unique levels, and where the vector
 is given the same name as the factor variable itself. If the data.frame
-contains no factors, any empty (length 0) list is returned.
+contains no factors, an empty (length 0) list is returned.
 }
 \examples{
 class(get_all_factors(iris))

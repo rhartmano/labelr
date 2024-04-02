@@ -20,7 +20,7 @@
 #' from this operation.
 #' @param unique.vals.thresh an integer. Numeric variables with fewer than this
 #' many unique variables will be exempted from the operation (i.e., will NOT
-#' receive quantile value labels).more than this.
+#' receive quantile value labels).
 #'
 #' @return A data.frame, with new variable value labels added.
 #' @importFrom stats quantile

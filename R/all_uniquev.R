@@ -4,7 +4,7 @@
 #' For a given vector, does the length of (number of values in) the vector equal
 #' the number of unique values in the vector?
 #'
-#' Note 2: `all_univ` is a compact alias for `all_uniquev`: they do the same
+#' Note: `all_univ` is a compact alias for `all_uniquev`: they do the same
 #' thing, and the former is easier to type
 #'
 #' @param x a vector.

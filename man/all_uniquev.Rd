@@ -22,7 +22,7 @@ a 1L logical.
 For a given vector, does the length of (number of values in) the vector equal
 the number of unique values in the vector?
 
-Note 2: \code{all_univ} is a compact alias for \code{all_uniquev}: they do the same
+Note: \code{all_univ} is a compact alias for \code{all_uniquev}: they do the same
 thing, and the former is easier to type
 }
 \examples{
