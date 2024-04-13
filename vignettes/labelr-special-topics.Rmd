@@ -46,7 +46,7 @@ df <- add_frame_lab(df, frame.lab = "On-time data for all flights that
 ```
 Note that the source data.frame (`nycflights13::flights`) is a tibble. The labelr
 package coerces augmented data.frames, such as tibbles and data.tables, into 
-"pure"Base R data.frames -- and alerts you that it has done so. The intent is to 
+"pure" Base R data.frames -- and alerts you that it has done so. The intent is to 
 avoid the dependencies, errors, or inconsistent and unpredictable behaviors that 
 might result from labelr trying to integrate with or make sense of these or other 
 competing, alternative data.frame constructs, which (a) by design behave 
@@ -92,7 +92,7 @@ get_name_labs(df) # show that they've been added
 ```
 
 Let's add variable VALUE labels for variable "carrier." Helpfully, a mapping of 
-airlines' carrier codes to their full ships with the nycflights13 package itself.
+airlines' carrier codes to their full names ships with the nycflights13 package itself.
 
 
 ```{r}
@@ -112,7 +112,7 @@ ny_lab <- airlines$name
 ```
 
 Let's add use these vectors to add value labels to df. We'll demo 
-`add_val1()`, which accepts only on variable but allows you to pass its name 
+`add_val1()`, which accepts only one variable but allows you to pass its name 
 unquoted. 
 
 ```{r}
@@ -152,8 +152,8 @@ ny_month_labs <- c(
 
 Note that order is important here: We need to supply exactly as many values as 
 value labels, with each value label being uniquely associated with the value 
-that shares its index. For example, in the above case, `ny_month_vals[3]` is 
-(here, `3`) is  associated with the ny_month_labs[3] (here, `"MAR"`)).
+that shares its index. For example, in the above case, `ny_month_vals[3]` (here, 
+`3`) is associated with the ny_month_labs[3] (here, `"MAR"`)).
 
 Now, let's use these two vectors to add value labels for the variable "month".
 
@@ -198,7 +198,7 @@ head(df_swapd[c("origin", "dep_time", "dest", "year", "month", "carrier")])
 Instead of replacing values using `use_val_labs()` -- something we can't directly 
 undo -- it might be safer to simply add "value-labels-on" character variables to 
 the data.frame, while preserving the parent variables. This adds nearly 1M new 
-cells to our df, but let's throw caution to the wind with `add_lab_cols()`.
+cells to our df (!), but let's throw caution to the wind with `add_lab_cols()`.
 
 ```{r}
 df_plus <- add_lab_cols(df, vars = c("carrier", "month", "dep_time"))
@@ -603,7 +603,7 @@ get_val_labs(ir_ord, "qrat_lab") # no labs here; this is just a character var
 
 ### Other Factor and Categorical Variable Possibilities
 labelr offers some additional facilities for working with factors and categorical 
-variables. For example, functions `add_lab_dummies()` (alias `alb()`) and 
+variables. For example, functions `add_lab_dummies()` (alias `ald()`) and 
 `add_lab_dumm1()` (alias `ald1()`) will generate and assign a dummy (aka binary 
 aka indicator) variable for each unique value label of a value-labeled variable 
 -- factor or otherwise. 
