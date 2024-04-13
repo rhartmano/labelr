@@ -24,7 +24,7 @@ functionalities and uses cases.
 labelr supports the following kinds of labels:
   
 1. **Frame labels** - Each data.frame may be given a single "frame label", which 
-    can be used describe the data set's key general features or characteristics 
+    can be used to describe the data set's key general features or characteristics 
     (e.g., source, date produced or published, high-level contents). 
   
 2. **Name labels** - Each data.frame column (variable) may be given exactly one 
@@ -270,7 +270,7 @@ relationship between these two functions mirrors the  relationship between
 df <- add_quant1(df, # data.frame
   x1, # variable to value-label
   qtiles = 5
-) # number quintiles to define numerical range labels
+) # number of quintiles to use in defining numerical range labels
 ```
 
 We'll preserve the "x1" range labels going forward, keeping "x2" unlabeled.
