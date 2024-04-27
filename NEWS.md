@@ -1,5 +1,8 @@
 # labelr News
 
+# labelr 0.1.5
+* Added function `v()` to allow passing of an "unquoted character vector" (of labels or column names). Fixed some typos and copy-editing errors in documentation. 
+
 # labelr 0.1.4
 * Functions `has_val_labs()`, `has_avl_labs()`, `has_m1_labs()`, and `has_quant_labs()` added to facilitate logical check of a single data.frame variable (column) for the presence of, respectively: (1) any sort of value labels, (2) `add_val_labs()` -style value labels specifically, (3) `add_m1_lab()`-style value labels specifically, or (4) `add_quant_labs()`-style value labels specifically.
 

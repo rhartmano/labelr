@@ -51,11 +51,11 @@ param, above), followed by the suffix string (see suffix.length param, below).}
 A 1L integer indicating the number of leading characters of each variable
 value label to use use in constructing dummy variable column names. For
 example, consider the following setup: parent column name is "tacos";
-prefix.length = 3; sep = "_", and suffix.length = 2. In this case, if
-simple.names = FALSE, then a dummy variable column named "tac.so" would be
+prefix.length = 3; sep = "\emph{", and suffix.length = 2. In this case, if
+simple.names = FALSE, then a dummy variable column named "tac_so" would be
 created to represent those values of the tacos" column that have the value
 label "soft" (because "tac" are the first three letters of the parent column
-name, the separator is ".", and "so" are the first two characters in "soft").}
+name, the separator is "}", and "so" are the first two characters in "soft").}
 }
 \value{
 A data.frame with dummy variables added for all value labels of the

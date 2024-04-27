@@ -30,7 +30,7 @@ all_uniquev(mtcars$am) # FALSE
 
 set.seed(35994)
 z <- runif(25)
-all_univ(z) # TRUE; all_uni is an alias for all_uniquev()
+all_univ(z) # TRUE; all_univ is an alias for all_uniquev()
 
 z[c(1, 2)] <- NA # two NA values added
 all_univ(z, na.rm = FALSE) # FALSE, because the two NA values are not unique
