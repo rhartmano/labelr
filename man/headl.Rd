@@ -39,8 +39,8 @@ df <- add_val_labs(df,
 # distinction between add_val1() and add_val_labs() will become more meaningful
 # when we get to our Likert example
 df <- add_val1(
-  data = df, gender, vals = c(0, 1, 2),
-  labs = c("M", "F", "O"), max.unique.vals = 50
+  data = df, gender, vals = c(0, 1, 2, 3, 4),
+  labs = c("M", "F", "TR", "NB", "Diff-Term"), max.unique.vals = 50
 )
 
 head(df) # utils::head

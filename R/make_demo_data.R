@@ -11,8 +11,8 @@
 #' distribution) recorded in a hypothetical data set.
 #' @param age.sd standard deviation of (fictional) age variable (assuming a normal
 #' distribution) recorded in a hypothetical data set.
-#' @param gend.prob probabilities of three gender categories for a gender identity
-#' variable recorded in a hypothetical data set.
+#' @param gend.prob probabilities of four categories of a gender identity variable
+#' recorded in a hypothetical data set.
 #' @param raceth.prob probabilities of categories of a hypothetical race/ethnicity
 #' variable recorded in a hypothetical data set.
 #' @param edu.prob probabilities of categories of a hypothetical "highest level of
@@ -38,7 +38,7 @@
 make_demo_data <- function(n = 1000,
                            age.mean = 43,
                            age.sd = 15,
-                           gend.prob = c(0.475, 0.475, 0.05),
+                           gend.prob = c(0.45, 0.45, 0.045, 0.045, 0.01),
                            raceth.prob = c(
                              1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7,
                              1 / 7, 1 / 7
@@ -46,7 +46,7 @@ make_demo_data <- function(n = 1000,
                            edu.prob = c(0.03, 0.32, 0.29, 0.24, 0.12),
                            rownames = TRUE) {
   raceth <- sample(c(1, 2, 3, 4, 5, 6, 7), n, replace = TRUE, prob = raceth.prob)
-  gender <- sample(c(0, 1, 2), n, replace = TRUE, prob = gend.prob)
+  gender <- sample(c(0, 1, 2, 3, 4), n, replace = TRUE, prob = gend.prob)
   age <- round(rnorm(n, mean = age.mean, sd = age.sd), 0)
   age[age < 0] <- 0
   edu <- sample(c(1:5), n, replace = TRUE, prob = edu.prob)

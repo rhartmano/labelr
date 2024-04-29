@@ -24,7 +24,7 @@ Convert a data.frame with Haven package-style labels to a data.frame with
 labelr name labels and \code{add_val_labs}-style one-to-one, value labels.
 }
 \examples{
-# convert haven vector value labels to labelr value labels
+# convert haven vector labels to labelr value labels
 library(haven)
 library(tibble)
 x1 <- labelled(1:8, c(good = 1, bad = 5))

@@ -8,7 +8,7 @@ make_demo_data(
   n = 1000,
   age.mean = 43,
   age.sd = 15,
-  gend.prob = c(0.475, 0.475, 0.05),
+  gend.prob = c(0.45, 0.45, 0.045, 0.045, 0.01),
   raceth.prob = c(1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7),
   edu.prob = c(0.03, 0.32, 0.29, 0.24, 0.12),
   rownames = TRUE
@@ -23,8 +23,8 @@ distribution) recorded in a hypothetical data set.}
 \item{age.sd}{standard deviation of (fictional) age variable (assuming a normal
 distribution) recorded in a hypothetical data set.}
 
-\item{gend.prob}{probabilities of three gender categories for a gender identity
-variable recorded in a hypothetical data set.}
+\item{gend.prob}{probabilities of four categories of a gender identity variable
+recorded in a hypothetical data set.}
 
 \item{raceth.prob}{probabilities of categories of a hypothetical race/ethnicity
 variable recorded in a hypothetical data set.}

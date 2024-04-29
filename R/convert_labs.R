@@ -15,7 +15,7 @@
 #' @return a data.frame.
 #' @export
 #' @examples
-#' # convert haven vector value labels to labelr value labels
+#' # convert haven vector labels to labelr value labels
 #' library(haven)
 #' library(tibble)
 #' x1 <- labelled(1:8, c(good = 1, bad = 5))

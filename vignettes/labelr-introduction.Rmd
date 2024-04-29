@@ -185,8 +185,8 @@ above, but `add_val_labs` supports labeling multiple variables at once).
 df <- add_val1(
   data = df,
   var = gender, # contrast this var argument to the vars argument demo'd above
-  vals = c(0, 1, 2), # the values to be labeled
-  labs = c("Male", "Female", "Other"), # the labels, applied in order, to the vals
+  vals = c(0, 1, 2, 3, 4), # the values to be labeled
+  labs = c("M", "F", "TR", "NB", "Diff-Term"), # the labels, applied in order, to the vals
   max.unique.vals = 10
 )
 ```
@@ -260,7 +260,7 @@ get_val_labs(df_temp)
 
 Having demonstrated the basic functionality on our df_temp copy of df, let's 
 ignore that data.frame and return our focus to df. We'll use `add_quant1` to 
-apply decile range labeling to the variable "x1" only. Note that `add_quant1` is 
+apply quintile range labeling to the variable "x1" only. Note that `add_quant1` is 
 like `add_quant_labs`, but accepts only a single variable, whose name can be 
 supplied without quotes. The opposite trade-off holds for `add_quant_labs`: The 
 relationship between these two functions mirrors the  relationship between 

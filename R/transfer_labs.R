@@ -40,8 +40,8 @@
 #' )
 #'
 #' df <- add_val1(
-#'   data = df, gender, vals = c(0, 1, 2),
-#'   labs = c("Male", "Female", "Other"), max.unique.vals = 50
+#'   data = df, gender, vals = c(0, 1, 2, 3, 4),
+#'   labs = c("M", "F", "TR", "NB", "Diff-Term"), max.unique.vals = 50
 #' )
 #'
 #' # let's add variable NAME labels
