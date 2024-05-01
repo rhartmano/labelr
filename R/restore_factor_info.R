@@ -2,7 +2,7 @@
 #'
 #' @description
 #' `restore_factor_info` searches a data.frame for labelr-specific factor
-#' meta-data (added by add_factor_info()) and, if found, uses that information
+#' meta-data (added by `add_factor_info()`) and, if found, uses that information
 #' to coerce a character vector that was formerly a factor back into a
 #' factor, with former levels and (if applicable) "ordered" factor status,
 #' as well.

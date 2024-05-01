@@ -15,7 +15,7 @@
 #' (potentially) more intuitively meaningful value labels (e.g., gender=1 values
 #' displayed as "Male" instead of 1).
 #'
-#' #' Warning: `use_val_labs` will replace existing variable values with value
+#' Warning: `use_val_labs` will replace existing variable values with value
 #' labels and cannot be undone. If you wish to preserve variable values, be sure
 #' to assign the result of `use_val_labs` to a new object. For other ways to
 #' leverage value labels for common data management or inspection tasks, while

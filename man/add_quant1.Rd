@@ -43,8 +43,8 @@ numerical variable.
 }
 \details{
 \code{add_quant1} is a variant of \code{add_quant_labs} that allows you to specify only
-one var to label but allows you to pass its name without quoting it (compare
-\code{add_quant1}(mtcars, mpg) to \code{add_quant_labs}(mtcars, "mpg").
+one var to label but allows you to pass its name without quoting it
+(compare \code{add_quant1}(mtcars, mpg) to \code{add_quant_labs}(mtcars, "mpg").
 
 Numerical variables that feature decimals or large numbers of distinct values
 are not eligible to receive conventional value labels. \code{add_quant1} allows

@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_numv.R
 \name{as_numv}
 \alias{as_numv}
-\title{Convert a "Suitable" Character Vector to Numeric}
+\title{Convert a Suitable Character Vector to Numeric}
 \usage{
 as_numv(x, nan2na = TRUE, inf2na = TRUE)
 }

@@ -48,7 +48,7 @@ and \code{tabl}. In particular, see \code{use_val_labs} if, rather than adding a
 "labels-on" column to a data.frame, you wish to replace a column's values
 with the corresponding value labels. See \code{val_labs_vec} if you wish to
 convert a single, value-labeled column's values to labels and return the
-result as a stand-alone vector, see \code{val_labs_vec}.
+result as a stand-alone vector.
 }
 \examples{
 # one variable at a time, mtcars

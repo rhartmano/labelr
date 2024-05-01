@@ -49,8 +49,8 @@ param, above), followed by the suffix string (see suffix.length param, below).}
 
 \item{suffix.length}{(NOTE: This argument is ignored if simple.names = TRUE).
 A 1L integer indicating the number of leading characters of each variable
-value label to use use in constructing dummy variable column names. For
-example, consider the following setup: parent column name is "tacos";
+value label to use in constructing dummy variable column names. For example,
+consider the following setup: parent column name is "tacos";
 prefix.length = 3; sep = "\emph{", and suffix.length = 2. In this case, if
 simple.names = FALSE, then a dummy variable column named "tac_so" would be
 created to represent those values of the tacos" column that have the value

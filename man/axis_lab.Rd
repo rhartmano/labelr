@@ -24,8 +24,13 @@ that variable's name label for use in axis labeling or plot labeling function
 options.
 }
 \details{
-Note: \code{alb} is a compact alias for \code{axis_lab}: they do the same thing,
+Note 1: \code{alb} is a compact alias for \code{axis_lab}: they do the same thing,
 and the former is easier to type.
+
+Note 2: This command is intended exclusively for interactive use. In
+particular, the var argument must be the literal name of a single variable
+(column) found in the supplied data.frame and may NOT be, e.g., the name of a
+character vector that contains the variable (column name) of interest.
 }
 \examples{
 # copy mtcars to df

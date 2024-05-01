@@ -1,4 +1,4 @@
-#' Convert a "Suitable" Character Vector to Numeric
+#' Convert a Suitable Character Vector to Numeric
 #'
 #' @description
 #' `as_numv` determines whether a character vector can be coerced to numeric

@@ -6,8 +6,8 @@
 #'
 #' @details
 #' `add_quant1` is a variant of `add_quant_labs` that allows you to specify only
-#' one var to label but allows you to pass its name without quoting it (compare
-#' `add_quant1`(mtcars, mpg) to `add_quant_labs`(mtcars, "mpg").
+#' one var to label but allows you to pass its name without quoting it
+#' (compare `add_quant1`(mtcars, mpg) to `add_quant_labs`(mtcars, "mpg").
 #'
 #' Numerical variables that feature decimals or large numbers of distinct values
 #' are not eligible to receive conventional value labels. `add_quant1` allows

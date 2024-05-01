@@ -23,7 +23,7 @@
 #' "labels-on" column to a data.frame, you wish to replace a column's values
 #' with the corresponding value labels. See `val_labs_vec` if you wish to
 #' convert a single, value-labeled column's values to labels and return the
-#' result as a stand-alone vector, see `val_labs_vec`.
+#' result as a stand-alone vector.
 #'
 #' @param data a data.frame.
 #' @param vars the names of the columns (variables) for which "labels-on"

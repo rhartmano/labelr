@@ -81,7 +81,6 @@ carb_to_int <- carb_fac # copy carb_fac to carb_to_int
 carb_to_int <- factor_to_lab_int(carb_to_int, carb) # alias int2f() also works
 class(carb_to_int$carb) # Is an integer
 levels(carb_to_int$carb) # NOT a factor
-head(carb_to_int$carb, 3) # NOT the same as carb_orig_int
 mean(carb_to_int$carb) # NOT the same as carb_orig_int
 lm(mpg ~ carb, data = carb_to_int) # NOT the same as carb_orig_int
 (adj_r2_fac <- summary(lm(mpg ~ carb, data = carb_to_int))$adj.r.squared)

@@ -10,7 +10,8 @@ has_decv(x, sample.after = 1000)
 \item{x}{the vector to check for presence of decimals.}
 
 \item{sample.after}{for larger (length(x)>1000) vectors,
-take a non-random sample of 1000 observations from the vector.}
+test for decimals using a non-random sample of 1000 observations from the
+vector.}
 }
 \value{
 a 1L vector indicating whether x has decimal values.

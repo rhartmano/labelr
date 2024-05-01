@@ -6,8 +6,13 @@
 #' options.
 #'
 #' @details
-#' Note: `alb` is a compact alias for `axis_lab`: they do the same thing,
+#' Note 1: `alb` is a compact alias for `axis_lab`: they do the same thing,
 #' and the former is easier to type.
+#'
+#' Note 2: This command is intended exclusively for interactive use. In
+#' particular, the var argument must be the literal name of a single variable
+#' (column) found in the supplied data.frame and may NOT be, e.g., the name of a
+#' character vector that contains the variable (column name) of interest.
 #'
 #' @param data a data.frame.
 #' @param var the unquoted name of a variable that exists in the data.frame and

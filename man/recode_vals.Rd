@@ -41,7 +41,7 @@ some other set of values (aft), returning the recoded vector.
 }
 \details{
 While labelr users do not need to engage \code{recode_vals} directly, it is the
-underlying function that powers the core labelr functions, such as
+underlying function that powers certain core labelr functions, including
 \code{add_val_labs} and \code{add_name_labs}. The bef argument identifies the values of
 x to recode, and aft argument indicates what each bef value should be recoded
 to (order matters: bef=c("a", "b", "c"), aft=c(1, 2, 3) means that "a" values

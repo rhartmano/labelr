@@ -4,34 +4,27 @@
 #' Apply a single variable value label to multiple values of a variable
 #' ("m1" is shorthand for "many values get one label").
 #'
-#' @details
-#' Note: `am1l` is a compact alias for `add_m1_labs`: they do the same thing,
-#' and the former is easier to type
-#'
+#' @details'
 #' add_m1_lab` (and `add1m1`) allows the user to assign the same value label to
 #' multiple distinct values of a variable ("m1" is short for "many-to-one").
 #' This is in contrast to `add_val_labs` and `add_val1`, which require a strict
 #' one-to-one mapping of distinct variable values and distinct value labels.
 #'
-#' If partial = TRUE, `add_m1_lab` will apply the specified labeling scheme to
-#' all variables that contain a key variable name substring of interest
-#' (supplied to the vars argument), which may be one or more variables found in
-#' the data.frame (see Example #2).
+#' Note 1: Each call to `add_m1_lab` accepts only one value label, which may be
+#' applied to multiple distinct values of the specified column(s). Additional
+#' labels can be applied to other values of the same column(s) by making
+#' additional calls to `add_m1_lab` (see the example).
+#'
+#' Note 2: `am1l` is a compact alias for `add_m1_lab`: they do the same thing,
+#' and the former is easier to type
 #'
 #' @param data a data.frame.
 #' @param vars a character vector that corresponds to the name(s) of one or more
 #' variables to which value labels will be added.
 #' @param vals a vector of distinct values of the actual variable, each of which
-#' is to be associated with the label supplied to the lab argument. Note: NA and
-#' other "irregular" (e.g., NaN, Inf) values all are automatically assigned the
-#' label "NA", and this cannot be overridden. Note that you do not need to
-#' specify all unique vals of var, and you can supply value labels
-#' incrementally, one (or a few, or all) unique vals of var at a time. However,
-#' if you do this, do not re-use a value label or repeat a value-label
-#' assignment you have already made: Once you've added the value label, it is
-#' bound to those values until you drop the label (see `drop_val_labs`) or some
-#' other action (intentional or otherwise) strips the value label attributes
-#' from your data.frame (see, e.g. `strip_labs`).
+#' is to be associated with the single label supplied to the lab argument. Note:
+#' NA and other "irregular" (e.g., NaN, Inf) values all are automatically
+#' assigned the label "NA", and this cannot be overridden.
 #' @param lab a single distinct label that will be associated with all values
 #' specified in your vals argument. Note: NA and other "irregular" (e.g.,
 #' NaN, Inf) values are automatically assigned the label "NA" and may not be
@@ -86,6 +79,8 @@
 #'   lab = ">=4",
 #'   max.unique.vals = 10
 #' )
+#'
+#' get_val_lab1(df, carb)
 #'
 #' head(use_val_labs(df), 8) # they're there
 add_m1_lab <- function(data, vars, vals, lab,

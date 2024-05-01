@@ -34,10 +34,9 @@
 #' @param data a data.frame.
 #' @param var the unquoted name of the column (variable) whose values you wish
 #' to replace with the corresponding value labels.
-#' @param suffix a suffix that will be added to the name of the labels-on
-#' column added to the data.frame (the non-suffix portion of the variable
-#' name will be identical to the original variable, e.g., the labels-on version
-#' of "x1" will be "x1_lab" (or whatever alternative suffix you supply)).
+#' @param suffix a suffix that will be appended to the name of the labels-on
+#' column that is added to the data.frame (e.g., if suffix = "_lab," the
+#' labels-on version of "x1" will be "x1_lab").
 #'
 #' @return A data.frame consisting of the originally supplied data.frame, along
 #'  with the labels-on column added to it.

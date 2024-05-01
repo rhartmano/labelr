@@ -1,11 +1,12 @@
 #' Add or Modify Data Frame Variable Name Labels
 #'
 #' @description
-#' Add descriptive variable name labels (up to one per variable) to a data.frame.
+#' Add descriptive variable name labels (up to one per column) to the columns of
+#' a data.frame.
 #'
 #' @details
 #' Note: `anl` is a compact alias for `add_name_labs`: they do the same thing,
-#' and the former is easier to type
+#' and the former is easier to type.
 #'
 #' `add_name_labs` works with `get_name_labs`, `use_name_labs`, and
 #' `use_var_names` to facilitate the creation, accessing, and substitution of

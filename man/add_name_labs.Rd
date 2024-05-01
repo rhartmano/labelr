@@ -41,11 +41,12 @@ see them), other provisional/default labelr label information added, and
 previous user-added labelr label information preserved.
 }
 \description{
-Add descriptive variable name labels (up to one per variable) to a data.frame.
+Add descriptive variable name labels (up to one per column) to the columns of
+a data.frame.
 }
 \details{
 Note: \code{anl} is a compact alias for \code{add_name_labs}: they do the same thing,
-and the former is easier to type
+and the former is easier to type.
 
 \code{add_name_labs} works with \code{get_name_labs}, \code{use_name_labs}, and
 \code{use_var_names} to facilitate the creation, accessing, and substitution of
