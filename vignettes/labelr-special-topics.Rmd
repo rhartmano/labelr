@@ -655,7 +655,7 @@ has_decv(carb_orig$carb) # and does NOT have decimals; so, lab_int_to_fac() work
 
 levels(carb_orig$carb) # none, not a factor
 
-head(carb_orig$carb, 3) 
+head(carb_orig$carb, 3)
 
 mean(carb_orig$carb) # compare to carb_to_int (below)
 
