@@ -290,13 +290,6 @@ ssort <- function(data, vars, descending = FALSE, na.last =
   # end supporting functions, begin primary sort_df operations     #
   ####################################################################
 
-  # warn user that this function is not for large data.frames
-  # (it may still work without crashing, but it will be slow)
-  if (nrow(data) > 50000) {
-    warning("
-\nNote: ssort() is not optimized for data.frames of this size or larger. This may take awhile.")
-  }
-
   # handle var column number indices, if supplied
   if (is.numeric(vars)) vars <- names(data)[vars]
 
@@ -319,10 +312,9 @@ ssort <- function(data, vars, descending = FALSE, na.last =
 
   if (length(descending) == 1 && length(vars) > 1) {
     descending <- rep(descending, length(vars))
-    warning("Note: Only one descending argument found; it has been applied (recycled) to all vars arguments.")
+  } else if (length(descending) > 1 && length(vars) != length(descending)) {
+    stop("Number of args to vars and descending do not match.")
   }
-
-  if (length(descending) != length(vars)) stop("Number of args to vars and descending do not match.")
 
   if (length(vars) == 1) {
     sort.ord2 <- order(data_orig[, vars], decreasing = descending, na.last = na.last)
