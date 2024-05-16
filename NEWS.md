@@ -1,6 +1,8 @@
 # labelr News
 
 # labelr 0.1.6
+* added two convenience functions: `fact2char()` converts all factor data.frame variables to character variables, and `irregular2()` converts all irregular (see `check_irregular()` and `irregular2v()`) values in a data.frame to some other single value (NA, by default). `irregular2()`. 
+
 * `ssort()` code is streamlined (and no longer issues a warning when it recycles the descending argument). 
 
 * added fact.to.char (defaults to FALSE) and irreg.to.na (defaults to FALSE) arguments to `as_base_data_frame()`.
