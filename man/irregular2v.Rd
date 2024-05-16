@@ -2,7 +2,7 @@
 % Please edit documentation in R/irregular2v.R
 \name{irregular2v}
 \alias{irregular2v}
-\title{Replace "Irregular" Values with Another Value}
+\title{Replace "Irregular" Values of a Vector with Some Other Value}
 \usage{
 irregular2v(
   x,

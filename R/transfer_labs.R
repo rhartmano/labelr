@@ -76,27 +76,15 @@ transfer_labs <- function(data, from, to) {
   # ..found for "from" var
   flag <- 0
 
-  # make this work with or without the variable being quoted
+  # make to arg work with or without the variable being quoted
   to <- deparse(substitute(to))
   test_quote <- any(grepl("\"", to))
   if (test_quote && is.character(to)) to <- gsub("\"", "", to)
 
-  # make this work with or without the variable being quoted
-  to <- deparse(substitute(to))
-
-  test_quote <- any(grepl("\"", to))
-  if (test_quote && is.character(to)) to <- gsub("\"", "", to)
-
-  # make this work with or without the variable being quoted
+  # make from arg work with or without the variable being quoted
   from <- deparse(substitute(from))
-
   test_quote_2 <- any(grepl("\"", from))
-  if (test_quote_2 && is.character(from)) {
-    from <- gsub(
-      "\"", "",
-      from
-    )
-  }
+  if (test_quote_2 && is.character(from)) from <- gsub("\"", "", from)
 
   from_var_val_label <- paste0("val.labs.", from)
   to_var_val_label <- paste0("val.labs.", to)

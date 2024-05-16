@@ -4,10 +4,14 @@
 \alias{as_base_data_frame}
 \title{Convert Augmented Data Frame to Base R Data Frame}
 \usage{
-as_base_data_frame(data)
+as_base_data_frame(data, fact.to.char = FALSE, irreg.to.na = FALSE)
 }
 \arguments{
 \item{data}{a data.frame object.}
+
+\item{fact.to.char}{coerce all factor variables to character variables.}
+
+\item{irreg.to.na}{convert all irregular values (see \code{irregular2v()}) to NA.}
 }
 \value{
 a data.frame object with any additional classes removed.

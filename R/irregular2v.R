@@ -1,4 +1,4 @@
-#' Replace "Irregular" Values with Another Value
+#' Replace "Irregular" Values of a Vector with Some Other Value
 #'
 #' @description
 #' Check a vector for the presence of "irregular" values (e.g., NA) and, if
