@@ -261,7 +261,7 @@ tabl(mt2, vars = c("am", "gear"), labs.on = TRUE) # labels on, sorted by freq
 #> 3 automatic   4+  4
 #> 4    manual    3  0
 
-tabl(mt2, vars = c("am", "gear"), labs.on = FALSE) # labels off (default)
+tabl(mt2, vars = c("am", "gear"), labs.on = FALSE) # labels off
 #>   am gear  n
 #> 1  0    3 15
 #> 2  1    4  8

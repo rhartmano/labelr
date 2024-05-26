@@ -5,7 +5,10 @@
 #' data.frame.
 #
 #' @details
-#' Note: To minimize dependencies and complexities, labelr label-assigning
+#' Note: `adf` is a compact alias for `as_base_data_frame`: they do the same
+#' thing, and the former is easier to type
+#'
+#' To minimize dependencies and complexities, labelr label-assigning
 #' functions are designed to work exclusively with Base R data.frames, not
 #' alternative data structures like matrices or augmented data.frames, such as
 #' data.tables or tibbles. The suggested labeling workflow is to first assign
@@ -64,3 +67,7 @@ data argument object coerced from augmented to conventional (Base R) data.frame.
 
   return(data)
 }
+
+#' @export
+#' @rdname as_base_data_frame
+adf <- as_base_data_frame

@@ -713,3 +713,6 @@ The available aliases are as follows:
 * `drop_frame_lab` alias is `dfl`
 
 * `axis_lab` is  `alb` 
+
+* `as_base_data_frame` is  `adf` 
+
