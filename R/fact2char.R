@@ -6,6 +6,7 @@
 #' @param data a data.frame object.
 #' @return a data.frame identical to data, with exception that any factors
 #' have been converted to character variables.
+#' @export
 #'
 #' @examples
 #' sapply(iris, class)
@@ -21,3 +22,7 @@ fact2char <- function(data) {
   data[i] <- lapply(data[i], as.character)
   return(data)
 }
+
+#' @export
+#' @rdname fact2char
+f2c <- fact2char

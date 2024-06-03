@@ -497,7 +497,7 @@ case, we filter on two value-labeled columns and return a data.frame consisting
 of only those columns.
 
 ```{r}
-df2 <- slab(df, raceth == "Black" & gender == "Male", gender, raceth)
+df2 <- slab(df, raceth == "Black" & gender == "M", gender, raceth)
 head(df2, 10)
 ```
 

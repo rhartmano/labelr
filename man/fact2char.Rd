@@ -2,9 +2,12 @@
 % Please edit documentation in R/fact2char.R
 \name{fact2char}
 \alias{fact2char}
+\alias{f2c}
 \title{Convert All Factor Variables of a Data Frame to Column Variables}
 \usage{
 fact2char(data)
+
+f2c(data)
 }
 \arguments{
 \item{data}{a data.frame object.}
