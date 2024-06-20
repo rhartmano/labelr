@@ -69,7 +69,13 @@ gremlr <- function(patterns, x, ignore.case = TRUE, vals = FALSE) {
     function(z) grepl(z, x, ignore.case = ignore.case)
   )
 
-  xmat <- apply(as.matrix(log_mat), 1, any)
+  log_mat <- as.matrix(log_mat)
+
+  xmat <- apply(log_mat, 1, any)
+
+  names(xmat) <- x
+
   if (vals) xmat <- x[which(xmat)]
+
   return(xmat)
 }

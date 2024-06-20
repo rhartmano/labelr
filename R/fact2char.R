@@ -1,4 +1,4 @@
-#' Convert All Factor Variables of a Data Frame to Column Variables
+#' Convert All Factor Variables of a Data Frame to Character Variables
 #'
 #' @description
 #' Convenience function to convert all factor variables to character.

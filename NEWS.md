@@ -1,5 +1,8 @@
 # labelr News
 
+# labelr 0.1.7
+* bug fixed in `greml()` and `gremlr()` so that these handle cases where character vector passed to x argument is a single element (1L). 
+
 # labelr 0.1.6
 * added two convenience functions: `fact2char()` converts all factor data.frame variables to character variables, and `irregular2()` converts all irregular (see `check_irregular()` and `irregular2v()`) values in a data.frame to some other single value (NA, by default). `irregular2()`. 
 

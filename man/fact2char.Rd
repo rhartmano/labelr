@@ -3,7 +3,7 @@
 \name{fact2char}
 \alias{fact2char}
 \alias{f2c}
-\title{Convert All Factor Variables of a Data Frame to Column Variables}
+\title{Convert All Factor Variables of a Data Frame to Character Variables}
 \usage{
 fact2char(data)
 
