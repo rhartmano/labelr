@@ -44,6 +44,11 @@
 #' df_vanilla <- as_base_data_frame(dft)
 #' class(df_vanilla)
 as_base_data_frame <- function(data, fact.to.char = FALSE, irreg.to.na = FALSE) {
+  # strip "labeled.data.frame" class if present
+  if (any(class(data) %in% "labeled.data.frame")) {
+    class(data) <- class(data)[!class(data) %in% "labeled.data.frame"]
+  }
+
   if (!"data.frame" %in% class(data)) {
     stop("
 data argument object must be, but is not, a data.frame.")

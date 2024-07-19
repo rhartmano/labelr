@@ -31,14 +31,13 @@ preserves its labelr label attributes.
 \details{
 \code{sbrac} allows one to select rows and columns of a data.frame in a bracket-
 like fashion, using integers (positional indices), logicals, or (partial)
-character names (row names and column/variable names). Whereas some forms of
-Base R bracket subsetting will discard (destroy) labelr attributes, \code{sbrac}
-preserves them. For example, sbrac(df, 1:5, 2:4) returns a data.frame
-(with any labelr attribute meta-data intact), consisting of rows 1-5 and
-columns 2-4 of data.frame df; while sbrac(mtcars, "Maz", "a", partial = TRUE)
-returns all variables with substring "a" in their names for all rows with
-substring "Maz" in their row names. Integer indices (only) can be enclosed in
--c() for negative index selection (i.e., "select not these"), (where
+character names (row names and column/variable names). For example,
+sbrac(df, 1:5, 2:4) returns a data.frame (with any labelr attribute
+meta-data intact), consisting of rows 1-5 and columns 2-4 of data.frame df;
+while sbrac(mtcars, "Maz", "a", partial = TRUE) returns all variables with
+substring "a" in their names for all rows with substring "Maz" in their row
+names. Integer indices (only) can be enclosed in -c() for negative index
+selection (i.e., "select not these"), where, e.g.,
 sbrac(df, -c(1,2), "x", partial = TRUE) means select all rows of df other
 than rows 1 and 2 and all columns that feature the letter "x" in their names.
 See also \code{ssubset}, \code{sfilter}, \code{sselect}, \code{sdrop}, \code{ssort}, and \code{srename}, as

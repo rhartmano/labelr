@@ -90,14 +90,14 @@ data.frame values.
    share a common variable name character substring).
 
 ## Disclaimer Regarding Base R Data Frames
-Note: To minimize dependencies and reduce unexpected behaviors, many labelr 
+Note: To minimize dependencies and reduce unexpected behaviors, key labelr 
 functions **will coerce augmented/non-standard data.frames (e.g., tibbles, 
-data.tables) to base R ("vanilla") data.frames.** If you work with non-standard 
-data.frames, the suggested workflow is to affix and use labelr labels **before** 
-transforming the base R data.frame to a non-standard data.frame, if at all. 
-While some augmented data.frames and their functions may "play well" with 
-labelr-style labels and functions, this is not guaranteed. Experiment as desired 
-and at your own discretion.
+data.tables) to labeled data.frames of class labeled.data.frame.** If you work 
+with non-standard data.frames, the suggested workflow is to affix and use labelr 
+labels **before** transforming the labeled.data.frame to a one of these other 
+non-standard data.frame classes, if at all. While some augmented data.frames and 
+their functions may "play well" with labelr-style labels and functions, this is 
+not guaranteed. Experiment as desired and at your own discretion.
 
 ## Adding and Looking up Frame, Name, and Value Labels
 We'll start our exploration of core labelr functions with a fake "demographic" 
@@ -311,53 +311,11 @@ head(df, 3) # our latest, post-labeling version of same data.frame
 These two data.frames still look identical. 
 
 Rest assured, labeling has introduced some unobtrusive but important features 
-for us to use. We'll put them to work in a moment. But first let's back them up 
-in case we lose them. 
-
-## Preserving and Restoring Labels
-Lose them, you say? labelr labels are data.frame attributes, and certain Base R
-functions (like some forms of subsetting) are known to destroy data.frame 
-attributes. For this reason, once you're done labeling your data.frame, it's 
-wise to create an in-session backup of your labels by assigning them to an 
-extra, stand-alone object. You can do this with `get_all_lab_atts()`, which will 
-return all labels (frame, name, and value) as a list object that you can 
-subsequently (re-) attach to a data.frame, as needed.
-
-```{r}
-labs.df <- get_all_lab_atts(df)
-```
-
-Now, let's remove our labels explicitly, simulating what certain R functions do 
-naturally.
-
-```{r}
-df <- strip_labs(df) # remove our labels
-get_all_lab_atts(df) # show that they're gone
-```
-
-Now, let's restore them, using the labs.df list object we just created.
-
-```{r}
-df <- add_lab_atts(df, labs.df)
-
-get_all_lab_atts(df)
-```
-
-We're back(ed up)!
-  
-In addition to this hack, labelr provides label-preserving variants of common 
-data management functions, including `sfilter()`, `sselect()`, `ssubset()`, 
-`srename()`, `ssort()`, and others. (Here, the "s" prefix is for "safely," as in, 
-"your labels will be safely retained"). Other popular packages (e.g., "dplyr") 
-may also preserve label attributes, but an advantage of the labelr functions 
-like `sselect()` is that they will update the label attributes of affected 
-columns. For example, if your use of `sselect()` or `sdrop` removes a column 
-from the returned data.frame, any labels associated with that column will be 
-removed from that data.frame's attributes, as well. 
+for us to use. 
 
 ## "Using" Value Labels
-Now that our data.frame is labeled (and our labels backed up), let's demonstrate 
-some ways that we can use them.
+Now that our data.frame has labels, let's demonstrate some ways that we can use 
+them.
 
 ### Show First, Last, or Random Rows with Value Labels Overlaid
 Base R includes the `head()` and `tail()` functions, which allow you to show the
@@ -713,6 +671,8 @@ The available aliases are as follows:
 * `drop_frame_lab` alias is `dfl`
 
 * `axis_lab` is  `alb` 
+
+* `as_labeled_data_frame` is  `aldf` 
 
 * `as_base_data_frame` is  `adf` 
 

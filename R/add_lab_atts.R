@@ -8,12 +8,7 @@
 #' See `get_all_lab_atts`.
 #'
 #' `add_lab_atts` allows one to add or restore label attributes from a free-
-#' standing list (created by `get_all_lab_atts`) to a data.frame. Certain
-#' R operations will destroy attributes like labelr labels. Storing label
-#' attributes in an appropriately formatted free-standing list (via
-#' `get_all_lab_atts`) beforehand allows one to (re-) associate those attributes
-#' with that data.frame (or associate the attributes with a new data.frame)
-#' using `add_lab_atts`.
+#' standing list (created by `get_all_lab_atts`) to a data.frame.
 #'
 #' @param data a data.frame object.
 #' @param lab.atts.list a list previously created using `get_all_lab_atts`.
@@ -56,6 +51,12 @@ add_lab_atts <- function(data, lab.atts.list,
                          strip.first = FALSE,
                          num.convert = FALSE,
                          clean = TRUE) {
+  # strip "labeled.data.frame" class if present
+  # will be added back at the end
+  if (any(class(data) %in% "labeled.data.frame")) {
+    class(data) <- class(data)[!class(data) %in% "labeled.data.frame"]
+  }
+
   if (length(class(data)) != 1 && "data.frame" %in% class(data)) {
     warning("
 data argument object is an augmented data.frame and may not interoperate with all
@@ -81,6 +82,9 @@ labelr functions. Consider coercing to Base R data.frame using as.data.frame()."
     # sort all variable value labels in ascending order of values
     data <- sort_val_labs(data)
   }
+
+  # add "labeled.data.frame" class
+  data <- as_labeled_data_frame(data)
 
   return(data)
 }

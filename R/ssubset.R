@@ -14,8 +14,7 @@
 #' columns as a data.frame that preserves the labelr  attribute information of
 #' the originally supplied data.frame. See `ssubset` for a variant that combines
 #' `sfilter` row-filtering and `sselect` column selection in a single function.
-#' See also `sbrac` for a labelr attribute-preserving approach to row-and/or-
-#' column indexing. See also `sdrop`, `ssort`, `srename`, `slab` and `flab`.
+#' See also `sdrop`, `sbrac`, `ssort`, `srename`, `slab` and `flab`.
 #'
 #' @param data the data.frame from which columns rows will be filtered (and,
 #' possibly, columns selected).

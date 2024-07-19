@@ -137,8 +137,9 @@ clean_data_atts <- function(data) {
   other_names_in <- all_att_names[!all_att_names %in% names_in_combined]
 
   final_names <- c(
-    core_in, other_names_in, frame_name_in,
-    val_lab_in, fact_in
+    core_in, frame_name_in,
+    fact_in, val_lab_in,
+    other_names_in
   )
 
   final_atts <- attributes(data)[final_names]

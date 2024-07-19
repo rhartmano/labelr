@@ -200,7 +200,9 @@ No value labels found for supplied var --%s--.",
 
       # handle value-labeled numerical variables
       # test for whether variable could be numeric
-      num_test <- is_numable(names(attributes(data)[[val_lab_name]]))
+      num_test1 <- is_numable(names(attributes(data)[[val_lab_name]]))
+      num_test2 <- is_numable(data[[var_name]]) || is.numeric(data[[var_name]])
+      num_test <- all(num_test1, num_test2)
 
       # test for presence of many-to-one (m1) labels
       this_var_val_lab <- get_labs_att(data, val_lab_name)[[1]]

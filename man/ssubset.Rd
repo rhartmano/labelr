@@ -40,8 +40,7 @@ column names to be selected (see examples), returning  the selected rows and
 columns as a data.frame that preserves the labelr  attribute information of
 the originally supplied data.frame. See \code{ssubset} for a variant that combines
 \code{sfilter} row-filtering and \code{sselect} column selection in a single function.
-See also \code{sbrac} for a labelr attribute-preserving approach to row-and/or-
-column indexing. See also \code{sdrop}, \code{ssort}, \code{srename}, \code{slab} and \code{flab}.
+See also \code{sdrop}, \code{sbrac}, \code{ssort}, \code{srename}, \code{slab} and \code{flab}.
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set

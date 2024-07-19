@@ -40,12 +40,7 @@ a data.frame object with label attribute information (re-) attached
 See \code{get_all_lab_atts}.
 
 \code{add_lab_atts} allows one to add or restore label attributes from a free-
-standing list (created by \code{get_all_lab_atts}) to a data.frame. Certain
-R operations will destroy attributes like labelr labels. Storing label
-attributes in an appropriately formatted free-standing list (via
-\code{get_all_lab_atts}) beforehand allows one to (re-) associate those attributes
-with that data.frame (or associate the attributes with a new data.frame)
-using \code{add_lab_atts}.
+standing list (created by \code{get_all_lab_atts}) to a data.frame.
 }
 \examples{
 # make toy demographic (gender, raceth, etc.) data set

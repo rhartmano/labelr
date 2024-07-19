@@ -32,6 +32,11 @@
 #' sapply(iris_df, class)
 #' head(iris_df, 1)
 as_base_data_frame2 <- function(data, fact.to.char = TRUE, irreg.to.na = TRUE) {
+  # strip "labeled.data.frame" class if present
+  if (any(class(data) %in% "labeled.data.frame")) {
+    class(data) <- class(data)[!class(data) %in% "labeled.data.frame"]
+  }
+
   if (!"data.frame" %in% class(data)) {
     stop("
 data argument object must be, but is not, a data.frame.")

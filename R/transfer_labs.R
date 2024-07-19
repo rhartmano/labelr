@@ -114,42 +114,10 @@ transfer_labs <- function(data, from, to) {
 \nNo labels associated with from variable were found.\n")
   }
 
-  # re-arrange attributes as needed
-  all_att_names <- names(attributes(data))
+  data <- as_labeled_data_frame(data)
 
-  core_att_names <- c("names", "row.names", "class")
-  core_in <- core_att_names[core_att_names %in% all_att_names]
-
-  frame_name <- c("frame.lab", "name.labs")
-  frame_name_in <- frame_name[frame_name %in% all_att_names]
-
-  val_lab_names <- paste0("val.labs.", names(data))
-  val_lab_in <- val_lab_names[val_lab_names %in% all_att_names]
-
-  fact_names <- c(
-    paste0("u.factor.", names(data)),
-    paste0("o.factor.", names(data))
-  )
-
-  fact_in <- fact_names[fact_names %in% all_att_names]
-
-  names_in_combined <- c(core_in, frame_name_in, val_lab_in, fact_in)
-
-  other_names_in <- all_att_names[!all_att_names %in% names_in_combined]
-
-  final_names <- c(
-    core_in, other_names_in, frame_name_in,
-    val_lab_in, fact_in
-  )
-
-  final_atts <- attributes(data)[final_names]
-
-  attributes(data) <- NULL
-  attributes(data) <- final_atts
-
-
-  # if neither name or value labels found for from, throw error
-  if (!to %in% names(data)) {
+  # issue warning if transfer target variable not among data.frame columns
+  if (!to %in% colnames(data)) {
     warning("
 \nLabels have been transferred, but note: the variable specified in your \"to\"
 argument does not (yet) exist in the supplied data.frame. To transfer back,

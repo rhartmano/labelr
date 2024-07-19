@@ -1,6 +1,14 @@
 # labelr News
 
 # labelr 0.1.7
+* added the `labeled.data.frame` class, including an `as_labeled_data_frame()` function that assigns that class to a data.frame. Now any data.frame that is assigned frame, name, or value labels is assigned the class `labeled.data.frame` (while continuing to inherit the `data.frame` class). 
+
+* added a `[` method so that subsetting and filtering of `labeled.data.frame` objects preserves labelr label attributes. Note that, unlike with Base R data.frames, this `labeled.data.frame` `[` method always returns a data.frame.  
+
+* modified `as_base_data_frame()` so that `labeled.data.frame`s are quietly coerced to Base R data.frames, unlike other augmented data.frames, which are (still) noisily converted to Base R data.frames.
+
+* improved ability of `add_lab_col*()` and `use_val_lab*()` functions to detect quantity-labeled variables that are no longer numeric. 
+
 * bug fixed in `greml()` and `gremlr()` so that these handle cases where character vector passed to x argument is a single element (1L). 
 
 # labelr 0.1.6

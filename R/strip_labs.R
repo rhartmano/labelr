@@ -8,7 +8,7 @@
 #' @details
 #' Some labelr functions automatically use `strip_labs`, but you should only
 #' use it if you no longer want or need a given data.frame's labelr meta-data
-#' (i.e., labels!). If you have saved your labelr attributes (using
+#' (i.e., labels). If you have saved your labelr attributes (using
 #' `get_all_lab_atts`), you can restore them to the data.frame using
 #' `add_lab_atts`).
 #'
