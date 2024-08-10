@@ -1,6 +1,6 @@
 Package: labelr
 Title: Label Data Frames, Variables, and Values
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c(person("Robert", "Hartman", "", email = "rohartman@gmail.com", role = c("aut", "cre")), person("The MITRE Corporation", role = "cph"))
 Maintainer: Robert Hartman <rohartman@gmail.com>
 Description: Create and use data frame labels for data frame objects (frame labels), their columns (name labels), and individual values of a column (value labels). Value labels include one-to-one and many-to-one labels for nominal and ordinal variables, as well as numerical range-based value labels for continuous variables. Convert value-labeled variables so each value is replaced by its corresponding value label. Add values-converted-to-labels columns to a value-labeled data frame while preserving parent columns. Filter and subset a value-labeled data frame using labels, while returning results in terms of values. Overlay labels in place of values in common R commands to increase interpretability. Generate tables of value frequencies, with categories expressed as raw values or as labels. Access data frames that show value-to-label mappings for easy reference.

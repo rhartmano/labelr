@@ -1,5 +1,8 @@
 # labelr News
 
+# labelr 0.1.8
+* fixed `tabl()` bug affecting use of wide.col option. Bug was introduced with the `labeled.data.frame` construct in 0.1.7 and affected internal call to `stats::reshape()`.
+
 # labelr 0.1.7
 * added the `labeled.data.frame` class, including an `as_labeled_data_frame()` function that assigns that class to a data.frame. Now any data.frame that is assigned frame, name, or value labels is assigned the class `labeled.data.frame` (while continuing to inherit the `data.frame` class). 
 

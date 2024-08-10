@@ -615,6 +615,8 @@ Requested table would be >100000 rows. Excluding zero-frequency (unobserved) com
     vals.var <- names(data2)[ncol(data2)]
     other.vars <- names(data2)[!names(data2) %in% c(wide.col, vals.var)]
 
+    data2 <- as_base_data_frame(data2)
+
     data2 <- stats::reshape(data2,
       timevar = wide.col,
       idvar = other.vars,
